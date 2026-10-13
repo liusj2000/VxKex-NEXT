@@ -1,0 +1,14 @@
+# Visual C++ / MSBuild 生成物：各工程下的中间与输出目录
+/x64/
+/*/x64/
+/*/*/x64/
+/Win32/
+/*/Win32/
+/*/*/Win32/
+
+# 02-Prebuilt DLLs 下的 x64 目录是仓库内容，必须保留
+!02-Prebuilt DLLs/x64/
+
+# 用户级工程设置
+*.user
+*.suo
