@@ -1,0 +1,206 @@
+LIBRARY KxUser
+EXPORTS
+	;;
+	;; autorot.c
+	;;
+
+	SetDisplayAutoRotationPreferences
+	GetDisplayAutoRotationPreferences
+	GetAutoRotationState
+
+	;;
+	;; blutooth.c
+	;;
+
+	;;BluetoothAddressToString
+	;;BluetoothAuthenticateDevice
+	;;BluetoothAuthenticateDeviceEx
+	;;BluetoothAuthenticateMultipleDevices
+	;;BluetoothAuthenticationAgent
+	;;BluetoothDisconnectDevice
+	;;BluetoothDisplayDeviceProperties
+	;;BluetoothEnableDiscovery
+	;;BluetoothEnableIncomingConnections
+	;;BluetoothEnumerateInstalledServices
+	;;BluetoothEnumerateInstalledServicesEx
+	;;BluetoothFindBrowseGroupClose
+	;;BluetoothFindClassIdClose
+	;;BluetoothFindDeviceClose
+	;;BluetoothFindFirstBrowseGroup
+	;;BluetoothFindFirstClassId
+	;;BluetoothFindFirstDevice
+	;;BluetoothFindFirstProfileDescriptor
+	;;BluetoothFindFirstProtocolDescriptorStack
+	;;BluetoothFindFirstProtocolEntry
+	;;BluetoothFindFirstRadio
+	;;BluetoothFindFirstService
+	;;BluetoothFindFirstServiceEx
+	;;BluetoothFindNextBrowseGroup
+	;;BluetoothFindNextClassId
+	;;BluetoothFindNextDevice
+	;;BluetoothFindNextProfileDescriptor
+	;;BluetoothFindNextProtocolDescriptorStack
+	;;BluetoothFindNextProtocolEntry
+	;;BluetoothFindNextRadio
+	;;BluetoothFindNextService
+	;;BluetoothFindProfileDescriptorClose
+	;;BluetoothFindProtocolDescriptorStackClose
+	;;BluetoothFindProtocolEntryClose
+	;;BluetoothFindRadioClose
+	;;BluetoothFindServiceClose
+	;;BluetoothGetDeviceInfo
+	;;BluetoothGetRadioInfo
+	;;BluetoothIsConnectable
+	;;BluetoothIsDiscoverable
+	;;BluetoothIsVersionAvailable
+	;;BluetoothMapClassOfDeviceToImageIndex
+	;;BluetoothMapClassOfDeviceToString
+	;;BluetoothRegisterForAuthentication
+	;;BluetoothRegisterForAuthenticationEx
+	;;BluetoothRemoveDevice
+	;;BluetoothSdpEnumAttributes
+	;;BluetoothSdpGetAttributeValue
+	;;BluetoothSdpGetContainerElementData
+	;;BluetoothSdpGetElementData
+	;;BluetoothSdpGetString
+	;;BluetoothSelectDevices
+	;;BluetoothSelectDevicesFree
+	;;BluetoothSendAuthenticationResponse
+	;;BluetoothSendAuthenticationResponseEx
+	;;BluetoothSetLocalServiceInfo
+	;;BluetoothSetServiceState
+	;;BluetoothUnregisterAuthentication
+	;;BluetoothUpdateDeviceRecord
+	BluetoothGATTAbortReliableWrite
+	BluetoothGATTBeginReliableWrite
+	BluetoothGATTEndReliableWrite
+	BluetoothGATTGetCharacteristics
+	BluetoothGATTGetCharacteristicValue
+	BluetoothGATTGetDescriptors
+	BluetoothGATTGetDescriptorValue
+	BluetoothGATTGetIncludedServices
+	BluetoothGATTGetServices
+	BluetoothGATTRegisterEvent
+	BluetoothGATTSetCharacteristicValue
+	BluetoothGATTSetDescriptorValue
+	BluetoothGATTUnregisterEvent
+	
+	;;
+	;; chromiumpatch.c
+	;;
+
+	CommandLineToArgvW					= Ext_CommandLineToArgvW
+	
+	;;
+	;; featurestaging.c
+	;;
+
+	GetFeatureEnabledState
+	GetFeatureVariant
+	RecordFeatureError
+	RecordFeatureUsage
+	SubscribeFeatureStateChangeNotification
+	UnsubscribeFeatureStateChangeNotification
+
+	;;
+	;; misc.c
+	;;
+
+	CreateWindowInBand
+	GetWindowBand
+	GetProcessUIContextInformation @2521 NONAME
+	GetCurrentInputMessageSource
+	IsImmersiveProcess
+
+	;;
+	;; pointer.c
+	;;
+
+	GetPointerDevices
+	GetPointerType
+	GetPointerInfo
+	GetPointerTouchInfo
+	GetPointerTouchInfoHistory 
+	GetPointerFrameTouchInfo
+	GetPointerFrameTouchInfoHistory
+	GetPointerPenInfo
+	GetPointerPenInfoHistory
+	SkipPointerFrameMessages
+	GetPointerDeviceRects
+	EnableMouseInPointer
+	IsMouseInPointerEnabled
+	RegisterPointerDeviceNotifications
+	GetWindowFeedbackSetting
+	SetWindowFeedbackSetting
+
+	;;
+	;; processref.c
+	;;
+
+	GetProcessReference
+	SetProcessReference
+
+	;;
+	;; pwrnotfy.c
+	;;
+
+	RegisterSuspendResumeNotification
+	UnregisterSuspendResumeNotification
+
+	;;
+	;; scaling.c
+	;;
+	
+	GetDpiForSystem
+	GetDpiForWindow
+	GetDpiForMonitor
+	GetScaleFactorForDevice
+	GetScaleFactorForMonitor
+	GetProcessDpiAwareness
+	SetProcessDpiAwareness
+	GetThreadDpiAwarenessContext
+	SetThreadDpiAwarenessContext
+	SetProcessDpiAwarenessContext
+	AdjustWindowRectExForDpi
+	GetDpiForShellUIComponent
+	GetAwarenessFromDpiAwarenessContext
+	GetWindowDpiAwarenessContext
+	EnableNonClientDpiScaling
+	AreDpiAwarenessContextsEqual
+	IsValidDpiAwarenessContext
+	LogicalToPhysicalPointForPerMonitorDPI
+	PhysicalToLogicalPointForPerMonitorDPI
+
+	;;
+	;; sysmetrc.c
+	;;
+
+	GetSystemMetricsForDpi
+	SystemParametersInfoForDpi
+
+	;;
+	;; timer.c
+	;;
+
+	SetCoalescableTimer
+	
+	;;
+	;; window.c
+	;;
+
+	IsWindowArranged
+	
+	;;
+	;; winmsg.c
+	;;
+
+	GetMessageA							= Ext_GetMessageA
+	GetMessageW							= Ext_GetMessageW
+	PeekMessageA						= Ext_PeekMessageA
+	PeekMessageW						= Ext_PeekMessageW
+	DefWindowProcA						= Ext_DefWindowProcA
+	DefWindowProcW						= Ext_DefWindowProcW
+	RegisterTouchWindow					= Ext_RegisterTouchWindow
+	UnregisterTouchWindow				= Ext_UnregisterTouchWindow
+	CreateWindowExA						= Ext_CreateWindowExA
+	CreateWindowExW						= Ext_CreateWindowExW

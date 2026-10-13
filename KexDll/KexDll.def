@@ -1,0 +1,131 @@
+LIBRARY "KexDll.dll"
+EXPORTS
+	KexDataInitialize
+	KexInitializePropagation
+	KexDllProtectedFunctionExceptionFilter
+	KexShouldUseWorkaroundsForNewerWindows
+	
+	KexRtlOperatingSystemBitness
+	KexRtlGetNtVersionNumbers
+	KexRtlPathFindFileName
+	KexRtlPathRemoveExtension
+	KexRtlPathReplaceIllegalCharacters
+	KexRtlGetProcessImageBaseName
+	KexRtlQueryKeyValueData
+	KexRtlQueryKeyMultipleValueData
+	KexRtlUnicodeStringEndsWith
+	KexRtlFindUnicodeSubstring
+	KexRtlAdvanceUnicodeString
+	KexRtlRetreatUnicodeString
+	KexRtlShiftUnicodeString
+	KexRtlWriteProcessMemory
+	KexRtlCreateDirectoryRecursive
+	KexRtlNtStatusToString
+	KexRtlSectionTableFromRva
+	KexRtlNullTerminateUnicodeString
+	KexRtlCreateUntrustedDirectoryObject
+	KexRtlGenerateRandomData
+	KexRtlDecryptMemory
+	KexRtlEncryptMemory
+
+	KexRtlWow64GetProcessMachines
+	KexRtlWow64IsWowGuestMachineSupported
+	KexRtlSetBit
+	KexRtlClearBit
+	KexRtlQueryPackageIdentity
+	KexRtlQueryPackageIdentityEx
+	KexRtlCheckPortableOperatingSystem
+	KexRtlUnsubscribeWnfNotificationWaitForCompletion
+	KexRtlUnsubscribeWnfStateChangeNotification
+	KexRtlQueryWnfStateData
+	KexRtlPublishWnfStateData
+	KexRtlSubscribeWnfStateChangeNotification
+	KexRtlAddGrowableFunctionTable
+	KexRtlDeleteGrowableFunctionTable
+	KexRtlGetSystemTimePrecise
+	KexRtlGetDeviceFamilyInfoEnum
+	KexRtlGetPersistedStateLocation
+	KexRtlCanonicalizeDomainName
+	KexRtlIsProcessorFeaturePresent
+
+	KexRtlWaitOnAddress
+	KexRtlWakeAddressSingle
+	KexRtlWakeAddressAll
+
+	KexEtwEventSetInformation
+
+	KexLdrGetSystemDllBase
+	KexLdrGetRemoteSystemDllBase
+	KexLdrGetNativeSystemDllBase
+	KexLdrMiniGetProcedureAddress
+	KexLdrFindDllInitRoutine
+	KexLdrGetDllFullName
+	KexLdrGetDllFullNameFromAddress
+	KexLdrGetImageImportSection
+
+	KexLdrLoadDll
+	KexLdrGetDllHandle
+	KexLdrGetDllHandleEx
+	KexLdrGetProcedureAddress
+	KexLdrGetProcedureAddressEx
+
+	KexLdrResolveDelayLoadedAPI
+
+	ApiSetQueryApiSetPresence
+
+	KexHkInstallBasicHook
+	KexHkRemoveBasicHook
+
+	KexMessageBox
+	KexMessageBoxF
+	KexRewriteDllPath
+	KexPatchCpiwSubsystemVersionCheck
+
+	AshExeBaseNameIs
+	AshModuleBaseNameIs
+	AshModuleIsWindowsModule
+
+	VxlOpenLog
+	VxlCloseLog
+	VxlQueryInformationLog
+	VxlWriteLogEx
+	VxlReadLog
+	VxlReadMultipleEntriesLog
+	VxlSeverityToText_ENG
+
+	Ext_NtQueryInformationThread
+	Ext_NtSetInformationThread
+	Ext_NtQueryInformationProcess
+	Ext_NtNotifyChangeKey
+	Ext_NtNotifyChangeMultipleKeys
+	Ext_NtCreateSection
+	Ext_NtAssignProcessToJobObject
+	Ext_NtWriteFile
+	Ext_NtSetInformationFile
+
+	Ext_RtlInitializeCriticalSection
+	Ext_RtlInitializeCriticalSectionAndSpinCount
+	Ext_RtlInitializeCriticalSectionEx
+
+	KexNtQuerySystemTime
+	KexNtCreateUserProcess
+	KexNtProtectVirtualMemory
+	KexNtAllocateVirtualMemory
+	KexNtQueryVirtualMemory
+	KexNtFreeVirtualMemory
+	KexNtQueryObject
+	KexNtOpenFile
+	KexNtWriteFile
+	KexNtRaiseHardError
+	KexNtQueryInformationThread
+	KexNtSetInformationThread
+	KexNtNotifyChangeKey
+	KexNtNotifyChangeMultipleKeys
+	KexNtCreateSection
+	KexNtAssignProcessToJobObject
+	KexNtMapViewOfSection
+
+	NtCompareObjects
+	NtQueryWnfStateData
+	NtWaitForAlertByThreadId
+	NtAlertThreadByThreadId

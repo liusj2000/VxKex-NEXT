@@ -1,0 +1,27 @@
+LIBRARY KxMi
+EXPORTS
+	;; powrprof.c
+	PowerDeterminePlatformRoleEx
+	PowerRegisterSuspendResumeNotification
+	PowerUnregisterSuspendResumeNotification
+
+	;; tbs.c
+	Tbsi_GetDeviceInfo
+
+	;; userenv.c
+	CreateAppContainerProfile
+	DeleteAppContainerProfile
+	DeriveAppContainerSidFromAppContainerName
+	GetAppContainerFolderPath
+	GetAppContainerRegistryLocation
+
+	;; verspoof.c
+	GetFileVersionInfoW							= Ext_GetFileVersionInfoW
+
+	;; wldp.c
+	WldpGetLockdownPolicy
+	WldpQueryWindowsLockdownMode
+
+	;; wtsapi.c
+	WTSQuerySessionInformationA					= Ext_WTSQuerySessionInformationA
+	WTSQuerySessionInformationW					= Ext_WTSQuerySessionInformationW

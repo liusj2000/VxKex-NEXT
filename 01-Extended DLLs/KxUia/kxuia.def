@@ -1,0 +1,7 @@
+LIBRARY KxUia
+EXPORTS
+	;; uiacore.c
+	UiaDisconnectAllProviders
+	UiaDisconnectProvider
+	UiaRaiseChangesEvent
+	UiaRaiseNotificationEvent
