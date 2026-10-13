@@ -1,0 +1,10 @@
+=== Final tracked changes ===
+diff_stat_exit=0
+diff_check_exit=0
+?? AGENTS.md
+?? docx/
+status_exit=0
+=== New documentation whitespace check ===
+D:\project\VxKex-NEXT\docx\当前工作.md: matches=0
+D:\project\VxKex-NEXT\docx\伪控制台最小启动补丁设计-20261013.md: matches=0
+=== End ===

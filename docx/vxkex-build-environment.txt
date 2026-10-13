@@ -1,0 +1,8 @@
+False C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd
+False C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe
+True C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
+True C:\Qt\Qt5.12.12\Tools\mingw730_64\bin\gcc.exe
+D:\project\VxKex-NEXT\01-Development Utilities\Build_Debug.bat
+D:\project\VxKex-NEXT\01-Development Utilities\Build_Release.bat
+D:\project\VxKex-NEXT\01-Development Utilities\Build_Stable_Version_And_Clean.bat
+D:\project\VxKex-NEXT\01-Development Utilities\Clean_VxKex_NEXT.bat

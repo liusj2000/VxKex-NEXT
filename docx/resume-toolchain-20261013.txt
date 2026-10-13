@@ -1,0 +1,11 @@
+=== MSBuild / VC targets ===
+=== Project top-level directories ===
+
+FullName
+--------
+D:\project\claude-code-engineering
+D:\project\<external-project>
+D:\project\VxKex-NEXT
+=== SDK roots ===
+=== End ===
+

@@ -1,0 +1,9 @@
+=== MSBuild version ===
+4.0.30319.34209
+msbuild_version_exit=0
+=== C++ build prerequisites ===
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.Cpp.Default.props: False
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.Cpp.Default.props: False
+C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd: False
+C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\cl.exe: False
+=== End ===

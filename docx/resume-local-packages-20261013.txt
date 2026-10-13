@@ -1,0 +1,40 @@
+=== Additional project tool roots (excluding <external-project>) ===
+
+FullName
+--------
+D:\project\claude-code-engineering\.claude
+D:\project\claude-code-engineering\01-Introduction
+D:\project\claude-code-engineering\02-Memory
+D:\project\claude-code-engineering\03-SubAgents
+D:\project\claude-code-engineering\04-Skills
+D:\project\claude-code-engineering\05-Commands
+D:\project\claude-code-engineering\06-Hooks
+D:\project\claude-code-engineering\07-MCP
+D:\project\claude-code-engineering\08-Headless
+D:\project\claude-code-engineering\09-Agent-SDK
+D:\project\claude-code-engineering\10-Plugins
+D:\project\claude-code-engineering\11-Tools
+D:\project\claude-code-engineering\12-Rules
+D:\project\claude-code-engineering\91-Pictures
+D:\project\claude-code-engineering\clangd_22.1.0
+D:\project\claude-code-engineering\jdk-17.0.12
+D:\project\claude-code-engineering\jdt-language-server-1.33.0-202402151717
+D:\project\claude-code-engineering\jdtls-workspace
+D:\project\claude-code-engineering\local-npm
+D:\project\claude-code-engineering\node-v22.22.2-win-x64
+D:\project\claude-code-engineering\python-3.11.9-embed-amd64
+D:\project\claude-code-engineering\scoop
+D:\project\claude-code-engineering\site-packages
+D:\project\claude-code-engineering\System Volume Information
+=== Framework MSBuild ===
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe
+=== Local CLI metadata ===
+D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\agents
+D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\cli-windows-x64
+D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\core
+D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\llms
+D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\sdk
+D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\shared
+=== End ===
+

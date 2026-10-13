@@ -1,0 +1,60 @@
+=== Git ===
+?? AGENTS.md
+?? docx/
+git_status_exit=0
+f98d85759c0e5c40051d5a28339fee1a2bfb2e8d
+git_head_exit=0
+=== Environment ===
+7.2.24
+Microsoft Windows NT 6.1.7601 Service Pack 1
+=== Tools ===
+
+Name   : pwsh.exe
+Source : C:\Program Files\PowerShell\7\pwsh.exe
+
+
+=== Installation roots ===
+
+FullName
+--------
+C:\Program Files\Common Files
+C:\Program Files\DSH Desktop
+C:\Program Files\DVD Maker
+C:\Program Files\Git
+C:\Program Files\Internet Explorer
+C:\Program Files\MSBuild
+C:\Program Files\Notepad++
+C:\Program Files\Oracle
+C:\Program Files\PowerShell
+C:\Program Files\Reference Assemblies
+C:\Program Files\VxKex
+C:\Program Files\Windows Defender
+C:\Program Files\Windows Journal
+C:\Program Files\Windows Mail
+C:\Program Files\Windows Media Player
+C:\Program Files\Windows NT
+C:\Program Files\Windows Photo Viewer
+C:\Program Files\Windows Portable Devices
+C:\Program Files\Windows Sidebar
+C:\Program Files\WindowsPowerShell
+C:\Program Files\WinRAR
+C:\Program Files (x86)\Common Files
+C:\Program Files (x86)\Internet Explorer
+C:\Program Files (x86)\Microsoft.NET
+C:\Program Files (x86)\MSBuild
+C:\Program Files (x86)\Reference Assemblies
+C:\Program Files (x86)\Windows Defender
+C:\Program Files (x86)\Windows Mail
+C:\Program Files (x86)\Windows Media Player
+C:\Program Files (x86)\Windows NT
+C:\Program Files (x86)\Windows Photo Viewer
+C:\Program Files (x86)\Windows Portable Devices
+C:\Program Files (x86)\Windows Sidebar
+C:\Program Files (x86)\WindowsPowerShell
+D:\<external-system-bus>已签名
+D:\project
+D:\VSCode-win32-x64-1.107.1
+D:\Win7AndW2K8R2-KB3191566-x64
+=== Registry ===
+=== End ===
+

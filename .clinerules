@@ -1,0 +1,11 @@
+# Cline 启动必读（VxKex NEXT 仓库）
+
+1. 依次阅读：`AGENTS.md` → `docx/当前工作.md` → `docx/ConPTY正确性测试计划-20261013.md`。
+2. **本次会话的首要任务：验证 KxBase 伪控制台（ConPTY）实现的正确性**，按上述测试计划的 A/B/C/D 分层用例逐项执行并留证。
+   - 不要重复下载或安装编译工具链，那部分已完成；工具链路径与编译命令见 `AGENTS.md` 的「构建工具链与编译方式」。
+3. 动手前先把下面几点复述给用户确认，再开始执行：
+   - 待测产物 `D:\project\VxKex-NEXT\x64\Release\KxBase.dll` **尚未部署**；已安装的 `C:\Program Files\VxKex\Kex64\KxBase.dll` 仍是缺 `ClosePseudoConsole` 的旧版。
+   - 替换已安装 DLL 属于需要用户明确安排的改动：必须先备份、记录 SHA256、准备可立即执行的回滚。
+   - 编译测试程序必须带 `/p:TrackFileAccess=false` 并串行 `/m:1`，否则会被本机 VxKex 的导入重写缺陷误伤（见 `AGENTS.md` 的「已知阻断」）。
+4. 提交状态：上一轮改动已入库——`a38b938 feat:` 源码补丁、`9dc7fb2 chore:` 构建输出忽略规则，另有 `docs:` 提交含本文件、AGENTS.md 与 `docx/`。提交身份仅配置在本仓库：`liusj <liusj2000@users.noreply.github.com>`；如需修改请先 `git config --local`。
+5. 安全边界：未获用户明确安排前，不替换系统或安装目录 DLL、不修改 IFEO/版本伪装/传播设置、不运行安装器、不改变系统策略。

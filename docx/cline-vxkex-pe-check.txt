@@ -1,0 +1,9 @@
+CLINE IMPORTS
+ntdll.dll : RtlWaitOnAddress
+api-ms-win-core-synch-l1-2-0.dll : WaitOnAddress
+KERNEL32.dll : ClosePseudoConsole
+KERNEL32.dll : CreatePseudoConsole
+KERNEL32.dll : ResizePseudoConsole
+KXBASE PSEUDOCONSOLE EXPORTS
+EXPORT TOTAL: 1925
+CLOSE EXPORTED: False

@@ -1,0 +1,12 @@
+=== Tools directory ===
+=== Download/extract commands ===
+=== Space ===
+
+Name        Used       Free
+----        ----       ----
+C    39848513536 8466718720
+D    31434264576 6143549440
+=== Elevation ===
+False
+=== End ===
+

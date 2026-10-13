@@ -1,0 +1,110 @@
+dllmain.c
+propagte.c
+dllpath.c
+dllrewrt.c
+ashcrsup.c
+verspoof.c
+dllnotif.c
+KexInitializePropagation
+KexpAddKex3264ToDllPath
+KexInitializeDllRewrite
+AshpSetIsChromiumProcess
+KexApplyVersionSpoof
+KexpRewriteImportTableDllNameInPlace
+KexDllNotificationCallback
+Ext_NtRaiseHardError
+Process created
+The VxKex NEXT version is 1.2.3.2463 (Release)
+The Windows version is 6.1.7601
+The program is 64-bit and the operating system is 64-bit
+Full path to the EXE: D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\cli-windows-x64\bin\cline.exe
+Command line:         "D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\cli-windows-x64\bin\cline.exe" --version
+
+Successfully initialized propagation system.
+%lIfeoParameters values are finalized.
+DisableForChild:      0
+DisableAppSpecific:   0
+WinVerSpoof:          4
+StrongVersionSpoof:   0x00000000
+Shrinking default loader DLL path
+The original DLL path is: "D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\cli-windows-x64\bin;;C:\Windows\system32;C:\Windows\system;C:\Windows;.;D:\project\claude-code-engineering\local-npm;D:\project\claude-code-engineering\node-v22.22.2-win-x64;D:\project\claude-code-engineering\scoop\shims;C:\Program Files\PowerShell\7;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\PowerShell\7\;C:\Program Files\Git\cmd"
+The Kex3264Dir path is: "C:\Program Files\VxKex\Kex64"
+Successfully initialized DLL rewrite subsystem.
+The new default DLL search path is:
+
+"C:\Program Files\VxKex\Kex64;D:\project\claude-code-engineering\node-v22.22.2-win-x64\node_modules\cline\node_modules\@cline\cli-windows-x64\bin;;C:\Windows\system32;C:\Windows\system;C:\Windows;.;D:\project\claude-code-engineering\local-npm;D:\project\claude-code-engineering\node-v22.22.2-win-x64;D:\project\claude-code-engineering\scoop\shims;C:\Program Files\PowerShell\7;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\PowerShell\7\;C:\Program Files\Git\cmd;;"
+Detected Chromium, applying compatibility fixes
+Applying Windows version spoof: Windows 10
+Rewrote DLL import: bcryptprimitives.dll -> kxcryp
+Rewrote DLL import: ntdll.dll -> kxnt
+Rewrote DLL import: api-ms-win-core-synch-l1-2-0.dll -> kxbase
+Rewrote DLL import: KERNEL32.dll -> kxbase
+ mThe DLL kernel32.dll was mapped
+Full path to the DLL: "C:\Windows\system32\kernel32.dll"
+Loaded at 0x0000000077500000 (size: 1175552 bytes)
+qThe DLL kxnt.dll was mapped
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxnt.dll"
+Loaded at 0x000007FEF3420000 (size: 135168 bytes)
+"nThe DLL KERNELBASE.dll was mapped
+Full path to the DLL: "C:\Windows\system32\KERNELBASE.dll"
+Loaded at 0x000007FEFD8D0000 (size: 434176 bytes)
+Rewrote DLL import: ntdll.dll -> kxnt
+rThe DLL kxcryp.DLL was mapped
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxcryp.DLL"
+Loaded at 0x000007FEEFD80000 (size: 49152 bytes)
+jThe DLL bcrypt.dll was mapped
+Full path to the DLL: "C:\Windows\system32\bcrypt.dll"
+Loaded at 0x000007FEFD030000 (size: 139264 bytes)
+jThe DLL Secur32.dll was mapped
+Full path to the DLL: "C:\Windows\system32\Secur32.dll"
+Loaded at 0x000007FEFD210000 (size: 45056 bytes)
+kThe DLL SSPICLI.DLL was mapped
+Full path to the DLL: "C:\Windows\system32\SSPICLI.DLL"
+Loaded at 0x000007FEFD4B0000 (size: 151552 bytes)
+Rewrote DLL import: msvcrt.dll -> kxcrt
+Rewrote DLL import: ntdll.dll -> kxnt
+Rewrote DLL import: API-MS-Win-Core-ErrorHandling-L1-1-0.dll -> kxbase
+Rewrote DLL import: API-MS-Win-Core-File-L1-1-0.dll -> kxbase
+Rewrote DLL import: API-MS-Win-Core-Handle-L1-1-0.dll -> kxbase
+Rewrote DLL import: API-MS-Win-Core-LibraryLoader-L1-1-0.dll -> kxbase
+Rewrote DLL import: API-MS-Win-Core-LocalRegistry-L1-1-0.dll -> kxadvapi
+Rewrote DLL import: API-MS-Win-Core-ProcessThreads-L1-1-0.dll -> kxbase
+Rewrote DLL import: API-MS-Win-Core-Profile-L1-1-0.dll -> kxbase
+Rewrote DLL import: API-MS-Win-Core-SysInfo-L1-1-0.dll -> kxbase
+Rewrote DLL import: API-MS-Win-Core-DelayLoad-L1-1-0.dll -> kxbase
+qThe DLL kxcrt.DLL was mapped
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxcrt.DLL"
+Loaded at 0x000007FEEFD60000 (size: 73728 bytes)
+jThe DLL msvcrt.dll was mapped
+Full path to the DLL: "C:\Windows\system32\msvcrt.dll"
+Loaded at 0x000007FEFF7D0000 (size: 651264 bytes)
+kThe DLL RPCRT4.dll was mapped
+Full path to the DLL: "C:\Windows\system32\RPCRT4.dll"
+Loaded at 0x000007FEFDB10000 (size: 1228800 bytes)
+sThe DLL kxbase.DLL was mapped
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxbase.DLL"
+Loaded at 0x000007FEEFBB0000 (size: 167936 bytes)
+jThe DLL VERSION.dll was mapped
+Full path to the DLL: "C:\Windows\system32\VERSION.dll"
+Loaded at 0x000007FEFC910000 (size: 49152 bytes)
+ tThe DLL kxadvapi.DLL was mapped
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxadvapi.DLL"
+Loaded at 0x000007FEEFB90000 (size: 69632 bytes)
+ lThe DLL advapi32.DLL was mapped
+Full path to the DLL: "C:\Windows\system32\advapi32.DLL"
+Loaded at 0x000007FEFDA30000 (size: 897024 bytes)
+kThe DLL sechost.dll was mapped
+Full path to the DLL: "C:\Windows\SYSTEM32\sechost.dll"
+Loaded at 0x000007FEFDC40000 (size: 126976 bytes)
+Hard Error handler has been called.
+ErrorStatus:                  STATUS_ENTRYPOINT_NOT_FOUND (0xc0000139)
+NumberOfParameters:           0x00000002
+UnicodeStringParameterMask:   0x00000003
+Parameters:                   0x000000000139EFA0
+ValidResponseOptions:         1
+Response:                     0x000000000139F000
+
+UlongParameter:               0x00000012
+StringParameter1:             "ClosePseudoConsole"
+StringParameter2:             "kxbase"
+

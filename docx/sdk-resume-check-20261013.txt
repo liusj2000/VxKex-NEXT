@@ -1,0 +1,12 @@
+
+Name              Length LastWriteTime
+----              ------ -------------
+download.exitcode      3 10/13/2026 9:34:00 PM
+download.log         423 10/13/2026 9:34:00 PM
+network-probe.log   1697 10/13/2026 9:34:57 PM
+                       1 
+?? AGENTS.md
+?? docx/
+git_exit=0
+END
+

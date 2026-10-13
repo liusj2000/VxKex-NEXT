@@ -1,0 +1,45 @@
+=== Extraction tools ===
+
+Name                                          FullName
+----                                          --------
+7zxa.dll                                      C:\Program Files\WinRAR\7zxa.dll
+Default.SFX                                   C:\Program Files\WinRAR\Default.SFX
+Default32.SFX                                 C:\Program Files\WinRAR\Default32.SFX
+Descript.ion                                  C:\Program Files\WinRAR\Descript.ion
+License.txt                                   C:\Program Files\WinRAR\License.txt
+Order.htm                                     C:\Program Files\WinRAR\Order.htm
+Rar.exe                                       C:\Program Files\WinRAR\Rar.exe
+rar.lng                                       C:\Program Files\WinRAR\rar.lng
+Rar.txt                                       C:\Program Files\WinRAR\Rar.txt
+RarExt.dll                                    C:\Program Files\WinRAR\RarExt.dll
+rarext.lng                                    C:\Program Files\WinRAR\rarext.lng
+RarExt32.dll                                  C:\Program Files\WinRAR\RarExt32.dll
+RarExtInstaller.exe                           C:\Program Files\WinRAR\RarExtInstaller.exe
+RarExtLogo.altform-unplated_targetsize-32.png C:\Program Files\WinRAR\RarExtLogo.altform-unplated_targetsize-32.png
+RarExtLogo.altform-unplated_targetsize-48.png C:\Program Files\WinRAR\RarExtLogo.altform-unplated_targetsize-48.png
+RarExtLogo.altform-unplated_targetsize-64.png C:\Program Files\WinRAR\RarExtLogo.altform-unplated_targetsize-64.png
+RarExtPackage.msix                            C:\Program Files\WinRAR\RarExtPackage.msix
+RarFiles.lst                                  C:\Program Files\WinRAR\RarFiles.lst
+rarnew.dat                                    C:\Program Files\WinRAR\rarnew.dat
+readme.txt                                    C:\Program Files\WinRAR\readme.txt
+Resources.pri                                 C:\Program Files\WinRAR\Resources.pri
+Uninstall.exe                                 C:\Program Files\WinRAR\Uninstall.exe
+uninstall.lng                                 C:\Program Files\WinRAR\uninstall.lng
+Uninstall.lst                                 C:\Program Files\WinRAR\Uninstall.lst
+UnRAR.exe                                     C:\Program Files\WinRAR\UnRAR.exe
+WhatsNew.txt                                  C:\Program Files\WinRAR\WhatsNew.txt
+WinCon.SFX                                    C:\Program Files\WinRAR\WinCon.SFX
+WinCon32.SFX                                  C:\Program Files\WinRAR\WinCon32.SFX
+WinRAR.chm                                    C:\Program Files\WinRAR\WinRAR.chm
+WinRAR.exe                                    C:\Program Files\WinRAR\WinRAR.exe
+winrar.lng                                    C:\Program Files\WinRAR\winrar.lng
+Zip.SFX                                       C:\Program Files\WinRAR\Zip.SFX
+Zip32.SFX                                     C:\Program Files\WinRAR\Zip32.SFX
+zipnew.dat                                    C:\Program Files\WinRAR\zipnew.dat
+jq                                            
+scoop                                         
+=== Existing VC runtimes ===
+                                              
+                                              
+=== End ===
+

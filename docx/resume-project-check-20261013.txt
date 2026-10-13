@@ -1,0 +1,4 @@
+=== KxBase project preprocessing (no build / no deployment) ===
+D:\project\VxKex-NEXT\01-Extended DLLs\KxBase\kxbase.vcxproj(27,3): error MSB4019: The imported project "D:\Microsoft.Cpp.Default.props" was not found. Confirm that the path in the <Import> declaration is correct, and that the file exists on disk.
+msbuild_preprocess_exit=1
+=== End ===

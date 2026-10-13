@@ -1,0 +1,8 @@
+D:\project\VxKex-NEXT\.github\workflows\build.yml
+D:\project\VxKex-NEXT\00-Common Headers\KxBase.h
+D:\project\VxKex-NEXT\01-Extended DLLs\KxBase\console.c
+D:\project\VxKex-NEXT\01-Extended DLLs\KxBase\kxbase.def
+D:\project\VxKex-NEXT\01-Extended DLLs\KxBase\KxBase.rc
+D:\project\VxKex-NEXT\01-Extended DLLs\KxBase\kxbase.vcxproj
+D:\project\VxKex-NEXT\01-Extended DLLs\KxBase\kxbase.vcxproj.filters
+D:\project\VxKex-NEXT\01-Extended DLLs\KxBase\kxbasep.h

@@ -1,0 +1,7 @@
+=== VC / SDK paths within engineering project ===
+
+FullName
+--------
+D:\project\claude-code-engineering\site-packages\modelscope\models\audio\vc
+=== End ===
+
