@@ -29,7 +29,7 @@
   Generating code
   Finished generating code
   kxbase.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxBase.dll
-BUILD_EXIT=0
+BUILD_EXIT=0 
   dllmain.c
   forwards.c
   reggval.c
@@ -40,4 +40,4 @@ BUILD_EXIT=0
   Generating code
   Finished generating code
   KxAdvapi.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxAdvapi.dll
-ADVAPI_BUILD_EXIT=0
+ADVAPI_BUILD_EXIT=0 

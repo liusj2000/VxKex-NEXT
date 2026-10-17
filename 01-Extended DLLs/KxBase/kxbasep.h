@@ -26,6 +26,7 @@
 
 #define DLL_DIRECTORY_DATA_VERIFICATION_CODE 'V' + 'x' + 'K' + 'e' + 'x' + 'N' + 'E' + 'X' + 'T'
 #define KEX_PSEUDOCONSOLE_MAGIC 0x4350584B
+#define KEX_PSEUDOCONSOLE_MAX_PROCESSES 8
 
 typedef struct _KEX_PSEUDOCONSOLE {
 	DWORD	Magic;
@@ -33,12 +34,16 @@ typedef struct _KEX_PSEUDOCONSOLE {
 	HANDLE	hInput;
 	HANDLE	hOutput;
 	DWORD	Flags;
+	HANDLE	hProcesses[KEX_PSEUDOCONSOLE_MAX_PROCESSES];
 	struct _KEX_PSEUDOCONSOLE *Next;
 } TYPEDEF_TYPE_NAME(KEX_PSEUDOCONSOLE);
 
 EXTERN RTL_SRWLOCK KxPseudoConsoleLock;
 
 VOID KxBasepInvalidatePseudoConsoleAttributes(IN HPCON PseudoConsoleHandle);
+VOID KxBasepAttachPseudoConsoleProcess(
+	IN	PPROC_THREAD_ATTRIBUTE_LIST	AttributeList,
+	IN	HANDLE						ProcessHandle);
 
 // Caller must hold KxPseudoConsoleLock while validating or using the object.
 BOOL KxBasepIsPseudoConsoleHandle(

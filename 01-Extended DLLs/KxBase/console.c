@@ -50,21 +50,66 @@ typedef struct _KX_CONSOLE_MODE_ENTRY {
 STATIC RTL_SRWLOCK KxConsoleModeLock = RTL_SRWLOCK_INIT;
 STATIC KX_CONSOLE_MODE_ENTRY KxConsoleModes[128];
 
+STATIC BOOLEAN KxBasepHasEmulatedAnsiOutputLocked(
+	IN	HANDLE	ConsoleHandle OPTIONAL)
+{
+	ULONG Index;
+
+	for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+		if (!KxConsoleModes[Index].Handle) {
+			continue;
+		}
+		if (ConsoleHandle && KxConsoleModes[Index].Handle != ConsoleHandle) {
+			continue;
+		}
+		if (KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+STATIC BOOLEAN KxBasepShouldProcessConsoleAnsi(
+	IN	HANDLE	ConsoleHandle)
+{
+	BOOLEAN Enabled;
+
+	if (!BaseIsConsoleAnsiSupportEnabled(ConsoleHandle)) {
+		return FALSE;
+	}
+
+	RtlAcquireSRWLockShared(&KxConsoleModeLock);
+	Enabled = KxBasepHasEmulatedAnsiOutputLocked(ConsoleHandle);
+	RtlReleaseSRWLockShared(&KxConsoleModeLock);
+
+	return Enabled;
+}
+
 KXBASEAPI BOOL WINAPI Ext_CloseHandle(IN HANDLE Handle)
 {
 	BOOL Success;
 	ULONG Index;
-	RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
+	BOOLEAN RemovedAnsiOutput;
+
 	Success = CloseHandle(Handle);
-	if (Success) {
+	if (Success && Handle && Handle != INVALID_HANDLE_VALUE) {
+		RemovedAnsiOutput = FALSE;
+		RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
 		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
 			if (KxConsoleModes[Index].Handle == Handle) {
+				if (KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
+					RemovedAnsiOutput = TRUE;
+				}
 				RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
 				break;
 			}
 		}
+		if (RemovedAnsiOutput && !KxBasepHasEmulatedAnsiOutputLocked(NULL)) {
+			BaseDisableConsoleAnsiSupport(Handle);
+		}
+		RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
 	}
-	RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
 	return Success;
 }
 #ifndef PSEUDOCONSOLE_INHERIT_CURSOR
@@ -105,7 +150,7 @@ KXBASEAPI BOOL WINAPI Ext_WriteConsoleA(
 	OUT	PULONG	CchWritten OPTIONAL,
 	IN	PVOID	Reserved OPTIONAL)
 {
-	if (BaseIsConsoleAnsiSupportEnabled(ConsoleHandle)) {
+	if (KxBasepShouldProcessConsoleAnsi(ConsoleHandle)) {
 		return WriteConsoleWithEscapeSequencesAorW(
 			ConsoleHandle,
 			Buffer,
@@ -130,7 +175,7 @@ KXBASEAPI BOOL WINAPI Ext_WriteConsoleW(
 	OUT	PULONG	CchWritten OPTIONAL,
 	IN	PVOID	Reserved OPTIONAL)
 {
-	if (BaseIsConsoleAnsiSupportEnabled(ConsoleHandle)) {
+	if (KxBasepShouldProcessConsoleAnsi(ConsoleHandle)) {
 		return WriteConsoleWithEscapeSequencesAorW(
 			ConsoleHandle,
 			Buffer,
@@ -215,7 +260,7 @@ KXBASEAPI BOOL WINAPI Ext_SetConsoleMode(
 		if (Output) {
 			if (Emulated && (Mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING)) {
 				BaseEnableConsoleAnsiSupport(ConsoleHandle);
-			} else {
+			} else if (!KxBasepHasEmulatedAnsiOutputLocked(NULL)) {
 				BaseDisableConsoleAnsiSupport(ConsoleHandle);
 			}
 		}
@@ -405,7 +450,8 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 	}
 
 	*PseudoConsoleHandle = NULL;
-	if (InputHandle == INVALID_HANDLE_VALUE || OutputHandle == INVALID_HANDLE_VALUE) {
+	if (InputHandle == INVALID_HANDLE_VALUE || OutputHandle == INVALID_HANDLE_VALUE ||
+		InputHandle == NtCurrentThread() || OutputHandle == NtCurrentThread()) {
 		return HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE);
 	}
 
@@ -498,6 +544,8 @@ KXBASEAPI VOID WINAPI ClosePseudoConsole(
 {
 	PKEX_PSEUDOCONSOLE PseudoConsole;
 	PKEX_PSEUDOCONSOLE *Link;
+	HANDLE Processes[KEX_PSEUDOCONSOLE_MAX_PROCESSES];
+	ULONG Index;
 
 	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 	if (!KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, &PseudoConsole)) {
@@ -509,8 +557,20 @@ KXBASEAPI VOID WINAPI ClosePseudoConsole(
 	*Link = PseudoConsole->Next;
 	KxBasepInvalidatePseudoConsoleAttributes(PseudoConsoleHandle);
 	PseudoConsole->Magic = 0;
+	RtlCopyMemory(Processes, PseudoConsole->hProcesses, sizeof(Processes));
+	RtlZeroMemory(PseudoConsole->hProcesses, sizeof(PseudoConsole->hProcesses));
 	CloseHandle(PseudoConsole->hInput);
 	CloseHandle(PseudoConsole->hOutput);
 	RtlFreeHeap(RtlProcessHeap(), 0, PseudoConsole);
 	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
+
+	for (Index = 0; Index < ARRAYSIZE(Processes); ++Index) {
+		if (Processes[Index]) {
+			if (WaitForSingleObject(Processes[Index], 0) == WAIT_TIMEOUT) {
+				TerminateProcess(Processes[Index], 0);
+				WaitForSingleObject(Processes[Index], 2000);
+			}
+			CloseHandle(Processes[Index]);
+		}
+	}
 }

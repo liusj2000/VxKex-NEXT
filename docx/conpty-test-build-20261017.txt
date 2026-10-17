@@ -1,22 +1,24 @@
-Build started 10/17/2026 5:52:34 PM.
-Project "D:\tools\Win7SDK\conpty-review-test.vcxproj" on node 1 (default targets).
+Build started 10/17/2026 6:35:18 PM.
+Project "D:\project\VxKex-NEXT\test\conpty-review-test.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "D:\project\VxKex-NEXT\test\x64\Release\obj\".
 InitializeBuildStatus:
-  Creating "D:\tools\Win7SDK\conpty-review-obj\conpty-review-test.unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "D:\project\VxKex-NEXT\test\x64\Release\obj\conpty-review-test.unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"D:\tools\Win7SDK\conpty-review-obj\\" /Fd"D:\tools\Win7SDK\conpty-review-obj\vcWindows7.1SDK.pdb" /Gd /TC /errorReport:queue "conpty-review-test.c"
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"D:\project\VxKex-NEXT\test\x64\Release\obj\\" /Fd"D:\project\VxKex-NEXT\test\x64\Release\obj\vcWindows7.1SDK.pdb" /Gd /TC /errorReport:queue "conpty-review-test.c"
   conpty-review-test.c
 Link:
-  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\tools\Win7SDK\conpty-review-out\conpty-review-test.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"D:\tools\Win7SDK\conpty-review-obj\conpty-review-test.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"D:\tools\Win7SDK\conpty-review-out\conpty-review-test.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\tools\Win7SDK\conpty-review-out\conpty-review-test.lib" /MACHINE:X64 "D:\tools\Win7SDK\conpty-review-obj\conpty-review-test.obj"
-  conpty-review-test.vcxproj -> D:\tools\Win7SDK\conpty-review-out\conpty-review-test.exe
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\project\VxKex-NEXT\test\x64\Release\conpty-review-test.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"D:\project\VxKex-NEXT\test\x64\Release\obj\conpty-review-test.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"D:\project\VxKex-NEXT\test\x64\Release\conpty-review-test.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\project\VxKex-NEXT\test\x64\Release\conpty-review-test.lib" /MACHINE:X64 "D:\project\VxKex-NEXT\test\x64\Release\obj\conpty-review-test.obj"
+  conpty-review-test.vcxproj -> D:\project\VxKex-NEXT\test\x64\Release\conpty-review-test.exe
 Manifest:
-  C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\x64\mt.exe /nologo /verbose /outputresource:"D:\tools\Win7SDK\conpty-review-out\conpty-review-test.exe;#1" /manifest "D:\tools\Win7SDK\conpty-review-obj\conpty-review-test.exe.intermediate.manifest"
+  C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\x64\mt.exe /nologo /verbose /outputresource:"D:\project\VxKex-NEXT\test\x64\Release\conpty-review-test.exe;#1" /manifest "D:\project\VxKex-NEXT\test\x64\Release\obj\conpty-review-test.exe.intermediate.manifest"
 FinalizeBuildStatus:
-  Deleting file "D:\tools\Win7SDK\conpty-review-obj\conpty-review-test.unsuccessfulbuild".
-  Touching "D:\tools\Win7SDK\conpty-review-obj\conpty-review-test.lastbuildstate".
-Done Building Project "D:\tools\Win7SDK\conpty-review-test.vcxproj" (default targets).
+  Deleting file "D:\project\VxKex-NEXT\test\x64\Release\obj\conpty-review-test.unsuccessfulbuild".
+  Touching "D:\project\VxKex-NEXT\test\x64\Release\obj\conpty-review-test.lastbuildstate".
+Done Building Project "D:\project\VxKex-NEXT\test\conpty-review-test.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:03.80
+Time Elapsed 00:00:01.48

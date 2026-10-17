@@ -29,6 +29,31 @@ typedef struct _KX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY {
 } TYPEDEF_TYPE_NAME(KX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY);
 
 STATIC KX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY KxPseudoConsoleAttributeEntries[64];
+STATIC ULONG KxPseudoConsoleAttributeEvictCursor = 0;
+
+STATIC BOOL KxBasepHasNativeProcThreadAttributes(
+	IN	PPROC_THREAD_ATTRIBUTE_LIST	AttributeList)
+{
+	BOOL HasNative;
+
+	if (!AttributeList) {
+		return FALSE;
+	}
+
+	HasNative = FALSE;
+	__try {
+		// On Windows Vista/7, PROC_THREAD_ATTRIBUTE_LIST starts with:
+		//   ULONG PresentFlags;   (offset 0)
+		//   ULONG AttributeCount; (offset 4)
+		//   ULONG LastAttribute;  (offset 8)
+		HasNative = (((PULONG) AttributeList)[0] != 0 &&
+					 ((PULONG) AttributeList)[2] != 0);
+	} __except (EXCEPTION_EXECUTE_HANDLER) {
+		HasNative = FALSE;
+	}
+
+	return HasNative;
+}
 
 // All table operations are serialized by KxPseudoConsoleLock.
 STATIC BOOL KxBasepRememberPseudoConsoleAttribute(
@@ -37,8 +62,11 @@ STATIC BOOL KxBasepRememberPseudoConsoleAttribute(
 {
 	ULONG Index;
 	ULONG EmptyIndex;
+	ULONG EvictIndex;
+	ULONG ScanIndex;
 
 	EmptyIndex = ARRAYSIZE(KxPseudoConsoleAttributeEntries);
+	EvictIndex = ARRAYSIZE(KxPseudoConsoleAttributeEntries);
 
 	for (Index = 0; Index < ARRAYSIZE(KxPseudoConsoleAttributeEntries); ++Index) {
 		if (KxPseudoConsoleAttributeEntries[Index].AttributeList == AttributeList) {
@@ -52,11 +80,27 @@ STATIC BOOL KxBasepRememberPseudoConsoleAttribute(
 		}
 	}
 
+	if (EmptyIndex == ARRAYSIZE(KxPseudoConsoleAttributeEntries)) {
+		// Reclaim a stale slot that was only initialized and never bound an HPCON.
+		for (Index = 0; Index < ARRAYSIZE(KxPseudoConsoleAttributeEntries); ++Index) {
+			ScanIndex = (KxPseudoConsoleAttributeEvictCursor + Index) %
+						ARRAYSIZE(KxPseudoConsoleAttributeEntries);
+			if (!KxPseudoConsoleAttributeEntries[ScanIndex].PseudoConsoleHandle) {
+				EvictIndex = ScanIndex;
+				KxPseudoConsoleAttributeEvictCursor =
+					(ScanIndex + 1) % ARRAYSIZE(KxPseudoConsoleAttributeEntries);
+				break;
+			}
+		}
+		EmptyIndex = EvictIndex;
+	}
+
 	if (EmptyIndex != ARRAYSIZE(KxPseudoConsoleAttributeEntries)) {
 		KxPseudoConsoleAttributeEntries[EmptyIndex].AttributeList = AttributeList;
 		KxPseudoConsoleAttributeEntries[EmptyIndex].PseudoConsoleHandle = PseudoConsoleHandle;
-		// Unknown lists may already contain native attributes. Never discard them.
-		KxPseudoConsoleAttributeEntries[EmptyIndex].NativeAttributes = TRUE;
+		KxPseudoConsoleAttributeEntries[EmptyIndex].NativeAttributes =
+			KxBasepHasNativeProcThreadAttributes(AttributeList);
+		KxPseudoConsoleAttributeEntries[EmptyIndex].HandleList = FALSE;
 		return TRUE;
 	}
 	SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -91,6 +135,70 @@ VOID KxBasepInvalidatePseudoConsoleAttributes(IN HPCON PseudoConsoleHandle)
 	}
 }
 
+VOID KxBasepAttachPseudoConsoleProcess(
+	IN	PPROC_THREAD_ATTRIBUTE_LIST	AttributeList,
+	IN	HANDLE						ProcessHandle)
+{
+	PKX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY Entry;
+	PKEX_PSEUDOCONSOLE PseudoConsole;
+	HANDLE DuplicatedProcess;
+	ULONG Index;
+	ULONG Slot;
+	DWORD LastError;
+
+	if (!AttributeList || !ProcessHandle) {
+		return;
+	}
+
+	LastError = GetLastError();
+	DuplicatedProcess = NULL;
+
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
+	Entry = KxBasepFindPseudoConsoleAttribute(AttributeList);
+	if (Entry && KxBasepIsPseudoConsoleHandle(Entry->PseudoConsoleHandle, &PseudoConsole)) {
+		if (!DuplicateHandle(
+				NtCurrentProcess(),
+				ProcessHandle,
+				NtCurrentProcess(),
+				&DuplicatedProcess,
+				PROCESS_TERMINATE | SYNCHRONIZE,
+				FALSE,
+				0)) {
+			DuplicateHandle(
+				NtCurrentProcess(),
+				ProcessHandle,
+				NtCurrentProcess(),
+				&DuplicatedProcess,
+				0,
+				FALSE,
+				DUPLICATE_SAME_ACCESS);
+		}
+
+		if (DuplicatedProcess) {
+			Slot = ARRAYSIZE(PseudoConsole->hProcesses);
+			for (Index = 0; Index < ARRAYSIZE(PseudoConsole->hProcesses); ++Index) {
+				if (PseudoConsole->hProcesses[Index] &&
+					WaitForSingleObject(PseudoConsole->hProcesses[Index], 0) == WAIT_OBJECT_0) {
+					CloseHandle(PseudoConsole->hProcesses[Index]);
+					PseudoConsole->hProcesses[Index] = NULL;
+				}
+				if (!PseudoConsole->hProcesses[Index] &&
+					Slot == ARRAYSIZE(PseudoConsole->hProcesses)) {
+					Slot = Index;
+				}
+			}
+
+			if (Slot == ARRAYSIZE(PseudoConsole->hProcesses)) {
+				CloseHandle(PseudoConsole->hProcesses[0]);
+				Slot = 0;
+			}
+			PseudoConsole->hProcesses[Slot] = DuplicatedProcess;
+		}
+	}
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
+	SetLastError(LastError);
+}
+
 KXBASEAPI BOOL WINAPI Ext_InitializeProcThreadAttributeList(
 	OUT PPROC_THREAD_ATTRIBUTE_LIST AttributeList,
 	IN DWORD Count, IN DWORD Flags, IN OUT PSIZE_T Size)
@@ -100,8 +208,7 @@ KXBASEAPI BOOL WINAPI Ext_InitializeProcThreadAttributeList(
 	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 	Success = InitializeProcThreadAttributeList(AttributeList, Count, Flags, Size);
 	if (Success) {
-		Success = KxBasepRememberPseudoConsoleAttribute(AttributeList, NULL);
-		if (Success) {
+		if (KxBasepRememberPseudoConsoleAttribute(AttributeList, NULL)) {
 			Entry = KxBasepFindPseudoConsoleAttribute(AttributeList);
 			Entry->NativeAttributes = FALSE;
 			Entry->HandleList = FALSE;
@@ -132,12 +239,14 @@ STATIC LONG KxBasepPreparePseudoConsole(
 	PKEX_PSEUDOCONSOLE PseudoConsole;
 	HANDLE Input;
 	HANDLE Output;
+	HANDLE ErrorOutput;
 	DWORD Error;
 	LONG Result;
 
 	Result = 0;
 	Input = NULL;
 	Output = NULL;
+	ErrorOutput = NULL;
 	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 	Entry = KxBasepFindPseudoConsoleAttribute(AttributeList);
 	if (Entry && Entry->PseudoConsoleHandle) {
@@ -153,7 +262,10 @@ STATIC LONG KxBasepPreparePseudoConsole(
 					NtCurrentProcess(), &Input, 0, TRUE, DUPLICATE_SAME_ACCESS)) {
 					if (DuplicateHandle(NtCurrentProcess(), PseudoConsole->hOutput,
 						NtCurrentProcess(), &Output, 0, TRUE, DUPLICATE_SAME_ACCESS)) {
-						Result = 1;
+						if (DuplicateHandle(NtCurrentProcess(), PseudoConsole->hOutput,
+							NtCurrentProcess(), &ErrorOutput, 0, TRUE, DUPLICATE_SAME_ACCESS)) {
+							Result = 1;
+						}
 					}
 				}
 				Error = GetLastError();
@@ -164,14 +276,16 @@ STATIC LONG KxBasepPreparePseudoConsole(
 			StartupInfo->wShowWindow = SW_HIDE;
 			StartupInfo->hStdInput = Input;
 			StartupInfo->hStdOutput = Output;
-			StartupInfo->hStdError = Output;
-			*CreationFlags = (*CreationFlags & ~CREATE_NEW_CONSOLE) | CREATE_NO_WINDOW;
+			StartupInfo->hStdError = ErrorOutput;
+			*CreationFlags = (*CreationFlags & ~(CREATE_NEW_CONSOLE | DETACHED_PROCESS)) | CREATE_NO_WINDOW;
 			if (!Entry->NativeAttributes) {
 				StartupInfo->cb = sizeof(STARTUPINFOW);
 				*CreationFlags &= ~EXTENDED_STARTUPINFO_PRESENT;
 			}
 		} else {
 			if (Input) CloseHandle(Input);
+			if (Output) CloseHandle(Output);
+			if (ErrorOutput) CloseHandle(ErrorOutput);
 			SetLastError(Error);
 		}
 	}
@@ -183,8 +297,11 @@ STATIC VOID KxBasepReleaseStartupHandles(IN LPSTARTUPINFOW StartupInfo)
 {
 	DWORD Error;
 	Error = GetLastError();
-	CloseHandle(StartupInfo->hStdInput);
-	CloseHandle(StartupInfo->hStdOutput);
+	if (StartupInfo->hStdInput) CloseHandle(StartupInfo->hStdInput);
+	if (StartupInfo->hStdOutput) CloseHandle(StartupInfo->hStdOutput);
+	if (StartupInfo->hStdError && StartupInfo->hStdError != StartupInfo->hStdOutput) {
+		CloseHandle(StartupInfo->hStdError);
+	}
 	SetLastError(Error);
 }
 
@@ -637,7 +754,14 @@ KXBASEAPI BOOL WINAPI Ext_CreateProcessW(
 	Success = CreateProcessProc(ApplicationName, CommandLine,
 		ProcessAttributes, ThreadAttributes, InheritHandles, CreationFlags,
 		Environment, CurrentDirectory, StartupInfo, ProcessInformation);
-	if (Attached) KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	if (Attached) {
+		if (Success && ProcessInformation) {
+			KxBasepAttachPseudoConsoleProcess(
+				LocalStartupInfoEx.lpAttributeList,
+				ProcessInformation->hProcess);
+		}
+		KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	}
 	return Success;
 }
 KXBASEAPI BOOL WINAPI Ext_CreateProcessA(
@@ -677,7 +801,14 @@ KXBASEAPI BOOL WINAPI Ext_CreateProcessA(
 	Success = CreateProcessProc(ApplicationName, CommandLine,
 		ProcessAttributes, ThreadAttributes, InheritHandles, CreationFlags,
 		Environment, CurrentDirectory, StartupInfo, ProcessInformation);
-	if (Attached) KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	if (Attached) {
+		if (Success && ProcessInformation) {
+			KxBasepAttachPseudoConsoleProcess(
+				LocalStartupInfoEx.lpAttributeList,
+				ProcessInformation->hProcess);
+		}
+		KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	}
 	return Success;
 }
 KXBASEAPI BOOL WINAPI Ext_CreateProcessAsUserW(
@@ -718,6 +849,13 @@ KXBASEAPI BOOL WINAPI Ext_CreateProcessAsUserW(
 	Success = CreateProcessProc(Token, ApplicationName, CommandLine,
 		ProcessAttributes, ThreadAttributes, InheritHandles, CreationFlags,
 		Environment, CurrentDirectory, StartupInfo, ProcessInformation);
-	if (Attached) KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	if (Attached) {
+		if (Success && ProcessInformation) {
+			KxBasepAttachPseudoConsoleProcess(
+				LocalStartupInfoEx.lpAttributeList,
+				ProcessInformation->hProcess);
+		}
+		KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	}
 	return Success;
 }
