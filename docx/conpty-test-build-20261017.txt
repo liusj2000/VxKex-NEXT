@@ -1,7 +1,5 @@
-Build started 10/17/2026 6:35:18 PM.
+Build started 10/17/2026 10:32:43 PM.
 Project "D:\project\VxKex-NEXT\test\conpty-review-test.vcxproj" on node 1 (default targets).
-PrepareForBuild:
-  Creating directory "D:\project\VxKex-NEXT\test\x64\Release\obj\".
 InitializeBuildStatus:
   Creating "D:\project\VxKex-NEXT\test\x64\Release\obj\conpty-review-test.unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
@@ -21,4 +19,4 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:01.48
+Time Elapsed 00:00:01.97

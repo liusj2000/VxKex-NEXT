@@ -68,7 +68,12 @@ int main(void)
  CHECK(updateattr(list,0,0x00020016,pc,sizeof(pc),NULL,NULL));
  CHECK(updateattr(list,0,0x00020016,&pc,sizeof(pc),NULL,NULL));
  CHECK(!updateattr(list,0,0x00020016,(PVOID)1,sizeof(pc),NULL,NULL));
- ZeroMemory(&si,sizeof(si)); si.StartupInfo.cb=sizeof(si); si.lpAttributeList=list; before=si;
+ ZeroMemory(&si,sizeof(si)); si.StartupInfo.cb=sizeof(si); si.lpAttributeList=list;
+ si.StartupInfo.dwFlags=STARTF_USESTDHANDLES;
+ si.StartupInfo.hStdInput=INVALID_HANDLE_VALUE;
+ si.StartupInfo.hStdOutput=INVALID_HANDLE_VALUE;
+ si.StartupInfo.hStdError=INVALID_HANDLE_VALUE;
+ before=si;
  ZeroMemory(&pi,sizeof(pi));
  wcscpy_s(command,128,L"C:\\Windows\\System32\\cmd.exe /d /c set /p line= & echo received");
  CHECK(createproc(NULL,command,NULL,NULL,FALSE,EXTENDED_STARTUPINFO_PRESENT|CREATE_NEW_CONSOLE|DETACHED_PROCESS,NULL,NULL,&si.StartupInfo,&pi));

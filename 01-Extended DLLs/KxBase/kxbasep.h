@@ -39,6 +39,8 @@ typedef struct _KEX_PSEUDOCONSOLE {
 } TYPEDEF_TYPE_NAME(KEX_PSEUDOCONSOLE);
 
 EXTERN RTL_SRWLOCK KxPseudoConsoleLock;
+EXTERN PKEX_PSEUDOCONSOLE KxPseudoConsoles;
+EXTERN volatile LONG KxPseudoConsoleInitialized;
 
 VOID KxBasepInvalidatePseudoConsoleAttributes(IN HPCON PseudoConsoleHandle);
 VOID KxBasepAttachPseudoConsoleProcess(

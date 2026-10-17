@@ -40,7 +40,8 @@
 #define KX_VT_OUTPUT_MASK (0x0004 | 0x0008 | 0x0200)
 #define KX_VT_INPUT_MASK 0x0200
 RTL_SRWLOCK KxPseudoConsoleLock = RTL_SRWLOCK_INIT;
-STATIC PKEX_PSEUDOCONSOLE KxPseudoConsoles;
+PKEX_PSEUDOCONSOLE KxPseudoConsoles = NULL;
+volatile LONG KxPseudoConsoleInitialized = 0;
 
 typedef struct _KX_CONSOLE_MODE_ENTRY {
 	HANDLE Handle;
@@ -54,20 +55,34 @@ STATIC BOOLEAN KxBasepHasEmulatedAnsiOutputLocked(
 	IN	HANDLE	ConsoleHandle OPTIONAL)
 {
 	ULONG Index;
+	ULONG NativeMode;
+	ULONG LastError;
+	BOOLEAN Found;
+
+	LastError = GetLastError();
+	Found = FALSE;
 
 	for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
 		if (!KxConsoleModes[Index].Handle) {
+			continue;
+		}
+		if (!GetConsoleMode(KxConsoleModes[Index].Handle, &NativeMode)) {
+			RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
 			continue;
 		}
 		if (ConsoleHandle && KxConsoleModes[Index].Handle != ConsoleHandle) {
 			continue;
 		}
 		if (KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
-			return TRUE;
+			Found = TRUE;
+			if (ConsoleHandle) {
+				break;
+			}
 		}
 	}
 
-	return FALSE;
+	SetLastError(LastError);
+	return Found;
 }
 
 STATIC BOOLEAN KxBasepShouldProcessConsoleAnsi(
@@ -79,38 +94,11 @@ STATIC BOOLEAN KxBasepShouldProcessConsoleAnsi(
 		return FALSE;
 	}
 
-	RtlAcquireSRWLockShared(&KxConsoleModeLock);
+	RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
 	Enabled = KxBasepHasEmulatedAnsiOutputLocked(ConsoleHandle);
-	RtlReleaseSRWLockShared(&KxConsoleModeLock);
+	RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
 
 	return Enabled;
-}
-
-KXBASEAPI BOOL WINAPI Ext_CloseHandle(IN HANDLE Handle)
-{
-	BOOL Success;
-	ULONG Index;
-	BOOLEAN RemovedAnsiOutput;
-
-	Success = CloseHandle(Handle);
-	if (Success && Handle && Handle != INVALID_HANDLE_VALUE) {
-		RemovedAnsiOutput = FALSE;
-		RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
-		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
-			if (KxConsoleModes[Index].Handle == Handle) {
-				if (KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
-					RemovedAnsiOutput = TRUE;
-				}
-				RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
-				break;
-			}
-		}
-		if (RemovedAnsiOutput && !KxBasepHasEmulatedAnsiOutputLocked(NULL)) {
-			BaseDisableConsoleAnsiSupport(Handle);
-		}
-		RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
-	}
-	return Success;
 }
 #ifndef PSEUDOCONSOLE_INHERIT_CURSOR
 #  define PSEUDOCONSOLE_INHERIT_CURSOR 0x1
@@ -240,6 +228,18 @@ KXBASEAPI BOOL WINAPI Ext_SetConsoleMode(
 			break;
 		}
 		if (!KxConsoleModes[Index].Handle && Slot == ARRAYSIZE(KxConsoleModes)) Slot = Index;
+	}
+	if ((Mode & Mask) && Slot == ARRAYSIZE(KxConsoleModes)) {
+		ULONG NativeMode;
+		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+			if (KxConsoleModes[Index].Handle &&
+				!GetConsoleMode(KxConsoleModes[Index].Handle, &NativeMode)) {
+				RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
+				if (Slot == ARRAYSIZE(KxConsoleModes)) {
+					Slot = Index;
+				}
+			}
+		}
 	}
 	if ((Mode & Mask) && Slot == ARRAYSIZE(KxConsoleModes)) {
 		RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
@@ -477,7 +477,7 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 			CurrentProcess,
 			&DuplicatedInputHandle,
 			0,
-			TRUE,
+			FALSE,
 			DUPLICATE_SAME_ACCESS)) {
 		LastError = GetLastError();
 		RtlFreeHeap(RtlProcessHeap(), 0, PseudoConsole);
@@ -490,7 +490,7 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 			CurrentProcess,
 			&DuplicatedOutputHandle,
 			0,
-			TRUE,
+			FALSE,
 			DUPLICATE_SAME_ACCESS)) {
 		LastError = GetLastError();
 		CloseHandle(DuplicatedInputHandle);
@@ -506,6 +506,7 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 	PseudoConsole->Next = KxPseudoConsoles;
 	KxPseudoConsoles = PseudoConsole;
+	InterlockedExchange(&KxPseudoConsoleInitialized, 1);
 	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 
 	*PseudoConsoleHandle = (HPCON) PseudoConsole;

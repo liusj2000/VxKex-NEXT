@@ -123,7 +123,7 @@
 #pragma comment(linker, "/EXPORT:CreatePrivateObjectSecurityEx=advapi32.CreatePrivateObjectSecurityEx")
 #pragma comment(linker, "/EXPORT:CreatePrivateObjectSecurityWithMultipleInheritance=advapi32.CreatePrivateObjectSecurityWithMultipleInheritance")
 #pragma comment(linker, "/EXPORT:CreateProcessAsUserA=advapi32.CreateProcessAsUserA")
-#pragma comment(linker, "/EXPORT:CreateProcessAsUserW=KxBase.CreateProcessAsUserW")
+#pragma comment(linker, "/EXPORT:CreateProcessAsUserW=advapi32.CreateProcessAsUserW")
 #pragma comment(linker, "/EXPORT:CreateProcessWithLogonW=advapi32.CreateProcessWithLogonW")
 #pragma comment(linker, "/EXPORT:CreateProcessWithTokenW=advapi32.CreateProcessWithTokenW")
 #pragma comment(linker, "/EXPORT:CreateRestrictedToken=advapi32.CreateRestrictedToken")

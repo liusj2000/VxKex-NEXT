@@ -86,7 +86,7 @@
 #pragma comment(linker, "/EXPORT:ClearCommBreak=kernel32.ClearCommBreak")
 #pragma comment(linker, "/EXPORT:ClearCommError=kernel32.ClearCommError")
 #pragma comment(linker, "/EXPORT:CloseConsoleHandle=kernel32.CloseConsoleHandle")
-// CloseHandle clears emulated per-handle console modes.
+#pragma comment(linker, "/EXPORT:CloseHandle=kernel32.CloseHandle")
 #pragma comment(linker, "/EXPORT:ClosePrivateNamespace=kernel32.ClosePrivateNamespace")
 #pragma comment(linker, "/EXPORT:CloseProfileUserMapping=kernel32.CloseProfileUserMapping")
 #pragma comment(linker, "/EXPORT:CloseThreadpool=kernel32.CloseThreadpool")

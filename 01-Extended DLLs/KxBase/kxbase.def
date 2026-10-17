@@ -226,7 +226,6 @@ EXPORTS
 	HeapCreate								= Ext_HeapCreate
 
 	;; handle.c
-	CloseHandle = Ext_CloseHandle
 	CompareObjectHandles
 	SetHandleInformation					= Ext_SetHandleInformation
 
