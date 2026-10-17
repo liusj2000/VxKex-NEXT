@@ -9,7 +9,7 @@ File Type: DLL
   Section contains the following exports for KxBase.dll
 
     00000000 characteristics
-    6AD38707 time date stamp Sat Oct 17 22:32:39 2026
+    6AD38DAB time date stamp Sat Oct 17 23:00:59 2026
         0.00 version
            1 ordinal base
         1928 number of functions
