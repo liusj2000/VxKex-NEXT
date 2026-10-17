@@ -25,19 +25,25 @@
 #include <KxBase.h>
 
 #define DLL_DIRECTORY_DATA_VERIFICATION_CODE 'V' + 'x' + 'K' + 'e' + 'x' + 'N' + 'E' + 'X' + 'T'
-#define KX_PSEUDOCONSOLE_SIGNATURE 'CPxK'
+#define KEX_PSEUDOCONSOLE_MAGIC 0x4350584B
 
-typedef struct _KX_PSEUDOCONSOLE {
-	ULONG	Signature;
+typedef struct _KEX_PSEUDOCONSOLE {
+	DWORD	Magic;
 	COORD	Size;
-	HANDLE	InputHandle;
-	HANDLE	OutputHandle;
+	HANDLE	hInput;
+	HANDLE	hOutput;
 	DWORD	Flags;
-} TYPEDEF_TYPE_NAME(KX_PSEUDOCONSOLE);
+	struct _KEX_PSEUDOCONSOLE *Next;
+} TYPEDEF_TYPE_NAME(KEX_PSEUDOCONSOLE);
 
+EXTERN RTL_SRWLOCK KxPseudoConsoleLock;
+
+VOID KxBasepInvalidatePseudoConsoleAttributes(IN HPCON PseudoConsoleHandle);
+
+// Caller must hold KxPseudoConsoleLock while validating or using the object.
 BOOL KxBasepIsPseudoConsoleHandle(
 	IN	HPCON				PseudoConsoleHandle,
-	OUT	PKX_PSEUDOCONSOLE	*PseudoConsole OPTIONAL);
+	OUT	PKEX_PSEUDOCONSOLE	*PseudoConsole OPTIONAL);
 
 typedef struct _DLL_DIRECTORY_DATA {
 	USHORT	VerificationCode;

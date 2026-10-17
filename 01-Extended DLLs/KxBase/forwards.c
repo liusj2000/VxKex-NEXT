@@ -86,7 +86,7 @@
 #pragma comment(linker, "/EXPORT:ClearCommBreak=kernel32.ClearCommBreak")
 #pragma comment(linker, "/EXPORT:ClearCommError=kernel32.ClearCommError")
 #pragma comment(linker, "/EXPORT:CloseConsoleHandle=kernel32.CloseConsoleHandle")
-#pragma comment(linker, "/EXPORT:CloseHandle=kernel32.CloseHandle")
+// CloseHandle clears emulated per-handle console modes.
 #pragma comment(linker, "/EXPORT:ClosePrivateNamespace=kernel32.ClosePrivateNamespace")
 #pragma comment(linker, "/EXPORT:CloseProfileUserMapping=kernel32.CloseProfileUserMapping")
 #pragma comment(linker, "/EXPORT:CloseThreadpool=kernel32.CloseThreadpool")
@@ -169,7 +169,7 @@
 #pragma comment(linker, "/EXPORT:CreatePrivateNamespaceA=kernel32.CreatePrivateNamespaceA")
 #pragma comment(linker, "/EXPORT:CreatePrivateNamespaceW=kernel32.CreatePrivateNamespaceW")
 //#pragma comment(linker, "/EXPORT:CreateProcessA=kernel32.CreateProcessA")
-#pragma comment(linker, "/EXPORT:CreateProcessAsUserW=kernel32.CreateProcessAsUserW")
+// CreateProcessAsUserW is implemented in process.c.
 #pragma comment(linker, "/EXPORT:CreateProcessInternalA=kernel32.CreateProcessInternalA")
 #pragma comment(linker, "/EXPORT:CreateProcessInternalW=kernel32.CreateProcessInternalW")
 //#pragma comment(linker, "/EXPORT:CreateProcessW=kernel32.CreateProcessW")
@@ -218,7 +218,7 @@
 #pragma comment(linker, "/EXPORT:DeleteFileTransactedA=kernel32.DeleteFileTransactedA")
 #pragma comment(linker, "/EXPORT:DeleteFileTransactedW=kernel32.DeleteFileTransactedW")
 #pragma comment(linker, "/EXPORT:DeleteFileW=kernel32.DeleteFileW")
-#pragma comment(linker, "/EXPORT:DeleteProcThreadAttributeList=kernel32.DeleteProcThreadAttributeList")
+// DeleteProcThreadAttributeList is implemented in process.c.
 #pragma comment(linker, "/EXPORT:DeleteTimerQueue=kernel32.DeleteTimerQueue")
 #pragma comment(linker, "/EXPORT:DeleteTimerQueueEx=kernel32.DeleteTimerQueueEx")
 #pragma comment(linker, "/EXPORT:DeleteTimerQueueTimer=kernel32.DeleteTimerQueueTimer")
@@ -744,7 +744,7 @@
 //#pragma comment(linker, "/EXPORT:InitializeCriticalSection=kernel32.InitializeCriticalSection")
 //#pragma comment(linker, "/EXPORT:InitializeCriticalSectionAndSpinCount=kernel32.InitializeCriticalSectionAndSpinCount")
 //#pragma comment(linker, "/EXPORT:InitializeCriticalSectionEx=kernel32.InitializeCriticalSectionEx")
-#pragma comment(linker, "/EXPORT:InitializeProcThreadAttributeList=kernel32.InitializeProcThreadAttributeList")
+// InitializeProcThreadAttributeList is implemented in process.c.
 #pragma comment(linker, "/EXPORT:InitializeSListHead=kernel32.InitializeSListHead")
 #pragma comment(linker, "/EXPORT:InitializeSRWLock=kernel32.InitializeSRWLock")
 #pragma comment(linker, "/EXPORT:InterlockedFlushSList=kernel32.InterlockedFlushSList")

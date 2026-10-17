@@ -1,6 +1,10 @@
 #include "buildcfg.h"
 #include "kxbasep.h"
 
+#ifndef SW_HIDE
+#define SW_HIDE 0
+#endif
+
 #ifndef PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE
 #  define PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE 0x00020016
 #endif
@@ -13,14 +17,21 @@ typedef BOOL (WINAPI *PFN_CREATEPROCESSW)(
 	PCWSTR, PWSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, BOOL,
 	DWORD, PVOID, PCWSTR, LPSTARTUPINFOW, LPPROCESS_INFORMATION);
 
+typedef BOOL (WINAPI *PFN_CREATEPROCESSASUSERW)(
+	HANDLE, PCWSTR, PWSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, BOOL,
+	DWORD, PVOID, PCWSTR, LPSTARTUPINFOW, LPPROCESS_INFORMATION);
+
 typedef struct _KX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY {
 	PPROC_THREAD_ATTRIBUTE_LIST	AttributeList;
 	HPCON						PseudoConsoleHandle;
+	BOOL NativeAttributes;
+	BOOL HandleList;
 } TYPEDEF_TYPE_NAME(KX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY);
 
 STATIC KX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY KxPseudoConsoleAttributeEntries[64];
 
-STATIC VOID KxBasepRememberPseudoConsoleAttribute(
+// All table operations are serialized by KxPseudoConsoleLock.
+STATIC BOOL KxBasepRememberPseudoConsoleAttribute(
 	IN	PPROC_THREAD_ATTRIBUTE_LIST	AttributeList,
 	IN	HPCON						PseudoConsoleHandle)
 {
@@ -32,7 +43,7 @@ STATIC VOID KxBasepRememberPseudoConsoleAttribute(
 	for (Index = 0; Index < ARRAYSIZE(KxPseudoConsoleAttributeEntries); ++Index) {
 		if (KxPseudoConsoleAttributeEntries[Index].AttributeList == AttributeList) {
 			KxPseudoConsoleAttributeEntries[Index].PseudoConsoleHandle = PseudoConsoleHandle;
-			return;
+			return TRUE;
 		}
 
 		if (!KxPseudoConsoleAttributeEntries[Index].AttributeList &&
@@ -44,10 +55,15 @@ STATIC VOID KxBasepRememberPseudoConsoleAttribute(
 	if (EmptyIndex != ARRAYSIZE(KxPseudoConsoleAttributeEntries)) {
 		KxPseudoConsoleAttributeEntries[EmptyIndex].AttributeList = AttributeList;
 		KxPseudoConsoleAttributeEntries[EmptyIndex].PseudoConsoleHandle = PseudoConsoleHandle;
+		// Unknown lists may already contain native attributes. Never discard them.
+		KxPseudoConsoleAttributeEntries[EmptyIndex].NativeAttributes = TRUE;
+		return TRUE;
 	}
+	SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+	return FALSE;
 }
 
-STATIC HPCON KxBasepFindPseudoConsoleAttribute(
+STATIC PKX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY KxBasepFindPseudoConsoleAttribute(
 	IN	PPROC_THREAD_ATTRIBUTE_LIST	AttributeList)
 {
 	ULONG Index;
@@ -58,11 +74,118 @@ STATIC HPCON KxBasepFindPseudoConsoleAttribute(
 
 	for (Index = 0; Index < ARRAYSIZE(KxPseudoConsoleAttributeEntries); ++Index) {
 		if (KxPseudoConsoleAttributeEntries[Index].AttributeList == AttributeList) {
-			return KxPseudoConsoleAttributeEntries[Index].PseudoConsoleHandle;
+			return &KxPseudoConsoleAttributeEntries[Index];
 		}
 	}
 
 	return NULL;
+}
+
+VOID KxBasepInvalidatePseudoConsoleAttributes(IN HPCON PseudoConsoleHandle)
+{
+	ULONG Index;
+	for (Index = 0; Index < ARRAYSIZE(KxPseudoConsoleAttributeEntries); ++Index) {
+		if (KxPseudoConsoleAttributeEntries[Index].PseudoConsoleHandle == PseudoConsoleHandle) {
+			KxPseudoConsoleAttributeEntries[Index].PseudoConsoleHandle = (HPCON) INVALID_HANDLE_VALUE;
+		}
+	}
+}
+
+KXBASEAPI BOOL WINAPI Ext_InitializeProcThreadAttributeList(
+	OUT PPROC_THREAD_ATTRIBUTE_LIST AttributeList,
+	IN DWORD Count, IN DWORD Flags, IN OUT PSIZE_T Size)
+{
+	BOOL Success;
+	PKX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY Entry;
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
+	Success = InitializeProcThreadAttributeList(AttributeList, Count, Flags, Size);
+	if (Success) {
+		Success = KxBasepRememberPseudoConsoleAttribute(AttributeList, NULL);
+		if (Success) {
+			Entry = KxBasepFindPseudoConsoleAttribute(AttributeList);
+			Entry->NativeAttributes = FALSE;
+			Entry->HandleList = FALSE;
+		}
+	}
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
+	return Success;
+}
+
+KXBASEAPI VOID WINAPI Ext_DeleteProcThreadAttributeList(
+	IN OUT PPROC_THREAD_ATTRIBUTE_LIST AttributeList)
+{
+	PKX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY Entry;
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
+	Entry = KxBasepFindPseudoConsoleAttribute(AttributeList);
+	if (Entry) RtlZeroMemory(Entry, sizeof(*Entry));
+	DeleteProcThreadAttributeList(AttributeList);
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
+}
+
+// Returns 0 for no binding, 1 for attached, -1 for an invalid binding.
+STATIC LONG KxBasepPreparePseudoConsole(
+	IN PPROC_THREAD_ATTRIBUTE_LIST AttributeList,
+	IN OUT LPSTARTUPINFOW StartupInfo,
+	IN OUT PDWORD CreationFlags)
+{
+	PKX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY Entry;
+	PKEX_PSEUDOCONSOLE PseudoConsole;
+	HANDLE Input;
+	HANDLE Output;
+	DWORD Error;
+	LONG Result;
+
+	Result = 0;
+	Input = NULL;
+	Output = NULL;
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
+	Entry = KxBasepFindPseudoConsoleAttribute(AttributeList);
+	if (Entry && Entry->PseudoConsoleHandle) {
+		Result = -1;
+		Error = ERROR_INVALID_HANDLE;
+		if (KxBasepIsPseudoConsoleHandle(Entry->PseudoConsoleHandle, &PseudoConsole)) {
+			// Private pipe duplicates are absent from the caller's explicit
+			// allow-list. Do not silently launch with inaccessible std handles.
+			if (Entry->HandleList) {
+				Error = ERROR_NOT_SUPPORTED;
+			} else {
+				if (DuplicateHandle(NtCurrentProcess(), PseudoConsole->hInput,
+					NtCurrentProcess(), &Input, 0, TRUE, DUPLICATE_SAME_ACCESS)) {
+					if (DuplicateHandle(NtCurrentProcess(), PseudoConsole->hOutput,
+						NtCurrentProcess(), &Output, 0, TRUE, DUPLICATE_SAME_ACCESS)) {
+						Result = 1;
+					}
+				}
+				Error = GetLastError();
+			}
+		}
+		if (Result > 0) {
+			StartupInfo->dwFlags |= STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+			StartupInfo->wShowWindow = SW_HIDE;
+			StartupInfo->hStdInput = Input;
+			StartupInfo->hStdOutput = Output;
+			StartupInfo->hStdError = Output;
+			*CreationFlags = (*CreationFlags & ~CREATE_NEW_CONSOLE) | CREATE_NO_WINDOW;
+			if (!Entry->NativeAttributes) {
+				StartupInfo->cb = sizeof(STARTUPINFOW);
+				*CreationFlags &= ~EXTENDED_STARTUPINFO_PRESENT;
+			}
+		} else {
+			if (Input) CloseHandle(Input);
+			SetLastError(Error);
+		}
+	}
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
+	return Result;
+}
+
+STATIC VOID KxBasepReleaseStartupHandles(IN LPSTARTUPINFOW StartupInfo)
+{
+	DWORD Error;
+	Error = GetLastError();
+	CloseHandle(StartupInfo->hStdInput);
+	CloseHandle(StartupInfo->hStdOutput);
+	SetLastError(Error);
 }
 
 STATIC FARPROC KxBasepGetKernel32Procedure(
@@ -367,11 +490,13 @@ KXBASEAPI BOOL WINAPI Ext_UpdateProcThreadAttribute(
 	BOOLEAN Success;
 	BOOLEAN AlreadyTriedAgain;
 	ULONG MitigationPolicy;
+	PKX_PSEUDOCONSOLE_ATTRIBUTE_ENTRY Entry;
 
 	AlreadyTriedAgain = FALSE;
 
 	if (Attribute == PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE) {
 		HPCON PseudoConsoleHandle;
+		BOOL Valid;
 
 		if (Flags != 0 || PreviousValue || ReturnSize || !AttributeList || !Value ||
 			Size != sizeof(HPCON)) {
@@ -379,17 +504,29 @@ KXBASEAPI BOOL WINAPI Ext_UpdateProcThreadAttribute(
 			return FALSE;
 		}
 
+		RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 		PseudoConsoleHandle = (HPCON) Value;
-
-		if (!KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, NULL)) {
+		Valid = KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, NULL);
+		if (!Valid) {
+			__try {
+				PseudoConsoleHandle = *(HPCON *) Value;
+				Valid = KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, NULL);
+			} __except (EXCEPTION_EXECUTE_HANDLER) {
+				Valid = FALSE;
+			}
+		}
+		if (!Valid) {
+			RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 			BaseSetLastNTError(STATUS_INVALID_HANDLE);
 			return FALSE;
 		}
 
-		KxBasepRememberPseudoConsoleAttribute(AttributeList, PseudoConsoleHandle);
-		return TRUE;
+		Valid = KxBasepRememberPseudoConsoleAttribute(AttributeList, PseudoConsoleHandle);
+		RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
+		return Valid;
 	}
 
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 TryAgain:
 	Success = UpdateProcThreadAttribute(
 		AttributeList,
@@ -399,6 +536,13 @@ TryAgain:
 		Size,
 		PreviousValue,
 		ReturnSize);
+	if (Success) {
+		Entry = KxBasepFindPseudoConsoleAttribute(AttributeList);
+		if (Entry) {
+			Entry->NativeAttributes = TRUE;
+			if (Attribute == PROC_THREAD_ATTRIBUTE_HANDLE_LIST) Entry->HandleList = TRUE;
+		}
+	}
 
 	if (!Success) {
 		ULONG LastError;
@@ -452,129 +596,128 @@ TryAgain:
 		SetLastError(LastError);
 	}
 
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 	return Success;
 }
 
 KXBASEAPI BOOL WINAPI Ext_CreateProcessW(
-	IN		PCWSTR					ApplicationName OPTIONAL,
-	IN OUT	PWSTR					CommandLine OPTIONAL,
-	IN		LPSECURITY_ATTRIBUTES	ProcessAttributes OPTIONAL,
-	IN		LPSECURITY_ATTRIBUTES	ThreadAttributes OPTIONAL,
-	IN		BOOL					InheritHandles,
-	IN		DWORD					CreationFlags,
-	IN		PVOID					Environment OPTIONAL,
-	IN		PCWSTR					CurrentDirectory OPTIONAL,
-	IN		LPSTARTUPINFOW			StartupInfo,
-	OUT		LPPROCESS_INFORMATION	ProcessInformation)
+	IN PCWSTR ApplicationName OPTIONAL,
+	IN OUT PWSTR CommandLine OPTIONAL,
+	IN LPSECURITY_ATTRIBUTES ProcessAttributes OPTIONAL,
+	IN LPSECURITY_ATTRIBUTES ThreadAttributes OPTIONAL,
+	IN BOOL InheritHandles,
+	IN DWORD CreationFlags,
+	IN PVOID Environment OPTIONAL,
+	IN PCWSTR CurrentDirectory OPTIONAL,
+	IN LPSTARTUPINFOW StartupInfo,
+	OUT LPPROCESS_INFORMATION ProcessInformation)
 {
-	PFN_CREATEPROCESSW CreateProcessWProc;
+	PFN_CREATEPROCESSW CreateProcessProc;
 	STARTUPINFOEXW LocalStartupInfoEx;
-	PKX_PSEUDOCONSOLE PseudoConsole;
-	HPCON PseudoConsoleHandle;
+	LONG Attached;
+	BOOL Success;
 
-	CreateProcessWProc = (PFN_CREATEPROCESSW) KxBasepGetKernel32Procedure("CreateProcessW");
-	ASSERT (CreateProcessWProc != NULL);
-
-	if ((CreationFlags & EXTENDED_STARTUPINFO_PRESENT) && StartupInfo) {
-		PseudoConsoleHandle = KxBasepFindPseudoConsoleAttribute(
-			((LPSTARTUPINFOEXW) StartupInfo)->lpAttributeList);
-
-		if (KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, &PseudoConsole)) {
-			RtlCopyMemory(&LocalStartupInfoEx, StartupInfo, sizeof(LocalStartupInfoEx));
-			LocalStartupInfoEx.StartupInfo.dwFlags |= STARTF_USESTDHANDLES;
-			LocalStartupInfoEx.StartupInfo.hStdInput = PseudoConsole->InputHandle;
-			LocalStartupInfoEx.StartupInfo.hStdOutput = PseudoConsole->OutputHandle;
-			LocalStartupInfoEx.StartupInfo.hStdError = PseudoConsole->OutputHandle;
-
-			KexLogWarningEvent(
-				L"CreateProcessW translated a pseudo console attribute to standard handles. "
-				L"This is a VxKex compatibility backend, not a Windows 10 ConPTY host.");
-
-			return CreateProcessWProc(
-				ApplicationName,
-				CommandLine,
-				ProcessAttributes,
-				ThreadAttributes,
-				TRUE,
-				CreationFlags,
-				Environment,
-				CurrentDirectory,
-				&LocalStartupInfoEx.StartupInfo,
-				ProcessInformation);
+	CreateProcessProc = (PFN_CREATEPROCESSW) KxBasepGetKernel32Procedure("CreateProcessW");
+	if (!CreateProcessProc) {
+		SetLastError(ERROR_PROC_NOT_FOUND);
+		return FALSE;
+	}
+	Attached = 0;
+	if ((CreationFlags & EXTENDED_STARTUPINFO_PRESENT) && StartupInfo &&
+		StartupInfo->cb >= sizeof(LocalStartupInfoEx)) {
+		RtlCopyMemory(&LocalStartupInfoEx, StartupInfo, sizeof(LocalStartupInfoEx));
+		Attached = KxBasepPreparePseudoConsole(LocalStartupInfoEx.lpAttributeList,
+			(LPSTARTUPINFOW) &LocalStartupInfoEx.StartupInfo, &CreationFlags);
+		if (Attached < 0) return FALSE;
+		if (Attached) {
+			StartupInfo = &LocalStartupInfoEx.StartupInfo;
+			InheritHandles = TRUE;
 		}
 	}
-
-	return CreateProcessWProc(
-		ApplicationName,
-		CommandLine,
-		ProcessAttributes,
-		ThreadAttributes,
-		InheritHandles,
-		CreationFlags,
-		Environment,
-		CurrentDirectory,
-		StartupInfo,
-		ProcessInformation);
+	Success = CreateProcessProc(ApplicationName, CommandLine,
+		ProcessAttributes, ThreadAttributes, InheritHandles, CreationFlags,
+		Environment, CurrentDirectory, StartupInfo, ProcessInformation);
+	if (Attached) KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	return Success;
 }
-
 KXBASEAPI BOOL WINAPI Ext_CreateProcessA(
-	IN		PCSTR					ApplicationName OPTIONAL,
-	IN OUT	PSTR					CommandLine OPTIONAL,
-	IN		LPSECURITY_ATTRIBUTES	ProcessAttributes OPTIONAL,
-	IN		LPSECURITY_ATTRIBUTES	ThreadAttributes OPTIONAL,
-	IN		BOOL					InheritHandles,
-	IN		DWORD					CreationFlags,
-	IN		PVOID					Environment OPTIONAL,
-	IN		PCSTR					CurrentDirectory OPTIONAL,
-	IN		LPSTARTUPINFOA			StartupInfo,
-	OUT		LPPROCESS_INFORMATION	ProcessInformation)
+	IN PCSTR ApplicationName OPTIONAL,
+	IN OUT PSTR CommandLine OPTIONAL,
+	IN LPSECURITY_ATTRIBUTES ProcessAttributes OPTIONAL,
+	IN LPSECURITY_ATTRIBUTES ThreadAttributes OPTIONAL,
+	IN BOOL InheritHandles,
+	IN DWORD CreationFlags,
+	IN PVOID Environment OPTIONAL,
+	IN PCSTR CurrentDirectory OPTIONAL,
+	IN LPSTARTUPINFOA StartupInfo,
+	OUT LPPROCESS_INFORMATION ProcessInformation)
 {
-	PFN_CREATEPROCESSA CreateProcessAProc;
+	PFN_CREATEPROCESSA CreateProcessProc;
 	STARTUPINFOEXA LocalStartupInfoEx;
-	PKX_PSEUDOCONSOLE PseudoConsole;
-	HPCON PseudoConsoleHandle;
+	LONG Attached;
+	BOOL Success;
 
-	CreateProcessAProc = (PFN_CREATEPROCESSA) KxBasepGetKernel32Procedure("CreateProcessA");
-	ASSERT (CreateProcessAProc != NULL);
-
-	if ((CreationFlags & EXTENDED_STARTUPINFO_PRESENT) && StartupInfo) {
-		PseudoConsoleHandle = KxBasepFindPseudoConsoleAttribute(
-			((LPSTARTUPINFOEXA) StartupInfo)->lpAttributeList);
-
-		if (KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, &PseudoConsole)) {
-			RtlCopyMemory(&LocalStartupInfoEx, StartupInfo, sizeof(LocalStartupInfoEx));
-			LocalStartupInfoEx.StartupInfo.dwFlags |= STARTF_USESTDHANDLES;
-			LocalStartupInfoEx.StartupInfo.hStdInput = PseudoConsole->InputHandle;
-			LocalStartupInfoEx.StartupInfo.hStdOutput = PseudoConsole->OutputHandle;
-			LocalStartupInfoEx.StartupInfo.hStdError = PseudoConsole->OutputHandle;
-
-			KexLogWarningEvent(
-				L"CreateProcessA translated a pseudo console attribute to standard handles. "
-				L"This is a VxKex compatibility backend, not a Windows 10 ConPTY host.");
-
-			return CreateProcessAProc(
-				ApplicationName,
-				CommandLine,
-				ProcessAttributes,
-				ThreadAttributes,
-				TRUE,
-				CreationFlags,
-				Environment,
-				CurrentDirectory,
-				&LocalStartupInfoEx.StartupInfo,
-				ProcessInformation);
+	CreateProcessProc = (PFN_CREATEPROCESSA) KxBasepGetKernel32Procedure("CreateProcessA");
+	if (!CreateProcessProc) {
+		SetLastError(ERROR_PROC_NOT_FOUND);
+		return FALSE;
+	}
+	Attached = 0;
+	if ((CreationFlags & EXTENDED_STARTUPINFO_PRESENT) && StartupInfo &&
+		StartupInfo->cb >= sizeof(LocalStartupInfoEx)) {
+		RtlCopyMemory(&LocalStartupInfoEx, StartupInfo, sizeof(LocalStartupInfoEx));
+		Attached = KxBasepPreparePseudoConsole(LocalStartupInfoEx.lpAttributeList,
+			(LPSTARTUPINFOW) &LocalStartupInfoEx.StartupInfo, &CreationFlags);
+		if (Attached < 0) return FALSE;
+		if (Attached) {
+			StartupInfo = &LocalStartupInfoEx.StartupInfo;
+			InheritHandles = TRUE;
 		}
 	}
+	Success = CreateProcessProc(ApplicationName, CommandLine,
+		ProcessAttributes, ThreadAttributes, InheritHandles, CreationFlags,
+		Environment, CurrentDirectory, StartupInfo, ProcessInformation);
+	if (Attached) KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	return Success;
+}
+KXBASEAPI BOOL WINAPI Ext_CreateProcessAsUserW(
+	IN HANDLE Token,
+	IN PCWSTR ApplicationName OPTIONAL,
+	IN OUT PWSTR CommandLine OPTIONAL,
+	IN LPSECURITY_ATTRIBUTES ProcessAttributes OPTIONAL,
+	IN LPSECURITY_ATTRIBUTES ThreadAttributes OPTIONAL,
+	IN BOOL InheritHandles,
+	IN DWORD CreationFlags,
+	IN PVOID Environment OPTIONAL,
+	IN PCWSTR CurrentDirectory OPTIONAL,
+	IN LPSTARTUPINFOW StartupInfo,
+	OUT LPPROCESS_INFORMATION ProcessInformation)
+{
+	PFN_CREATEPROCESSASUSERW CreateProcessProc;
+	STARTUPINFOEXW LocalStartupInfoEx;
+	LONG Attached;
+	BOOL Success;
 
-	return CreateProcessAProc(
-		ApplicationName,
-		CommandLine,
-		ProcessAttributes,
-		ThreadAttributes,
-		InheritHandles,
-		CreationFlags,
-		Environment,
-		CurrentDirectory,
-		StartupInfo,
-		ProcessInformation);
+	CreateProcessProc = (PFN_CREATEPROCESSASUSERW) KxBasepGetKernel32Procedure("CreateProcessAsUserW");
+	if (!CreateProcessProc) {
+		SetLastError(ERROR_PROC_NOT_FOUND);
+		return FALSE;
+	}
+	Attached = 0;
+	if ((CreationFlags & EXTENDED_STARTUPINFO_PRESENT) && StartupInfo &&
+		StartupInfo->cb >= sizeof(LocalStartupInfoEx)) {
+		RtlCopyMemory(&LocalStartupInfoEx, StartupInfo, sizeof(LocalStartupInfoEx));
+		Attached = KxBasepPreparePseudoConsole(LocalStartupInfoEx.lpAttributeList,
+			(LPSTARTUPINFOW) &LocalStartupInfoEx.StartupInfo, &CreationFlags);
+		if (Attached < 0) return FALSE;
+		if (Attached) {
+			StartupInfo = &LocalStartupInfoEx.StartupInfo;
+			InheritHandles = TRUE;
+		}
+	}
+	Success = CreateProcessProc(Token, ApplicationName, CommandLine,
+		ProcessAttributes, ThreadAttributes, InheritHandles, CreationFlags,
+		Environment, CurrentDirectory, StartupInfo, ProcessInformation);
+	if (Attached) KxBasepReleaseStartupHandles((LPSTARTUPINFOW) StartupInfo);
+	return Success;
 }

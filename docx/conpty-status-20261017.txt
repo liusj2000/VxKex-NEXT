@@ -1,0 +1,16 @@
+ M "00-Common Headers/KxBase.h"
+ M "01-Extended DLLs/KxAdvapi/forwards.c"
+ M "01-Extended DLLs/KxBase/console.c"
+ M "01-Extended DLLs/KxBase/forwards.c"
+ M "01-Extended DLLs/KxBase/kxbase.def"
+ M "01-Extended DLLs/KxBase/kxbasep.h"
+ M "01-Extended DLLs/KxBase/process.c"
+?? "docx/ConPTY\345\256\241\346\237\245\344\277\256\346\255\243-20261017.md"
+?? docx/conpty-build-20261017.txt
+?? docx/conpty-diff-check-20261017.txt
+?? docx/conpty-exports-20261017.txt
+?? docx/conpty-hashes-20261017.txt
+?? docx/conpty-status-20261017.txt
+?? docx/conpty-target-build-20261017.txt
+?? docx/conpty-test-build-20261017.txt
+?? docx/conpty-test-run-20261017.txt

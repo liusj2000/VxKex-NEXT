@@ -1,0 +1,7 @@
+LOADED D:\project\VxKex-NEXT\x64\Release\KxBase.dll
+PIPE OUTPUT: received
+
+
+HANDLES before=43 after=43
+RESULT failures=0
+TEST_EXIT=0

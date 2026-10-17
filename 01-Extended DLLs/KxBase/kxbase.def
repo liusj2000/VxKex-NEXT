@@ -190,6 +190,9 @@ EXPORTS
 	;; process.c
 	IsProcessInJob							= Ext_IsProcessInJob
 	UpdateProcThreadAttribute				= Ext_UpdateProcThreadAttribute
+	InitializeProcThreadAttributeList = Ext_InitializeProcThreadAttributeList
+	DeleteProcThreadAttributeList = Ext_DeleteProcThreadAttributeList
+	CreateProcessAsUserW = Ext_CreateProcessAsUserW
 	CreateProcessA							= Ext_CreateProcessA
 	CreateProcessW							= Ext_CreateProcessW
 
@@ -223,6 +226,7 @@ EXPORTS
 	HeapCreate								= Ext_HeapCreate
 
 	;; handle.c
+	CloseHandle = Ext_CloseHandle
 	CompareObjectHandles
 	SetHandleInformation					= Ext_SetHandleInformation
 

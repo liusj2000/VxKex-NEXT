@@ -37,27 +37,57 @@
 #include "kxbasep.h"
 
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x4
+#define KX_VT_OUTPUT_MASK (0x0004 | 0x0008 | 0x0200)
+#define KX_VT_INPUT_MASK 0x0200
+RTL_SRWLOCK KxPseudoConsoleLock = RTL_SRWLOCK_INIT;
+STATIC PKEX_PSEUDOCONSOLE KxPseudoConsoles;
+
+typedef struct _KX_CONSOLE_MODE_ENTRY {
+	HANDLE Handle;
+	ULONG VirtualMode;
+} KX_CONSOLE_MODE_ENTRY;
+
+STATIC RTL_SRWLOCK KxConsoleModeLock = RTL_SRWLOCK_INIT;
+STATIC KX_CONSOLE_MODE_ENTRY KxConsoleModes[128];
+
+KXBASEAPI BOOL WINAPI Ext_CloseHandle(IN HANDLE Handle)
+{
+	BOOL Success;
+	ULONG Index;
+	RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
+	Success = CloseHandle(Handle);
+	if (Success) {
+		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+			if (KxConsoleModes[Index].Handle == Handle) {
+				RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
+				break;
+			}
+		}
+	}
+	RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
+	return Success;
+}
 #ifndef PSEUDOCONSOLE_INHERIT_CURSOR
 #  define PSEUDOCONSOLE_INHERIT_CURSOR 0x1
 #endif
 
 BOOL KxBasepIsPseudoConsoleHandle(
 	IN	HPCON				PseudoConsoleHandle,
-	OUT	PKX_PSEUDOCONSOLE	*PseudoConsole OPTIONAL)
+	OUT	PKEX_PSEUDOCONSOLE	*PseudoConsole OPTIONAL)
 {
-	PKX_PSEUDOCONSOLE LocalPseudoConsole;
+	PKEX_PSEUDOCONSOLE LocalPseudoConsole;
 
 	if (!PseudoConsoleHandle) {
 		return FALSE;
 	}
 
-	__try {
-		LocalPseudoConsole = (PKX_PSEUDOCONSOLE) PseudoConsoleHandle;
-
-		if (LocalPseudoConsole->Signature != KX_PSEUDOCONSOLE_SIGNATURE) {
-			return FALSE;
-		}
-	} __except (EXCEPTION_EXECUTE_HANDLER) {
+	// Only dereference objects registered by CreatePseudoConsole. The caller
+	// holds the lifetime lock, so Close cannot free an object during this walk.
+	for (LocalPseudoConsole = KxPseudoConsoles; LocalPseudoConsole;
+		 LocalPseudoConsole = LocalPseudoConsole->Next) {
+		if ((HPCON) LocalPseudoConsole == PseudoConsoleHandle) break;
+	}
+	if (!LocalPseudoConsole || LocalPseudoConsole->Magic != KEX_PSEUDOCONSOLE_MAGIC) {
 		return FALSE;
 	}
 
@@ -123,15 +153,19 @@ KXBASEAPI BOOL WINAPI Ext_GetConsoleMode(
 	OUT	PULONG	Mode)
 {
 	BOOL Success;
+	ULONG Index;
 
 	Success = GetConsoleMode(ConsoleHandle, Mode);
 
 	if (Success) {
-		if (IsConsoleOutputHandle(ConsoleHandle)) {
-			if (BaseIsConsoleAnsiSupportEnabled(ConsoleHandle)) {
-				*Mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+		RtlAcquireSRWLockShared(&KxConsoleModeLock);
+		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+			if (KxConsoleModes[Index].Handle == ConsoleHandle) {
+				*Mode |= KxConsoleModes[Index].VirtualMode;
+				break;
 			}
 		}
+		RtlReleaseSRWLockShared(&KxConsoleModeLock);
 	}
 
 	return Success;
@@ -142,31 +176,54 @@ KXBASEAPI BOOL WINAPI Ext_SetConsoleMode(
 	IN	ULONG	Mode)
 {
 	BOOL Success;
-	BOOLEAN EnableAnsiOutput;
-	BOOLEAN DisableAnsiOutput;
+	BOOLEAN Output;
+	ULONG Mask;
+	ULONG Index;
+	ULONG Slot;
+	ULONG LastError;
+	BOOL Emulated;
 
-	EnableAnsiOutput = FALSE;
-	DisableAnsiOutput = FALSE;
-
-	if (IsConsoleOutputHandle(ConsoleHandle)) {
-		if (Mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
-			ASSERT (Mode & ENABLE_PROCESSED_OUTPUT);
-			Mode &= ~ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-			EnableAnsiOutput = TRUE;
-		} else {
-			DisableAnsiOutput = TRUE;
+	LastError = GetLastError();
+	Output = IsConsoleOutputHandle(ConsoleHandle);
+	Mask = Output ? KX_VT_OUTPUT_MASK : KX_VT_INPUT_MASK;
+	Emulated = FALSE;
+	RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
+	Slot = ARRAYSIZE(KxConsoleModes);
+	for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+		if (KxConsoleModes[Index].Handle == ConsoleHandle) {
+			Slot = Index;
+			break;
 		}
+		if (!KxConsoleModes[Index].Handle && Slot == ARRAYSIZE(KxConsoleModes)) Slot = Index;
 	}
-
+	if ((Mode & Mask) && Slot == ARRAYSIZE(KxConsoleModes)) {
+		RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
+		SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+		return FALSE;
+	}
 	Success = SetConsoleMode(ConsoleHandle, Mode);
+	if (!Success && GetLastError() == ERROR_INVALID_PARAMETER && (Mode & Mask)) {
+		Success = SetConsoleMode(ConsoleHandle, Mode & ~Mask);
+		Emulated = Success;
+	}
 
 	if (Success) {
-		if (EnableAnsiOutput) {
-			BaseEnableConsoleAnsiSupport(ConsoleHandle);
-		} else if (DisableAnsiOutput) {
-			BaseDisableConsoleAnsiSupport(ConsoleHandle);
+		if (Slot != ARRAYSIZE(KxConsoleModes)) {
+			KxConsoleModes[Slot].Handle = (Mode & Mask) ? ConsoleHandle : NULL;
+			KxConsoleModes[Slot].VirtualMode = Emulated ? (Mode & Mask) : 0;
 		}
+		if (Output) {
+			if (Emulated && (Mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING)) {
+				BaseEnableConsoleAnsiSupport(ConsoleHandle);
+			} else {
+				BaseDisableConsoleAnsiSupport(ConsoleHandle);
+			}
+		}
+	} else {
+		LastError = GetLastError();
 	}
+	RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
+	SetLastError(LastError);
 
 	return Success;
 }
@@ -174,6 +231,9 @@ KXBASEAPI BOOL WINAPI Ext_SetConsoleMode(
 KXBASEAPI BOOL WINAPI Ext_FreeConsole(
 	VOID)
 {
+	RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
+	RtlZeroMemory(KxConsoleModes, sizeof(KxConsoleModes));
+	RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
 	BaseDisableConsoleAnsiSupport(GetStdHandle(STD_OUTPUT_HANDLE));
 	return FreeConsole();
 }
@@ -331,10 +391,11 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 	IN	DWORD	Flags,
 	OUT	HPCON	*PseudoConsoleHandle)
 {
-	PKX_PSEUDOCONSOLE PseudoConsole;
+	PKEX_PSEUDOCONSOLE PseudoConsole;
 	HANDLE CurrentProcess;
 	HANDLE DuplicatedInputHandle;
 	HANDLE DuplicatedOutputHandle;
+	DWORD LastError;
 
 	DuplicatedInputHandle = NULL;
 	DuplicatedOutputHandle = NULL;
@@ -344,13 +405,16 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 	}
 
 	*PseudoConsoleHandle = NULL;
+	if (InputHandle == INVALID_HANDLE_VALUE || OutputHandle == INVALID_HANDLE_VALUE) {
+		return HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE);
+	}
 
 	if (Size.X <= 0 || Size.Y <= 0 || !InputHandle || !OutputHandle ||
 		(Flags & ~PSEUDOCONSOLE_INHERIT_CURSOR)) {
 		return E_INVALIDARG;
 	}
 
-	PseudoConsole = (PKX_PSEUDOCONSOLE) RtlAllocateHeap(
+	PseudoConsole = (PKEX_PSEUDOCONSOLE) RtlAllocateHeap(
 		RtlProcessHeap(),
 		HEAP_ZERO_MEMORY,
 		sizeof(*PseudoConsole));
@@ -369,8 +433,9 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 			0,
 			TRUE,
 			DUPLICATE_SAME_ACCESS)) {
+		LastError = GetLastError();
 		RtlFreeHeap(RtlProcessHeap(), 0, PseudoConsole);
-		return HRESULT_FROM_WIN32(GetLastError());
+		return HRESULT_FROM_WIN32(LastError);
 	}
 
 	if (!DuplicateHandle(
@@ -381,22 +446,27 @@ KXBASEAPI HRESULT WINAPI CreatePseudoConsole(
 			0,
 			TRUE,
 			DUPLICATE_SAME_ACCESS)) {
+		LastError = GetLastError();
 		CloseHandle(DuplicatedInputHandle);
 		RtlFreeHeap(RtlProcessHeap(), 0, PseudoConsole);
-		return HRESULT_FROM_WIN32(GetLastError());
+		return HRESULT_FROM_WIN32(LastError);
 	}
 
-	PseudoConsole->Signature = KX_PSEUDOCONSOLE_SIGNATURE;
+	PseudoConsole->Magic = KEX_PSEUDOCONSOLE_MAGIC;
 	PseudoConsole->Size = Size;
-	PseudoConsole->InputHandle = DuplicatedInputHandle;
-	PseudoConsole->OutputHandle = DuplicatedOutputHandle;
+	PseudoConsole->hInput = DuplicatedInputHandle;
+	PseudoConsole->hOutput = DuplicatedOutputHandle;
 	PseudoConsole->Flags = Flags;
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
+	PseudoConsole->Next = KxPseudoConsoles;
+	KxPseudoConsoles = PseudoConsole;
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 
 	*PseudoConsoleHandle = (HPCON) PseudoConsole;
 
 	KexLogWarningEvent(
-		L"CreatePseudoConsole created a VxKex pseudo console placeholder. "
-		L"Pseudo console process attachment is not fully implemented.");
+		L"CreatePseudoConsole created a pipe compatibility backend. "
+		L"Console buffer hosting and resize notifications are not implemented.");
 
 	return S_OK;
 }
@@ -405,17 +475,20 @@ KXBASEAPI HRESULT WINAPI ResizePseudoConsole(
 	IN	HPCON	PseudoConsoleHandle,
 	IN	COORD	Size)
 {
-	PKX_PSEUDOCONSOLE PseudoConsole;
+	PKEX_PSEUDOCONSOLE PseudoConsole;
 
 	if (Size.X <= 0 || Size.Y <= 0) {
 		return E_INVALIDARG;
 	}
 
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 	if (!KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, &PseudoConsole)) {
+		RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 		return HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE);
 	}
 
 	PseudoConsole->Size = Size;
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 
 	return S_OK;
 }
@@ -423,14 +496,21 @@ KXBASEAPI HRESULT WINAPI ResizePseudoConsole(
 KXBASEAPI VOID WINAPI ClosePseudoConsole(
 	IN	HPCON	PseudoConsoleHandle)
 {
-	PKX_PSEUDOCONSOLE PseudoConsole;
+	PKEX_PSEUDOCONSOLE PseudoConsole;
+	PKEX_PSEUDOCONSOLE *Link;
 
+	RtlAcquireSRWLockExclusive(&KxPseudoConsoleLock);
 	if (!KxBasepIsPseudoConsoleHandle(PseudoConsoleHandle, &PseudoConsole)) {
+		RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 		return;
 	}
 
-	PseudoConsole->Signature = 0;
-	CloseHandle(PseudoConsole->InputHandle);
-	CloseHandle(PseudoConsole->OutputHandle);
+	for (Link = &KxPseudoConsoles; *Link != PseudoConsole; Link = &(*Link)->Next) NOTHING;
+	*Link = PseudoConsole->Next;
+	KxBasepInvalidatePseudoConsoleAttributes(PseudoConsoleHandle);
+	PseudoConsole->Magic = 0;
+	CloseHandle(PseudoConsole->hInput);
+	CloseHandle(PseudoConsole->hOutput);
 	RtlFreeHeap(RtlProcessHeap(), 0, PseudoConsole);
+	RtlReleaseSRWLockExclusive(&KxPseudoConsoleLock);
 }
