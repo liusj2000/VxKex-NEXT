@@ -141,3 +141,11 @@ Connectivity
    - 在右侧 Codex 面板重新点击 **「Sign in with ChatGPT」**；
    - 浏览器授权通过后跳转回本地，此时 `codex.exe` 换取 Token 的 HTTPS 请求将顺利通过 TLS 校验，登录成功完成；
    - 也支持直接点击面板中的 **「Use API Key」** 使用个人 API 密钥。
+
+---
+
+## 六、横向对比延伸
+
+关于 Antigravity 插件为何可以在同一环境下顺利认证，而 Codex 插件会触发此 TLS 问题的详细架构与协议栈机理对比，详见专门分析文档：
+[Antigravity 与 Codex 插件认证架构及 TLS 证书链处理机制对比分析（2026-10-18）](Antigravity与Codex插件认证架构及TLS对比分析-20261018.md)。
+
