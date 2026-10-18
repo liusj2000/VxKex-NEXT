@@ -1,0 +1,522 @@
+PID=1384 CREATE \\?\D:\VSCode-win32-x64-1.107.1\data\extensions\openai.chatgpt-26.1007.21434-win32-x64\bin\windows-x86_64\codex.exe
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\verifier.dll
+PID=1384 DEBUG AVRF: codex.exe: pid 0x568: flags 0x80000000: application verifier enabled
+
+PID=1384 DLL \\?\C:\Windows\System32\KexDll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=1384 DEBUG VXL (KexDll): Process created
+
+The VxKex NEXT version is 1.2.3.2463 (Release)
+The Windows version is 6.1.7601
+The program is 64-bit and the operating system is 64-bit
+Full path to the EXE: D:\VSCode-win32-x64-1.107.1\data\extensions\openai.chatgpt-26.1007.21434-win32-x64\bin\windows-x86_64\codex.exe
+Command line:         "D:\VSCode-win32-x64-1.107.1\data\extensions\openai.chatgpt-26.1007.21434-win32-x64\bin\windows-x86_64\codex.exe" -c windows.sandbox="unelevated" sandbox -C D:\project\VxKex-NEXT -P
+
+PID=1384 DLL \\?\C:\Windows\SysWOW64\ntdll.dll
+PID=1384 DEBUG VXL (KexDll): Successfully initialized propagation system.
+
+PID=1384 DEBUG VXL (KexDll): IfeoParameters values are finalized.
+
+DisableForChild:      0
+DisableAppSpecific:   0
+WinVerSpoof:          0
+StrongVersionSpoof:   0x00000000
+
+PID=1384 DEBUG VXL (KexDll): Shrinking default loader DLL path
+
+The original DLL path is: "D:\VSCode-win32-x64-1.107.1\data\extensions\openai.chatgpt-26.1007.21434-win32-x64\bin\windows-x86_64;;C:\Windows\system32;C:\Windows\system;C:\Windows;.;C:\Program Files\PowerShell\7;C:\Users\liusj\.codex\tmp\arg0\codex-arg0YctZq9;C:\Qt\Qt5.12.12\Tools\mingw730_64\bin;D:\VSCode-win32-x64-1.107.1\cmake-3.31.10-windows-x86_64\bin\;D:\VSCode-win32-x64-1.107.1\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\Syst
+
+PID=1384 DEBUG VXL (KexDll): Successfully initialized DLL rewrite subsystem.
+
+The new default DLL search path is:
+
+"C:\Program Files\VxKex\Kex64;D:\VSCode-win32-x64-1.107.1\data\extensions\openai.chatgpt-26.1007.21434-win32-x64\bin\windows-x86_64;;C:\Windows\system32;C:\Windows\system;C:\Windows;.;C:\Program Files\PowerShell\7;C:\Users\liusj\.codex\tmp\arg0\codex-arg0YctZq9;C:\Qt\Qt5.12.12\Tools\mingw730_64\bin;D:\VSCode-win32-x64-1.107.1\cmake-3.31.10-windows-x86_64\bin\;D:\VSCode-win32-x64-1.107.1\;C:\Windows\syst
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: kernel32.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: combase.dll -> kxcom
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: advapi32.dll -> kxadvapi
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ws2_32.dll -> kxnet
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ole32.dll -> kxcom
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: userenv.dll -> kxmi
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: api-ms-win-security-base-l1-2-2.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: api-ms-win-core-apiquery-l2-1-0.dll -> kxnt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ntdll.dll -> kxnt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: api-ms-win-core-synch-l1-2-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: api-ms-win-core-winrt-l1-1-0.dll -> kxcom
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: user32.dll -> kxuser
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: secur32.dll -> kxcryp
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: bcrypt.dll -> kxcryp
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: bcryptprimitives.dll -> kxcryp
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: wtsapi32.dll -> kxmi
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: winhttp.dll -> kxnet
+
+PID=1384 DLL \\?\C:\Windows\System32\kernel32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kernel32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\kernel32.dll"
+Loaded at 0x0000000077A80000 (size: 1175552 bytes)
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxNt.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxnt.dll was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxnt.dll"
+Loaded at 0x000007FEF44F0000 (size: 135168 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\KernelBase.dll
+PID=1384 DEBUG VXL (KexDll): The DLL KERNELBASE.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\KERNELBASE.dll"
+Loaded at 0x000007FEFDC80000 (size: 434176 bytes)
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ntdll.dll -> kxnt
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxBase.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxbase.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxbase.DLL"
+Loaded at 0x000007FEF44B0000 (size: 184320 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\version.dll
+PID=1384 DEBUG VXL (KexDll): The DLL VERSION.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\VERSION.dll"
+Loaded at 0x000007FEFCE90000 (size: 49152 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\msvcrt.dll
+PID=1384 DEBUG VXL (KexDll): The DLL msvcrt.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\msvcrt.dll"
+Loaded at 0x000007FEFFAE0000 (size: 651264 bytes)
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxCom.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxcom.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxcom.DLL"
+Loaded at 0x000007FEF3D60000 (size: 69632 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\ole32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL ole32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\ole32.dll"
+Loaded at 0x000007FEFE020000 (size: 2109440 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\gdi32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL GDI32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\GDI32.dll"
+Loaded at 0x000007FEFFF20000 (size: 421888 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\user32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL USER32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\USER32.dll"
+Loaded at 0x0000000077BA0000 (size: 1024000 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\lpk.dll
+PID=1384 DEBUG VXL (KexDll): The DLL LPK.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\LPK.dll"
+Loaded at 0x000007FEFFB80000 (size: 57344 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\usp10.dll
+PID=1384 DEBUG VXL (KexDll): The DLL USP10.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\USP10.dll"
+Loaded at 0x000007FEFEA70000 (size: 823296 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\rpcrt4.dll
+PID=1384 DEBUG VXL (KexDll): The DLL RPCRT4.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\RPCRT4.dll"
+Loaded at 0x000007FEFE660000 (size: 1228800 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\oleaut32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL OLEAUT32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\OLEAUT32.dll"
+Loaded at 0x000007FEFE580000 (size: 880640 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\urlmon.dll
+PID=1384 DEBUG VXL (KexDll): The DLL urlmon.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\urlmon.dll"
+Loaded at 0x000007FEFE790000 (size: 1540096 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\wininet.dll
+PID=1384 DEBUG VXL (KexDll): The DLL WININET.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\WININET.dll"
+Loaded at 0x000007FEFFB90000 (size: 1220608 bytes)
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: msvcrt.dll -> kxcrt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ntdll.dll -> kxnt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ADVAPI32.dll -> kxadvapi
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: KERNEL32.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: USER32.dll -> kxuser
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxCrt.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxcrt.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxcrt.DLL"
+Loaded at 0x000007FEF4290000 (size: 73728 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\shlwapi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL SHLWAPI.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\SHLWAPI.dll"
+Loaded at 0x000007FEFE910000 (size: 462848 bytes)
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxAdvapi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxadvapi.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxadvapi.DLL"
+Loaded at 0x000007FEF4140000 (size: 69632 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\advapi32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL advapi32.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\advapi32.DLL"
+Loaded at 0x000007FEFFA00000 (size: 897024 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\sechost.dll
+PID=1384 DEBUG VXL (KexDll): The DLL sechost.dll was mapped
+
+Full path to the DLL: "C:\Windows\SYSTEM32\sechost.dll"
+Loaded at 0x000007FEFF9E0000 (size: 126976 bytes)
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxUser.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxuser.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxuser.DLL"
+Loaded at 0x000007FEF3D80000 (size: 208896 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\shell32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL SHELL32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\SHELL32.dll"
+Loaded at 0x000007FEFEB40000 (size: 14188544 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\setupapi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL SETUPAPI.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\SETUPAPI.dll"
+Loaded at 0x000007FEFE3A0000 (size: 1929216 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\cfgmgr32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL CFGMGR32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\CFGMGR32.dll"
+Loaded at 0x000007FEFDE80000 (size: 221184 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\devobj.dll
+PID=1384 DEBUG VXL (KexDll): The DLL DEVOBJ.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\DEVOBJ.dll"
+Loaded at 0x000007FEFDE60000 (size: 106496 bytes)
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxMi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL KxMi.dll was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\KxMi.dll"
+Loaded at 0x000007FEF7BE0000 (size: 40960 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\powrprof.dll
+PID=1384 DEBUG VXL (KexDll): The DLL POWRPROF.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\POWRPROF.dll"
+Loaded at 0x000007FEFBEF0000 (size: 180224 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\wtsapi32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL WTSAPI32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\WTSAPI32.dll"
+Loaded at 0x000007FEFCE00000 (size: 69632 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\iertutil.dll
+PID=1384 DEBUG VXL (KexDll): The DLL iertutil.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\iertutil.dll"
+Loaded at 0x000007FEFFCC0000 (size: 2461696 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\crypt32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL CRYPT32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\CRYPT32.dll"
+Loaded at 0x000007FEFDCF0000 (size: 1495040 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\msasn1.dll
+PID=1384 DEBUG VXL (KexDll): The DLL MSASN1.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\MSASN1.dll"
+Loaded at 0x000007FEFDC70000 (size: 61440 bytes)
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxNet.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxnet.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxnet.DLL"
+Loaded at 0x000007FEF44E0000 (size: 53248 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\dnsapi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL DNSAPI.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\DNSAPI.dll"
+Loaded at 0x000007FEFD230000 (size: 372736 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\ws2_32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL WS2_32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\WS2_32.dll"
+Loaded at 0x000007FEFEA00000 (size: 315392 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\nsi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL NSI.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\NSI.dll"
+Loaded at 0x000007FEFE990000 (size: 32768 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\userenv.dll
+PID=1384 DEBUG VXL (KexDll): The DLL userenv.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\userenv.DLL"
+Loaded at 0x000007FEFCF20000 (size: 122880 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\profapi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL profapi.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\profapi.dll"
+Loaded at 0x000007FEFDBD0000 (size: 61440 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\tdh.dll
+PID=1384 DEBUG VXL (KexDll): The DLL tdh.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\tdh.dll"
+Loaded at 0x000007FEEB290000 (size: 864256 bytes)
+
+PID=1384 DLL \\?\C:\Program Files\VxKex\Kex64\KxCryp.dll
+PID=1384 DEBUG VXL (KexDll): The DLL kxcryp.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxcryp.DLL"
+Loaded at 0x000007FEF42B0000 (size: 49152 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\bcrypt.dll
+PID=1384 DEBUG VXL (KexDll): The DLL bcrypt.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\bcrypt.dll"
+Loaded at 0x000007FEFD5B0000 (size: 139264 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\secur32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL Secur32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\Secur32.dll"
+Loaded at 0x000007FEFDA00000 (size: 45056 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\sspicli.dll
+PID=1384 DEBUG VXL (KexDll): The DLL SSPICLI.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\SSPICLI.DLL"
+Loaded at 0x000007FEFDA30000 (size: 151552 bytes)
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: msvcrt.dll -> kxcrt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ntdll.dll -> kxnt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-ErrorHandling-L1-1-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-File-L1-1-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-Handle-L1-1-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-LibraryLoader-L1-1-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-LocalRegistry-L1-1-0.dll -> kxadvapi
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-ProcessThreads-L1-1-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-Profile-L1-1-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-SysInfo-L1-1-0.dll -> kxbase
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: API-MS-Win-Core-DelayLoad-L1-1-0.dll -> kxbase
+
+PID=1384 DLL \\?\C:\Windows\System32\FWPUCLNT.DLL
+PID=1384 DEBUG VXL (KexDll): The DLL fwpuclnt.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\fwpuclnt.dll"
+Loaded at 0x000007FEFB250000 (size: 339968 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\IPHLPAPI.DLL
+PID=1384 DEBUG VXL (KexDll): The DLL iphlpapi.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\iphlpapi.dll"
+Loaded at 0x000007FEFCE60000 (size: 159744 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\winnsi.dll
+PID=1384 DEBUG VXL (KexDll): The DLL WINNSI.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\WINNSI.DLL"
+Loaded at 0x000007FEFCE50000 (size: 45056 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\netapi32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL netapi32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\netapi32.dll"
+Loaded at 0x000007FEFB9C0000 (size: 90112 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\netutils.dll
+PID=1384 DEBUG VXL (KexDll): The DLL netutils.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\netutils.dll"
+Loaded at 0x000007FEFB9B0000 (size: 49152 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\srvcli.dll
+PID=1384 DEBUG VXL (KexDll): The DLL srvcli.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\srvcli.dll"
+Loaded at 0x000007FEFD960000 (size: 143360 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\wkscli.dll
+PID=1384 DEBUG VXL (KexDll): The DLL wkscli.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\wkscli.dll"
+Loaded at 0x000007FEFB990000 (size: 86016 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\samcli.dll
+PID=1384 DEBUG VXL (KexDll): The DLL SAMCLI.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\SAMCLI.DLL"
+Loaded at 0x000007FEFB970000 (size: 81920 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\winhttp.dll
+PID=1384 DEBUG VXL (KexDll): The DLL winhttp.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\winhttp.DLL"
+Loaded at 0x000007FEFAB40000 (size: 462848 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\webio.dll
+PID=1384 DEBUG VXL (KexDll): The DLL webio.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\webio.dll"
+Loaded at 0x000007FEFAAD0000 (size: 409600 bytes)
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: msvcrt.dll -> kxcrt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: ntdll.dll -> kxnt
+
+PID=1384 DEBUG VXL (KexDll): Rewrote DLL import: KERNEL32.dll -> kxbase
+
+PID=1384 EXCEPTION=0x80000003 ADDRESS=0x77D46C50 FIRST=1
+PID=1384 DEBUG VXL (KexDll): Successfully bypassed subsystem version check in CreateProcessInternalW.
+
+PID=1384 DLL \\?\C:\Windows\System32\imm32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL IMM32.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\IMM32.DLL"
+Loaded at 0x000007FEFE230000 (size: 188416 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\msctf.dll
+PID=1384 DEBUG VXL (KexDll): The DLL MSCTF.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\MSCTF.dll"
+Loaded at 0x000007FEFF8D0000 (size: 1085440 bytes)
+
+PID=1384 DEBUG VXL (KexDll): Failed to resolve FlsGetValue2 (#0) from kxbase.DLL
+
+DLL base address:     0x000007FEF44B0000
+Full path to the DLL: C:\Program Files\VxKex\Kex64\kxbase.DLL
+Flags:                0x00000000
+NTSTATUS error code:  STATUS_ENTRYPOINT_NOT_FOUND (0xc0000139)
+
+PID=1384 DLL \\?\C:\Windows\System32\ntmarta.dll
+PID=1384 DEBUG VXL (KexDll): The DLL ntmarta.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\ntmarta.dll"
+Loaded at 0x000007FEFCE20000 (size: 184320 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\Wldap32.dll
+PID=1384 DEBUG VXL (KexDll): The DLL WLDAP32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\WLDAP32.dll"
+Loaded at 0x000007FEFE9A0000 (size: 335872 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\bcryptprimitives.dll
+PID=1384 DEBUG VXL (KexDll): The DLL bcryptprimitives.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\bcryptprimitives.dll"
+Loaded at 0x000007FEFD520000 (size: 311296 bytes)
+
+PID=1384 DLL \\?\C:\Windows\System32\apphelp.dll
+PID=1384 DEBUG VXL (KexDll): The DLL apphelp.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\apphelp.dll"
+Loaded at 0x000007FEFDA60000 (size: 356352 bytes)
+
+PID=3740 CREATE \\?\C:\Windows\System32\cmd.exe
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\verifier.dll
+PID=3740 DEBUG AVRF: cmd.exe: pid 0xE9C: flags 0x80000000: application verifier enabled
+
+PID=3740 DLL \\?\C:\Windows\System32\KexDll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\SysWOW64\ntdll.dll
+PID=3740 DLL \\?\C:\Windows\System32\kernel32.dll
+PID=3740 DLL \\?\C:\Program Files\VxKex\Kex64\KxNt.dll
+PID=3740 DLL \\?\C:\Windows\System32\KernelBase.dll
+PID=3740 EXIT=0xC0000142
+PID=1384 EXIT=0xC0000142

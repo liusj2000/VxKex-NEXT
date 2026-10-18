@@ -144,3 +144,4 @@ message="update check failed" error="Error: Failed to check for updates (cause: 
    - 在当前 Windows 7 环境下，**强烈建议放弃使用基于 Bun 的 OpenCode**；
    - 推荐使用已在该环境下完全验证调优通过的 **Codex**（Rust）或 **VS Code 内置插件 / Antigravity**；
    - 若确需使用 OpenCode，可将其部署在局域网的 Linux/Mac/Win10 服务器上，在 Win7 本机通过浏览器或远程终端访问其 Web 界面。
+

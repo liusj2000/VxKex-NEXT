@@ -1,0 +1,150 @@
+PID=4252 CREATE \\?\C:\Windows\System32\cmd.exe
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\verifier.dll
+PID=4252 DEBUG AVRF: cmd.exe: pid 0x109C: flags 0x80000000: application verifier enabled
+
+PID=4252 DLL \\?\C:\Windows\System32\KexDll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DLL \\?\C:\Windows\System32\ntdll.dll
+PID=4252 DEBUG VXL (KexDll): Process created
+
+The VxKex NEXT version is 1.2.3.2463 (Release)
+The Windows version is 6.1.7601
+The program is 64-bit and the operating system is 64-bit
+Full path to the EXE: C:\Windows\System32\cmd.exe
+Command line:         "C:\Windows\System32\cmd.exe" /d /c echo BASELINE_OK
+
+
+PID=4252 DLL \\?\C:\Windows\SysWOW64\ntdll.dll
+PID=4252 DEBUG VXL (KexDll): Successfully initialized propagation system.
+
+PID=4252 DEBUG VXL (KexDll): IfeoParameters values are finalized.
+
+DisableForChild:      0
+DisableAppSpecific:   0
+WinVerSpoof:          0
+StrongVersionSpoof:   0x00000000
+
+PID=4252 DEBUG VXL (KexDll): Shrinking default loader DLL path
+
+The original DLL path is: "C:\Windows\System32;;C:\Windows\system32;C:\Windows\system;C:\Windows;.;C:\Program Files\PowerShell\7;C:\Users\liusj\.codex\tmp\arg0\codex-arg0YctZq9;C:\Qt\Qt5.12.12\Tools\mingw730_64\bin;D:\VSCode-win32-x64-1.107.1\cmake-3.31.10-windows-x86_64\bin\;D:\VSCode-win32-x64-1.107.1\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Progra
+
+PID=4252 DEBUG VXL (KexDll): Successfully initialized DLL rewrite subsystem.
+
+The new default DLL search path is:
+
+"C:\Program Files\VxKex\Kex64;C:\Windows\System32;;C:\Windows\system;C:\Windows;.;C:\Program Files\PowerShell\7;C:\Users\liusj\.codex\tmp\arg0\codex-arg0YctZq9;C:\Qt\Qt5.12.12\Tools\mingw730_64\bin;D:\VSCode-win32-x64-1.107.1\cmake-3.31.10-windows-x86_64\bin\;D:\VSCode-win32-x64-1.107.1\;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\WindowsPowerShell
+
+PID=4252 DEBUG VXL (KexDll): Rewrote DLL import: msvcrt.dll -> kxcrt
+
+PID=4252 DEBUG VXL (KexDll): Rewrote DLL import: ntdll.dll -> kxnt
+
+PID=4252 DEBUG VXL (KexDll): Rewrote DLL import: KERNEL32.dll -> kxbase
+
+PID=4252 DLL \\?\C:\Windows\System32\kernel32.dll
+PID=4252 DEBUG VXL (KexDll): The DLL kernel32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\kernel32.dll"
+Loaded at 0x0000000077A80000 (size: 1175552 bytes)
+
+PID=4252 DLL \\?\C:\Program Files\VxKex\Kex64\KxNt.dll
+PID=4252 DEBUG VXL (KexDll): The DLL kxnt.dll was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxnt.dll"
+Loaded at 0x000007FEF44F0000 (size: 135168 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\KernelBase.dll
+PID=4252 DEBUG VXL (KexDll): The DLL KERNELBASE.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\KERNELBASE.dll"
+Loaded at 0x000007FEFDC80000 (size: 434176 bytes)
+
+PID=4252 DEBUG VXL (KexDll): Rewrote DLL import: ntdll.dll -> kxnt
+
+PID=4252 DLL \\?\C:\Program Files\VxKex\Kex64\KxCrt.dll
+PID=4252 DEBUG VXL (KexDll): The DLL kxcrt.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxcrt.DLL"
+Loaded at 0x000007FEF4290000 (size: 73728 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\msvcrt.dll
+PID=4252 DEBUG VXL (KexDll): The DLL msvcrt.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\msvcrt.dll"
+Loaded at 0x000007FEFFAE0000 (size: 651264 bytes)
+
+PID=4252 DLL \\?\C:\Program Files\VxKex\Kex64\KxBase.dll
+PID=4252 DEBUG VXL (KexDll): The DLL kxbase.DLL was mapped
+
+Full path to the DLL: "C:\Program Files\VxKex\Kex64\kxbase.DLL"
+Loaded at 0x000007FEF44B0000 (size: 184320 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\version.dll
+PID=4252 DEBUG VXL (KexDll): The DLL VERSION.dll was mapped
+
+Full path to the DLL: "C:\Windows\System32\VERSION.dll"
+Loaded at 0x000007FEFCE90000 (size: 49152 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\winbrand.dll
+PID=4252 DEBUG VXL (KexDll): The DLL WINBRAND.dll was mapped
+
+Full path to the DLL: "C:\Windows\System32\WINBRAND.dll"
+Loaded at 0x000007FEF8F10000 (size: 32768 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\user32.dll
+PID=4252 DEBUG VXL (KexDll): The DLL USER32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\USER32.dll"
+Loaded at 0x0000000077BA0000 (size: 1024000 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\gdi32.dll
+PID=4252 DEBUG VXL (KexDll): The DLL GDI32.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\GDI32.dll"
+Loaded at 0x000007FEFFF20000 (size: 421888 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\lpk.dll
+PID=4252 DEBUG VXL (KexDll): The DLL LPK.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\LPK.dll"
+Loaded at 0x000007FEFFB80000 (size: 57344 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\usp10.dll
+PID=4252 DEBUG VXL (KexDll): The DLL USP10.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\USP10.dll"
+Loaded at 0x000007FEFEA70000 (size: 823296 bytes)
+
+PID=4252 EXCEPTION=0x80000003 ADDRESS=0x77D46C50 FIRST=1
+PID=4252 DEBUG VXL (KexDll): Successfully bypassed subsystem version check in CreateProcessInternalW.
+
+PID=4252 DLL \\?\C:\Windows\System32\imm32.dll
+PID=4252 DEBUG VXL (KexDll): The DLL IMM32.DLL was mapped
+
+Full path to the DLL: "C:\Windows\system32\IMM32.DLL"
+Loaded at 0x000007FEFE230000 (size: 188416 bytes)
+
+PID=4252 DLL \\?\C:\Windows\System32\msctf.dll
+PID=4252 DEBUG VXL (KexDll): The DLL MSCTF.dll was mapped
+
+Full path to the DLL: "C:\Windows\system32\MSCTF.dll"
+Loaded at 0x000007FEFF8D0000 (size: 1085440 bytes)
+
+PID=4252 EXIT=0x00000000

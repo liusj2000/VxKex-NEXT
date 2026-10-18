@@ -171,6 +171,77 @@ Claude Code 官方原生提供 API Key 优先鉴权机制。配置后插件将�
 2. 按照控制台提示完成授权，生成长效 Token 后自动保存在本地配置中，绕开本地 Webview 端口回调。
 
 ---
+claude官方补充说明：
+命令本身基本正确，但第 2 步的说法有误：令牌不会自动保存。
+
+第 1 步（命令）
+
+claude setup-token 是官方子命令，直接调用插件自带的 claude.exe 也可以。要注意终端类型：
+
+cmd：照你写的运行即可。
+PowerShell：带引号的路径前面要加 &，否则会报错：
+powershell
+  & "D:\VSCode-win32-x64-1.107.1\data\extensions\anthropic.claude-code-2.1.301-win32-x64\resources\native-binary\claude.exe" setup-token
+
+运行前请确认这个路径在你机器上真实存在（插件版本号不同，文件夹名也会不同）。
+
+第 2 步（错误）
+
+官方文档说明，该命令会引导您完成 OAuth 授权并将令牌打印到终端。它不会将令牌保存在任何地方；复制它并将其设置为 CLAUDE_CODE_OAUTH_TOKEN 环境变量。 
+claude
+
+所以正确的第 2 步应该是：
+
+授权完成后，复制终端打印出的 sk-ant-oat01-... 令牌。令牌只显示这一次。
+在 cmd 中设置为用户环境变量：
+bat
+   setx CLAUDE_CODE_OAUTH_TOKEN "sk-ant-oat01-你的令牌"
+完全关闭并重新打开 VS Code，新的环境变量才会生效。
+
+其他需要注意的地方
+
+仍然需要浏览器授权一次：生成令牌时仍需至少成功完成一次 OAuth。它的作用是避开 VS Code 内部 Webview 的登录流程，而不是完全不用浏览器。 
+github
+订阅要求：需要 Pro、Max、Team 或 Enterprise 计划。 
+claude
+功能限制：它的范围仅限于推理，无法建立 Remote Control 会话。 
+claude
+有效期：令牌有效期为一年，到期后需要重新运行 setup-token。
+安全：这个令牌等同于你的订阅凭证，不要提交到代码仓库，也不要发给别人。
+
+Sources:
+
+Claude Code 身份验证文档（中文）
+GitHub issue #74204
+
+
+可以在其它电脑上登陆，如果在虚拟机中通过不了的话，可能还是有bun的bug问题：
+
+PS C:\Users\liusj> $exe = "D:\VSCode-win32-x64-1.107.1\data\extensions\anthropic.claude-code-2.1.301-win32-x64\resources\native-binary\claude.exe"
+PS C:\Users\liusj> claude.exe --version
+claude.exe : 无法将“claude.exe”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写，如果包括路径，请
+确保路径正确，然后再试一次。
+所在位置 行:1 字符: 1
++ claude.exe --version
++ ~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (claude.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\liusj> & $exe --version
+2.1.301 (Claude Code)
+PS C:\Users\liusj> & $exe setup-token
+
+
+Your OAuth token (valid for 1 year):
+
+ 。。。。。。。
+
+ Store this token securely. You won't be able to see it again.
+
+ Use this token by setting: export CLAUDE_CODE_OAUTH_TOKEN=<token>
+export CLAUDE_CODE_OAUTH_TOKEN=。。。。
+
+setx CLAUDE_CODE_OAUTH_TOKEN "。。。。。"
 
 ### 方案 C：命令行控制台鉴权（`claude auth login --console`）
 
@@ -179,3 +250,4 @@ Claude Code 官方原生提供 API Key 优先鉴权机制。配置后插件将�
 "D:\VSCode-win32-x64-1.107.1\data\extensions\anthropic.claude-code-2.1.301-win32-x64\resources\native-binary\claude.exe" auth login --console
 ```
 直接在控制台命令行中粘贴 Key，完成全局用户凭证绑定。
+
