@@ -219,6 +219,7 @@
 #pragma comment(linker, "/EXPORT:DeleteAce=advapi32.DeleteAce")
 #pragma comment(linker, "/EXPORT:DeleteService=advapi32.DeleteService")
 #pragma comment(linker, "/EXPORT:DeregisterEventSource=advapi32.DeregisterEventSource")
+#pragma comment(linker, "/EXPORT:DeriveCapabilitySidsFromName=KxBase.DeriveCapabilitySidsFromName")
 #pragma comment(linker, "/EXPORT:DestroyPrivateObjectSecurity=advapi32.DestroyPrivateObjectSecurity")
 #pragma comment(linker, "/EXPORT:DuplicateEncryptionInfoFile=advapi32.DuplicateEncryptionInfoFile")
 #pragma comment(linker, "/EXPORT:DuplicateToken=advapi32.DuplicateToken")

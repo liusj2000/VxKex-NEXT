@@ -1,10 +1,14 @@
 @echo off
 cd /D "%~dp0"
+set "PATH=%~dp0;%PATH%"
 
 del Archive.7z >nul 2>nul
 rd /s /q Archive >nul 2>nul
 
-if /i "%1"=="/RELEASE" (
+set "ARG1=%~1"
+if /i "%ARG1%"=="/RELEASE" (
+	SET DBGREL=Release
+) else if /i "%ARG1%"=="RELEASE" (
 	SET DBGREL=Release
 ) ELSE (
 	SET DBGREL=Debug
@@ -162,14 +166,14 @@ REM the packed SFX version.
 REM It has to be run now because otherwise it will clobber the appended
 REM 7zip data.
 
-vtrplnt.exe /%DBGREL%
+"%~dp0vtrplnt.exe" /%DBGREL%
 
 REM ===========================================================================
 REM FOR FINAL RELEASE: switch to the upper command for higher compression
 REM ===========================================================================
 
-REM 7zr a -y Archive.7z .\Archive\* -mmt1 -mx9 -m0=LZMA:d32
-7zr a -y Archive.7z .\Archive\* -mmt1 -mx1 -m0=LZMA:d32
+REM "%~dp07zr.exe" a -y Archive.7z .\Archive\* -mmt1 -mx9 -m0=LZMA:d32
+"%~dp07zr.exe" a -y Archive.7z .\Archive\* -mmt1 -mx1 -m0=LZMA:d32
 
 if %errorlevel% neq 0 (
 	pause

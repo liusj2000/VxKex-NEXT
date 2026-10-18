@@ -1,2 +1,8 @@
-BLOCKED LoadLibrary error 1114
-TEST_EXIT=2 
+LOADED D:\project\VxKex-NEXT\x64\Release\KxBase.dll
+PIPE OUTPUT: 
+FAIL line 97 error 6: strstr(output,"received")!=NULL
+FAIL line 127 error 6: strstr(output,"C4_READY")!=NULL
+FAIL line 128 error 6: WaitForSingleObject(pi.hProcess,50)==WAIT_TIMEOUT
+HANDLES before=49 after=49
+RESULT failures=3
+TEST_EXIT=1 

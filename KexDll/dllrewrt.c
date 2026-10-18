@@ -958,6 +958,7 @@ STATIC CONST FUNCTION_MAP NtToKexMap[] = {
 	{RTL_CONSTANT_STRING("RtlInitializeCriticalSectionEx"),					RTL_CONSTANT_STRING("Ext_RtlInitializeCriticalSectionEx")},
 
 	{RTL_CONSTANT_STRING("ApiSetQueryApiSetPresence"),						RTL_CONSTANT_STRING("ApiSetQueryApiSetPresence")},
+	{RTL_CONSTANT_STRING("IsApiSetImplemented"),							RTL_CONSTANT_STRING("IsApiSetImplemented")},
 
 	{RTL_CONSTANT_STRING("EtwEventSetInformation"),							RTL_CONSTANT_STRING("KexEtwEventSetInformation")},
 

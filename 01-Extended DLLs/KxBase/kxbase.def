@@ -211,6 +211,7 @@ EXPORTS
 
 	;; security.c
 	CreateWellKnownSid						= Ext_CreateWellKnownSid
+	DeriveCapabilitySidsFromName
 
 	;; verspoof.c
 	GetVersion								= Ext_GetVersion

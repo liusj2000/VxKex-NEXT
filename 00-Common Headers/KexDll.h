@@ -727,6 +727,17 @@ VOID KexMessageBoxF(
 	IN	...);
 
 //
+// apiset.c
+//
+
+KEXAPI NTSTATUS NTAPI ApiSetQueryApiSetPresence(
+	IN	PUNICODE_STRING	Namespace,
+	OUT	PBOOLEAN		Present);
+
+KEXAPI BOOL WINAPI IsApiSetImplemented(
+	IN	PCSTR			Contract);
+
+//
 // cpiwbypa.c
 //
 

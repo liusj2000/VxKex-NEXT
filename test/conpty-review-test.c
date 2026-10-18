@@ -36,6 +36,8 @@ int main(void)
  int i;
 
  SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOGPFAULTERRORBOX);
+ SetDllDirectoryW(L"D:\\project\\VxKex-NEXT\\x64\\Release");
+ LoadLibraryW(L"D:\\project\\VxKex-NEXT\\x64\\Release\\KxMi.dll");
  dll=LoadLibraryW(L"D:\\project\\VxKex-NEXT\\x64\\Release\\KxBase.dll");
  if (!dll) { printf("BLOCKED LoadLibrary error %lu\n",GetLastError()); return 2; }
  GetModuleFileNameW(dll,path,MAX_PATH);

@@ -33,6 +33,7 @@ EXPORTS
 	RtlIsProcessorFeaturePresent					= KexDll.KexRtlIsProcessorFeaturePresent
 
 	ApiSetQueryApiSetPresence						= KexDll.ApiSetQueryApiSetPresence
+	IsApiSetImplemented								= KexDll.IsApiSetImplemented
 
 	EtwEventSetInformation							= KexDll.KexEtwEventSetInformation
 

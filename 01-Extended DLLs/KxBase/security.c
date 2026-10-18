@@ -454,3 +454,44 @@ FoundMatch:
 //
 // TODO: implement IsWellKnownSid
 //
+
+KXBASEAPI BOOL WINAPI DeriveCapabilitySidsFromName(
+	IN	LPCWSTR	CapName,
+	OUT	PSID	**CapabilityGroupSids,
+	OUT	DWORD	*CapabilityGroupSidCount,
+	OUT	PSID	**CapabilitySids,
+	OUT	DWORD	*CapabilitySidCount)
+{
+	KexLogDebugEvent(L"DeriveCapabilitySidsFromName called for \"%s\"", CapName ? CapName : L"(null)");
+
+	if (CapabilityGroupSids) {
+		*CapabilityGroupSids = NULL;
+	}
+
+	if (CapabilityGroupSidCount) {
+		*CapabilityGroupSidCount = 0;
+	}
+
+	if (CapabilitySids) {
+		*CapabilitySids = NULL;
+	}
+
+	if (CapabilitySidCount) {
+		*CapabilitySidCount = 0;
+	}
+
+	if (!CapName || !CapabilityGroupSids || !CapabilityGroupSidCount ||
+		!CapabilitySids || !CapabilitySidCount) {
+		RtlSetLastWin32Error(ERROR_INVALID_PARAMETER);
+		return FALSE;
+	}
+
+	//
+	// Windows 7 does not support AppContainer capabilities.
+	// Return FALSE with ERROR_NOT_SUPPORTED to allow callers
+	// (such as Chromium, Electron, Node or Rust sandbox setup)
+	// to cleanly and gracefully fall back.
+	//
+	RtlSetLastWin32Error(ERROR_NOT_SUPPORTED);
+	return FALSE;
+}

@@ -9,3 +9,14 @@ NTSTATUS NTAPI ApiSetQueryApiSetPresence(
 	*Present = TRUE;
 	return STATUS_SUCCESS;
 }
+
+KEXAPI BOOL WINAPI IsApiSetImplemented(
+	IN	PCSTR	Contract)
+{
+	if (!Contract || !*Contract) {
+		return FALSE;
+	}
+
+	KexLogDebugEvent(L"IsApiSetImplemented called with \"%hs\"", Contract);
+	return TRUE;
+}
