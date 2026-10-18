@@ -137,3 +137,47 @@ Node.js（以及基于 Electron 的 VS Code）在源码构建时，官方将 Moz
      `SSL_CERT_FILE = C:\Program Files\Git\mingw64\etc\ssl\certs\ca-bundle.crt`
      本质上就是**手动为 Rust 进程（`codex.exe`）注入了与 Node.js 相同水准的现代全量 Mozilla 根证书库**；
    - 配合将 Windows 注册表的 `CertificateRevocation` 设为 `0` 并补全 `HTTP_PROXY` / `HTTPS_PROXY`，彻底对齐了现代 Rust 原生进程与 Node.js 插件在 Windows 7 上的网络与安全能力。
+
+---
+
+## 六、扩展排查：OAuth 本地回调代理死循环（localhost）与账号风控（account_on_hold）
+
+在实际使用 Claude Code / Codex 等插件登录时，用户还遇到了另外两类高频认证衍生问题：
+
+### 1. 本地回调代理死循环陷阱（`http://localhost:<port>/callback?code=...` 报错）
+- **现象**：
+  在浏览器中完成授权后，页面重定向至本地回调地址（例如 `http://localhost:54495/callback?code=...&state=...`），但浏览器报错显示：
+  `无法访问此网站`、`ERR_CONNECTION_RESET`、`ERR_CONNECTION_REFUSED` 或 `10054 远程主机强迫关闭了一个现有的连接`。
+- **根本原因**：
+  - 插件（如 `claude.exe` 或 `codex.exe`）会在当前本机启动一个临时的 HTTP 监听端口（如 54495、1455）用于捕获授权码；
+  - Windows 系统代理开启了局域网代理服务器（如 `192.168.x.x:10809`），但注册表中的代理例外列表 `ProxyOverride` 仅设置了默认的 `<local>`；
+  - 现代浏览器（Chrome / Edge）对于带有端口的 `http://localhost:<port>`，若未明确设置例外，会将其**转发至局域网代理服务器 `192.168.x.x`**；
+  - 代理服务器收到请求后尝试连接**代理服务器自己机器上的对应端口**（并非用户这台 Win7 本机），因无服务监听而立即强行掐断连接（`WinError 10054 ConnectionReset`），导致本地程序无法拿到回调授权码。
+- **解决措施**：
+  1. **永久修复（系统代理白名单）**：
+     在注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings` 中，将 `ProxyOverride` 更新为：
+     ```text
+     ProxyOverride = localhost;127.0.0.1;<local>
+     ```
+     强制所有遵守系统代理的软件和浏览器在访问 `localhost` 或 `127.0.0.1` 时严禁走代理，必须本机回环直连。
+  2. **临时应急修复**：
+     在报错的浏览器地址栏中，直接将 `localhost` 手动替换为 `127.0.0.1` 回车：
+     ```text
+     http://127.0.0.1:54495/callback?code=...&state=...
+     ```
+     现代浏览器对纯数字 IP `127.0.0.1` 具有硬编码的代理豁免权，可直接送达本机监听程序。
+
+### 2. 服务端风控拦截（`error_description=account_on_hold`）
+- **现象**：
+  浏览器授权跳转回调返回：
+  ```text
+  http://localhost:54105/callback?error=access_denied&error_description=account_on_hold&error_uri=https%3A%2F%2Fclaude.ai%2Frestricted&state=...
+  ```
+- **根本原因**：
+  - 并非本地 TLS 证书或网络层故障（网络及 TLS 握手均已成功）；
+  - 属于 Anthropic 服务端业务级安全风控拦截：当前账号被 Anthropic 官方标记为 `account_on_hold`（挂起/受限），通常是由代理出口 IP 属于机房高风险 IP、多人共享节点、跨区域突变或支付方式风控触发。
+- **解决措施**：
+  1. 登录 `claude.ai` 检查账号横幅，提交「Request a review」人工审核申诉；
+  2. 更换纯净度更高的独享/住宅节点；
+  3. 改用 API Key 模式（设置环境变量 `ANTHROPIC_API_KEY`）直连，绕开网页端严格的 OAuth 账号风控。
+
