@@ -64,7 +64,41 @@
 > **关于 Bun / Deno 运行时的补充说明**：
 > 基于 Bun 单文件运行时的程序（如早期 OpenCode CLI）深度依赖 Win10+ 内核的 `NtCreateWaitCompletionPacket`（等待完成包挂接 IOCP）以及现代 `afd.sys` Winsock 状态机，其**本地 HTTP/WebSocket 服务端**在 Win7 兼容层下存在系统驱动级断流现象。建议优先选择基于 Node.js 运行时或远程微服务架构的开发工具。
 
-### 3. 现代 TLS 证书与网络环境配置（重要）
+### 3. PowerShell 环境与依赖安装完整说明（WMF 5.1 与 PowerShell 7）
+
+Windows 7 SP1 原生出厂仅搭载极为陈旧的 **PowerShell 2.0**，无法运行现代包管理器、模块或 VS Code 调试插件。为获得现代终端体验，需按需完成以下安装与依赖配置：
+
+#### ① 基础层：升级至 Windows PowerShell 5.1（WMF 5.1）
+若需使用系统原生 Windows PowerShell 5.1：
+1. **安装 .NET Framework 4.5.2 或更高版本**（推荐直接安装 **.NET Framework 4.8 离线安装包** `NDP48-x86-x64-AllOS-ENU.exe`）；
+2. **安装 Windows Management Framework 5.1**：下载并安装微软官方补丁 `Win7AndW2K8R2-KB3191566-x64.zip`；
+3. 重启计算机后，原生控制台将升级至 `5.1.14409.1005`。
+
+#### ② 现代跨平台层：安装运行 PowerShell 7.x（Core）
+官方自 PowerShell 7.2 起停止正式支持 Windows 7，但**结合 VxKex NEXT 兼容层，可在 Win7 上完美运行最新的 PowerShell 7.6+**：
+1. **系统运行库依赖**：
+   - **SHA-2 代码签名支持**：补丁 `KB4474419`；
+   - **通用 C 运行时（Universal C Runtime, UCRT）**：补丁 `KB2999226`（或直接安装 Visual C++ 2015-2022 Redistributable x64，即 `vc_redist.x64.exe`）；
+2. **启用 VxKex 兼容伪装**：
+   - 提取或安装 PowerShell 7（如 `C:\Program Files\PowerShell\7\pwsh.exe`）；
+   - 右键点击 `pwsh.exe` ->「属性」-> 切换到 **VxKex** 选项卡 -> 勾选“为此程序启用 VxKex NEXT”，伪装版本选择 **Windows 10**。
+
+#### ③ 模块管理与在线安装依赖（PSGallery / Install-Module）
+由于 Win7 默认仅协商旧版 SSL 3.0 / TLS 1.0，执行 `Install-Module` 时会因协议不匹配导致连接被拒绝（`Unable to resolve package source`）。需配置 TLS 1.2 支持：
+1. **强制启用 TLS 1.2 传输**：
+   ```powershell
+   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+   ```
+2. **安装并更新 NuGet Provider 与 PowerShellGet**：
+   ```powershell
+   # 安装现代 NuGet 引导程序
+   Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+   
+   # 更新 PowerShellGet 与 PackageManagement
+   Install-Module -Name PowerShellGet -Force -AllowClobber
+   ```
+
+### 4. 现代 TLS 证书与网络环境配置（重要）
 Win7 原生系统根证书库停滞于 2011 年左右，缺少现代云端基础设施（Cloudflare、OpenAI、GitHub、Anthropic）所依赖的 ECC 现代根证书（如 GlobalSign ECC R4、Google GTS 等），会导致 Rust（`reqwest`/`rustls`）、Python、Node 等现代程序报 `TLS handshake failed` 或 `0x80092013 CRYPT_E_REVOCATION_OFFLINE`。
 
 **推荐配置方案**：
@@ -77,12 +111,12 @@ Win7 原生系统根证书库停滞于 2011 年左右，缺少现代云端基础
    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name "CertificateRevocation" -Value 0
    ```
 3. **修复本地代理例外白名单（杜绝本地回调死循环）**：
-   若本机开启了科学代理（如端口 `10809`），为防止 VS Code / Codex / Claude 登录时的 OAuth 本地回调（如 `http://localhost:<port>/callback`）被误转发至远端代理，需确保设置代理白名单：
+   若本机开启了代理（如端口 `10809`），为防止 VS Code / Codex / Claude 登录时的 OAuth 本地回调（如 `http://localhost:<port>/callback`）被误转发至远端代理，需确保设置代理白名单：
    ```powershell
    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name "ProxyOverride" -Value "localhost;127.0.0.1;<local>"
    ```
 
-### 4. VS Code 内置终端 PowerShell 7 中文优化
+### 5. VS Code 内置终端 PowerShell 7 中文优化
 针对 Win7 下 `winpty` 对 PSReadLine VT 序列处理引发的中文乱码和重复问题，建议在 PowerShell 7 的全局 `$PROFILE` 中禁用该模块：
 ```powershell
 Remove-Module PSReadLine -ErrorAction SilentlyContinue

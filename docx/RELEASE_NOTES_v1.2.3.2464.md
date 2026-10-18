@@ -40,6 +40,11 @@
   - **Python / Jupyter**：`ms-toolsai.jupyter-2025.9.1-win32-x64`
   - **Java**：`redhat.java-1.57.0-win32-x64` / `vscjava.vscode-gradle-3.18.1` / `vscjava.vscode-maven-0.46.0`
 
+### PowerShell 依赖与环境要求
+- **原生 Windows PowerShell 5.1**：需安装 .NET Framework 4.5.2+（推荐 .NET 4.8）与 WMF 5.1（KB3191566）；
+- **现代 PowerShell 7.x (Core)**：需安装 SHA-2 补丁 KB4474419 与 UCRT KB2999226（或 VC++ 2015-2022 运行库），右键 `pwsh.exe` 开启 VxKex Win10 伪装；
+- **PSGallery / Install-Module**：需会话启用 TLS 1.2（`[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12`）并安装 NuGet Provider。
+
 ---
 
 ### 安装包校验信息 (Checksum)
