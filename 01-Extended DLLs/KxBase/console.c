@@ -51,6 +51,23 @@ typedef struct _KX_CONSOLE_MODE_ENTRY {
 STATIC RTL_SRWLOCK KxConsoleModeLock = RTL_SRWLOCK_INIT;
 STATIC KX_CONSOLE_MODE_ENTRY KxConsoleModes[128];
 
+STATIC BOOLEAN KxBasepIsConsoleVtEmulationDisabled(VOID)
+{
+	STATIC LONG Initialized = 0;
+	STATIC BOOLEAN Disabled = FALSE;
+
+	if (InterlockedCompareExchange(&Initialized, 1, 0) == 0) {
+		WCHAR EnvBuf[16];
+		if (GetEnvironmentVariableW(L"VXKEX_NO_CONSOLE_VT", EnvBuf, ARRAYSIZE(EnvBuf)) > 0) {
+			if (EnvBuf[0] == L'1' || EnvBuf[0] == L'y' || EnvBuf[0] == L'Y') {
+				Disabled = TRUE;
+			}
+		}
+	}
+
+	return Disabled;
+}
+
 STATIC BOOLEAN KxBasepHasEmulatedAnsiOutputLocked(
 	IN	HANDLE	ConsoleHandle OPTIONAL)
 {
@@ -58,24 +75,47 @@ STATIC BOOLEAN KxBasepHasEmulatedAnsiOutputLocked(
 	ULONG NativeMode;
 	ULONG LastError;
 	BOOLEAN Found;
+	BOOLEAN HasExplicitEntry;
+	BOOLEAN IsOutput;
 
 	LastError = GetLastError();
 	Found = FALSE;
+	HasExplicitEntry = FALSE;
+	IsOutput = ConsoleHandle ? IsConsoleOutputHandle(ConsoleHandle) : TRUE;
 
-	for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
-		if (!KxConsoleModes[Index].Handle) {
-			continue;
+	if (ConsoleHandle) {
+		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+			if (!KxConsoleModes[Index].Handle) {
+				continue;
+			}
+			if (!GetConsoleMode(KxConsoleModes[Index].Handle, &NativeMode)) {
+				RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
+				continue;
+			}
+			if (KxConsoleModes[Index].Handle == ConsoleHandle) {
+				HasExplicitEntry = TRUE;
+				if (KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
+					Found = TRUE;
+				}
+				break;
+			}
 		}
-		if (!GetConsoleMode(KxConsoleModes[Index].Handle, &NativeMode)) {
-			RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
-			continue;
-		}
-		if (ConsoleHandle && KxConsoleModes[Index].Handle != ConsoleHandle) {
-			continue;
-		}
-		if (KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
-			Found = TRUE;
-			if (ConsoleHandle) {
+	}
+
+	// If no explicit entry was found for this specific handle, but it is an active console
+	// output handle (e.g. STD_OUTPUT_HANDLE), inherit the VT processing state if ANY
+	// active console output handle (e.g. CONOUT$ opened by PSReadLine) has enabled it.
+	if (!HasExplicitEntry && IsOutput) {
+		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+			if (!KxConsoleModes[Index].Handle) {
+				continue;
+			}
+			if (!GetConsoleMode(KxConsoleModes[Index].Handle, &NativeMode)) {
+				RtlZeroMemory(&KxConsoleModes[Index], sizeof(KxConsoleModes[Index]));
+				continue;
+			}
+			if (KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) {
+				Found = TRUE;
 				break;
 			}
 		}
@@ -187,15 +227,28 @@ KXBASEAPI BOOL WINAPI Ext_GetConsoleMode(
 {
 	BOOL Success;
 	ULONG Index;
+	BOOLEAN FoundExplicit;
 
 	Success = GetConsoleMode(ConsoleHandle, Mode);
 
 	if (Success) {
+		FoundExplicit = FALSE;
 		RtlAcquireSRWLockShared(&KxConsoleModeLock);
 		for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
 			if (KxConsoleModes[Index].Handle == ConsoleHandle) {
 				*Mode |= KxConsoleModes[Index].VirtualMode;
+				FoundExplicit = TRUE;
 				break;
+			}
+		}
+
+		if (!FoundExplicit && IsConsoleOutputHandle(ConsoleHandle)) {
+			for (Index = 0; Index < ARRAYSIZE(KxConsoleModes); ++Index) {
+				if (KxConsoleModes[Index].Handle &&
+					(KxConsoleModes[Index].VirtualMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING)) {
+					*Mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+					break;
+				}
 			}
 		}
 		RtlReleaseSRWLockShared(&KxConsoleModeLock);
@@ -215,6 +268,10 @@ KXBASEAPI BOOL WINAPI Ext_SetConsoleMode(
 	ULONG Slot;
 	ULONG LastError;
 	BOOL Emulated;
+
+	if (KxBasepIsConsoleVtEmulationDisabled()) {
+		return SetConsoleMode(ConsoleHandle, Mode);
+	}
 
 	LastError = GetLastError();
 	Output = IsConsoleOutputHandle(ConsoleHandle);

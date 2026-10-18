@@ -9,7 +9,7 @@ File Type: DLL
   Section contains the following exports for KxBase.dll
 
     00000000 characteristics
-    6AD42E78 time date stamp Sun Oct 18 10:27:04 2026
+    6AD4B00C time date stamp Sun Oct 18 19:39:56 2026
         0.00 version
            1 ordinal base
         1929 number of functions
@@ -41,7 +41,7 @@ File Type: DLL
          22   15          AddAuditAccessObjectAce (forwarded to kernelbase.AddAuditAccessObjectAce)
          23   16          AddConsoleAliasA (forwarded to kernel32.AddConsoleAliasA)
          24   17          AddConsoleAliasW (forwarded to kernel32.AddConsoleAliasW)
-         25   18 00003D88 AddDllDirectory = Ext_AddDllDirectory
+         25   18 00003D60 AddDllDirectory = Ext_AddDllDirectory
          26   19          AddIntegrityLabelToBoundaryDescriptor (forwarded to kernel32.AddIntegrityLabelToBoundaryDescriptor)
          27   1A          AddLocalAlternateComputerNameA (forwarded to kernel32.AddLocalAlternateComputerNameA)
          28   1B          AddLocalAlternateComputerNameW (forwarded to kernel32.AddLocalAlternateComputerNameW)
@@ -417,7 +417,7 @@ File Type: DLL
         398  18D          CloseHandle (forwarded to kernel32.CloseHandle)
         399  18E          ClosePrivateNamespace (forwarded to kernel32.ClosePrivateNamespace)
         400  18F          CloseProfileUserMapping (forwarded to kernel32.CloseProfileUserMapping)
-        401  190 0000270C ClosePseudoConsole = ClosePseudoConsole
+        401  190 00002800 ClosePseudoConsole = ClosePseudoConsole
         402  191          CloseThreadpool (forwarded to kernel32.CloseThreadpool)
         403  192          CloseThreadpoolCleanupGroup (forwarded to kernel32.CloseThreadpoolCleanupGroup)
         404  193          CloseThreadpoolCleanupGroupMembers (forwarded to kernel32.CloseThreadpoolCleanupGroupMembers)
@@ -430,7 +430,7 @@ File Type: DLL
         411  19A          CommConfigDialogW (forwarded to kernel32.CommConfigDialogW)
         412  19B          CompareCalendarDates (forwarded to kernel32.CompareCalendarDates)
         413  19C          CompareFileTime (forwarded to kernel32.CompareFileTime)
-        414  19D 00003368 CompareObjectHandles = CompareObjectHandles
+        414  19D 00003340 CompareObjectHandles = CompareObjectHandles
         415  19E          CompareStringA (forwarded to kernel32.CompareStringA)
         416  19F          CompareStringEx (forwarded to kernel32.CompareStringEx)
         417  1A0          CompareStringOrdinal (forwarded to kernel32.CompareStringOrdinal)
@@ -447,7 +447,7 @@ File Type: DLL
         428  1AB          ConvertThreadToFiberEx (forwarded to kernel32.ConvertThreadToFiberEx)
         429  1AC          ConvertToAutoInheritPrivateObjectSecurity (forwarded to kernelbase.ConvertToAutoInheritPrivateObjectSecurity)
         430  1AD          CopyContext (forwarded to kernel32.CopyContext)
-        431  1AE 0000301C CopyFile2 = CopyFile2
+        431  1AE 00002FF4 CopyFile2 = CopyFile2
         432  1AF          CopyFileA (forwarded to kernel32.CopyFileA)
         433  1B0          CopyFileExA (forwarded to kernel32.CopyFileExA)
         434  1B1          CopyFileExW (forwarded to kernel32.CopyFileExW)
@@ -473,10 +473,10 @@ File Type: DLL
         454  1C5          CreateEventW (forwarded to kernel32.CreateEventW)
         455  1C6          CreateFiber (forwarded to kernel32.CreateFiber)
         456  1C7          CreateFiberEx (forwarded to kernel32.CreateFiberEx)
-        457  1C8 00002EFC CreateFile2 = CreateFile2
+        457  1C8 00002ED4 CreateFile2 = CreateFile2
         458  1C9          CreateFileA (forwarded to kernel32.CreateFileA)
         459  1CA          CreateFileMappingA (forwarded to kernel32.CreateFileMappingA)
-        460  1CB 00005E68 CreateFileMappingFromApp = CreateFileMappingFromApp
+        460  1CB 00005E40 CreateFileMappingFromApp = CreateFileMappingFromApp
         461  1CC          CreateFileMappingNumaA (forwarded to kernel32.CreateFileMappingNumaA)
         462  1CD          CreateFileMappingNumaW (forwarded to kernel32.CreateFileMappingNumaW)
         463  1CE          CreateFileMappingW (forwarded to kernel32.CreateFileMappingW)
@@ -506,12 +506,12 @@ File Type: DLL
         487  1E6          CreatePrivateObjectSecurity (forwarded to kernelbase.CreatePrivateObjectSecurity)
         488  1E7          CreatePrivateObjectSecurityEx (forwarded to kernelbase.CreatePrivateObjectSecurityEx)
         489  1E8          CreatePrivateObjectSecurityWithMultipleInheritance (forwarded to kernelbase.CreatePrivateObjectSecurityWithMultipleInheritance)
-        490  1E9 00004CC8 CreateProcessA = Ext_CreateProcessA
-        491  1EA 00004E0C CreateProcessAsUserW = Ext_CreateProcessAsUserW
+        490  1E9 00004C60 CreateProcessA = Ext_CreateProcessA
+        491  1EA 00004DA4 CreateProcessAsUserW = Ext_CreateProcessAsUserW
         492  1EB          CreateProcessInternalA (forwarded to kernel32.CreateProcessInternalA)
         493  1EC          CreateProcessInternalW (forwarded to kernel32.CreateProcessInternalW)
-        494  1ED 00004B84 CreateProcessW = Ext_CreateProcessW
-        495  1EE 00002464 CreatePseudoConsole = CreatePseudoConsole
+        494  1ED 00004B1C CreateProcessW = Ext_CreateProcessW
+        495  1EE 00002558 CreatePseudoConsole = CreatePseudoConsole
         496  1EF          CreateRemoteThread (forwarded to kernel32.CreateRemoteThread)
         497  1F0          CreateRemoteThreadEx (forwarded to kernel32.CreateRemoteThreadEx)
         498  1F1          CreateRestrictedToken (forwarded to kernelbase.CreateRestrictedToken)
@@ -540,7 +540,7 @@ File Type: DLL
         521  208          CreateWaitableTimerExA (forwarded to kernel32.CreateWaitableTimerExA)
         522  209          CreateWaitableTimerExW (forwarded to kernel32.CreateWaitableTimerExW)
         523  20A          CreateWaitableTimerW (forwarded to kernel32.CreateWaitableTimerW)
-        524  20B 000050AC CreateWellKnownSid = Ext_CreateWellKnownSid
+        524  20B 00005044 CreateWellKnownSid = Ext_CreateWellKnownSid
         525  20C          CtrlRoutine (forwarded to kernel32.CtrlRoutine)
         526  20D          DeactivateActCtx (forwarded to kernel32.DeactivateActCtx)
         527  20E          DebugActiveProcess (forwarded to kernel32.DebugActiveProcess)
@@ -562,7 +562,7 @@ File Type: DLL
         543  21E          DeleteFileTransactedA (forwarded to kernel32.DeleteFileTransactedA)
         544  21F          DeleteFileTransactedW (forwarded to kernel32.DeleteFileTransactedW)
         545  220          DeleteFileW (forwarded to kernel32.DeleteFileW)
-        546  221 0000438C DeleteProcThreadAttributeList = Ext_DeleteProcThreadAttributeList
+        546  221 00004364 DeleteProcThreadAttributeList = Ext_DeleteProcThreadAttributeList
         547  222          DeleteTimerQueue (forwarded to kernel32.DeleteTimerQueue)
         548  223          DeleteTimerQueueEx (forwarded to kernel32.DeleteTimerQueueEx)
         549  224          DeleteTimerQueueTimer (forwarded to kernel32.DeleteTimerQueueTimer)
@@ -571,13 +571,13 @@ File Type: DLL
         552  227          DeleteVolumeMountPointA (forwarded to kernel32.DeleteVolumeMountPointA)
         553  228          DeleteVolumeMountPointW (forwarded to kernel32.DeleteVolumeMountPointW)
         554  229          DequeueUmsCompletionListItems (forwarded to kernel32.DequeueUmsCompletionListItems)
-        555  22A 00005364 DeriveCapabilitySidsFromName = DeriveCapabilitySidsFromName
+        555  22A 000052FC DeriveCapabilitySidsFromName = DeriveCapabilitySidsFromName
         556  22B          DestroyPrivateObjectSecurity (forwarded to kernelbase.DestroyPrivateObjectSecurity)
-        557  22C 000031DC DeviceIoControl = Ext_DeviceIoControl
+        557  22C 000031B4 DeviceIoControl = Ext_DeviceIoControl
         558  22D          DisableThreadLibraryCalls (forwarded to kernel32.DisableThreadLibraryCalls)
         559  22E          DisableThreadProfiling (forwarded to kernel32.DisableThreadProfiling)
         560  22F          DisassociateCurrentThreadFromCallback (forwarded to kernel32.DisassociateCurrentThreadFromCallback)
-        561  230 00005DB0 DiscardVirtualMemory = DiscardVirtualMemory
+        561  230 00005D70 DiscardVirtualMemory = DiscardVirtualMemory
         562  231          DisconnectNamedPipe (forwarded to kernel32.DisconnectNamedPipe)
         563  232          DnsHostnameToComputerNameA (forwarded to kernel32.DnsHostnameToComputerNameA)
         564  233          DnsHostnameToComputerNameW (forwarded to kernel32.DnsHostnameToComputerNameW)
@@ -585,7 +585,7 @@ File Type: DLL
         566  235          DosPathToSessionPathA (forwarded to kernel32.DosPathToSessionPathA)
         567  236          DosPathToSessionPathW (forwarded to kernel32.DosPathToSessionPathW)
         568  237          DuplicateConsoleHandle (forwarded to kernel32.DuplicateConsoleHandle)
-        569  238 000053C0 DuplicateHandle = Stub_DuplicateHandle
+        569  238 00005358 DuplicateHandle = Stub_DuplicateHandle
         570  239          DuplicateToken (forwarded to kernelbase.DuplicateToken)
         571  23A          DuplicateTokenEx (forwarded to kernelbase.DuplicateTokenEx)
         572  23B          EnableThreadProfiling (forwarded to kernel32.EnableThreadProfiling)
@@ -723,7 +723,7 @@ File Type: DLL
         704  2BF          FoldStringW (forwarded to kernel32.FoldStringW)
         705  2C0          FormatMessageA (forwarded to kernel32.FormatMessageA)
         706  2C1          FormatMessageW (forwarded to kernel32.FormatMessageW)
-        707  2C2 000022AC FreeConsole = Ext_FreeConsole
+        707  2C2 000023A0 FreeConsole = Ext_FreeConsole
         708  2C3          FreeEnvironmentStringsA (forwarded to kernel32.FreeEnvironmentStringsA)
         709  2C4          FreeEnvironmentStringsW (forwarded to kernel32.FreeEnvironmentStringsW)
         710  2C5          FreeLibrary (forwarded to kernel32.FreeLibrary)
@@ -740,7 +740,7 @@ File Type: DLL
         721  2D0          GetActiveProcessorGroupCount (forwarded to kernel32.GetActiveProcessorGroupCount)
         722  2D1          GetApplicationRecoveryCallback (forwarded to kernel32.GetApplicationRecoveryCallback)
         723  2D2          GetApplicationRestartSettings (forwarded to kernel32.GetApplicationRestartSettings)
-        724  2D3 00001164 GetApplicationUserModelId = GetCurrentApplicationUserModelId
+        724  2D3 00001164 GetApplicationUserModelId = GetApplicationUserModelId
         725  2D4          GetAtomNameA (forwarded to kernel32.GetAtomNameA)
         726  2D5          GetAtomNameW (forwarded to kernel32.GetAtomNameW)
         727  2D6          GetBinaryType (forwarded to kernel32.GetBinaryType)
@@ -807,23 +807,23 @@ File Type: DLL
         788  313          GetConsoleInputWaitHandle (forwarded to kernel32.GetConsoleInputWaitHandle)
         789  314          GetConsoleKeyboardLayoutNameA (forwarded to kernel32.GetConsoleKeyboardLayoutNameA)
         790  315          GetConsoleKeyboardLayoutNameW (forwarded to kernel32.GetConsoleKeyboardLayoutNameW)
-        791  316 00001FEC GetConsoleMode = Ext_GetConsoleMode
+        791  316 00002048 GetConsoleMode = Ext_GetConsoleMode
         792  317          GetConsoleNlsMode (forwarded to kernel32.GetConsoleNlsMode)
-        793  318 000023DC GetConsoleOriginalTitleA = Ext_GetConsoleOriginalTitleA
-        794  319 00002420 GetConsoleOriginalTitleW = Ext_GetConsoleOriginalTitleW
+        793  318 000024D0 GetConsoleOriginalTitleA = Ext_GetConsoleOriginalTitleA
+        794  319 00002514 GetConsoleOriginalTitleW = Ext_GetConsoleOriginalTitleW
         795  31A          GetConsoleOutputCP (forwarded to kernel32.GetConsoleOutputCP)
         796  31B          GetConsoleProcessList (forwarded to kernel32.GetConsoleProcessList)
         797  31C          GetConsoleScreenBufferInfo (forwarded to kernel32.GetConsoleScreenBufferInfo)
         798  31D          GetConsoleScreenBufferInfoEx (forwarded to kernel32.GetConsoleScreenBufferInfoEx)
         799  31E          GetConsoleSelectionInfo (forwarded to kernel32.GetConsoleSelectionInfo)
-        800  31F 00002354 GetConsoleTitleA = Ext_GetConsoleTitleA
-        801  320 00002398 GetConsoleTitleW = Ext_GetConsoleTitleW
+        800  31F 00002448 GetConsoleTitleA = Ext_GetConsoleTitleA
+        801  320 0000248C GetConsoleTitleW = Ext_GetConsoleTitleW
         802  321          GetConsoleWindow (forwarded to kernel32.GetConsoleWindow)
         803  322          GetCurrencyFormatA (forwarded to kernel32.GetCurrencyFormatA)
         804  323          GetCurrencyFormatEx (forwarded to kernel32.GetCurrencyFormatEx)
         805  324          GetCurrencyFormatW (forwarded to kernel32.GetCurrencyFormatW)
         806  325          GetCurrentActCtx (forwarded to kernel32.GetCurrentActCtx)
-        807  326 00001164 GetCurrentApplicationUserModelId = GetCurrentApplicationUserModelId
+        807  326 00001164 GetCurrentApplicationUserModelId = GetApplicationUserModelId
         808  327          GetCurrentConsoleFont (forwarded to kernel32.GetCurrentConsoleFont)
         809  328          GetCurrentConsoleFontEx (forwarded to kernel32.GetCurrentConsoleFontEx)
         810  329          GetCurrentDirectoryA (forwarded to kernel32.GetCurrentDirectoryA)
@@ -837,7 +837,7 @@ File Type: DLL
         818  331          GetCurrentProcessorNumberEx (forwarded to kernel32.GetCurrentProcessorNumberEx)
         819  332          GetCurrentThread (forwarded to kernel32.GetCurrentThread)
         820  333          GetCurrentThreadId (forwarded to kernel32.GetCurrentThreadId)
-        821  334 000056F8 GetCurrentThreadStackLimits = GetCurrentThreadStackLimits
+        821  334 00005690 GetCurrentThreadStackLimits = GetCurrentThreadStackLimits
         822  335          GetCurrentUmsThread (forwarded to kernel32.GetCurrentUmsThread)
         823  336          GetDateFormatA (forwarded to kernel32.GetDateFormatA)
         824  337          GetDateFormatEx (forwarded to kernel32.GetDateFormatEx)
@@ -878,7 +878,7 @@ File Type: DLL
         859  35A          GetFileBandwidthReservation (forwarded to kernel32.GetFileBandwidthReservation)
         860  35B          GetFileInformationByHandle (forwarded to kernel32.GetFileInformationByHandle)
         861  35C          GetFileInformationByHandleEx (forwarded to kernel32.GetFileInformationByHandleEx)
-        862  35D 00003178 GetFileInformationByName = GetFileInformationByName
+        862  35D 00003150 GetFileInformationByName = GetFileInformationByName
         863  35E          GetFileMUIInfo (forwarded to kernel32.GetFileMUIInfo)
         864  35F          GetFileMUIPath (forwarded to kernel32.GetFileMUIPath)
         865  360          GetFileSecurityW (forwarded to kernelbase.GetFileSecurityW)
@@ -890,7 +890,7 @@ File Type: DLL
         871  366          GetFinalPathNameByHandleW (forwarded to kernel32.GetFinalPathNameByHandleW)
         872  367          GetFirmwareEnvironmentVariableA (forwarded to kernel32.GetFirmwareEnvironmentVariableA)
         873  368          GetFirmwareEnvironmentVariableW (forwarded to kernel32.GetFirmwareEnvironmentVariableW)
-        874  369 00003480 GetFirmwareType = GetFirmwareType
+        874  369 00003458 GetFirmwareType = GetFirmwareType
         875  36A          GetFullPathNameA (forwarded to kernel32.GetFullPathNameA)
         876  36B          GetFullPathNameTransactedA (forwarded to kernel32.GetFullPathNameTransactedA)
         877  36C          GetFullPathNameTransactedW (forwarded to kernel32.GetFullPathNameTransactedW)
@@ -922,10 +922,10 @@ File Type: DLL
         903  386          GetMaximumProcessorGroupCount (forwarded to kernel32.GetMaximumProcessorGroupCount)
         904  387          GetModuleFileNameA (forwarded to kernel32.GetModuleFileNameA)
         905  388          GetModuleFileNameW (forwarded to kernel32.GetModuleFileNameW)
-        906  389 000036D0 GetModuleHandleA = Ext_GetModuleHandleA
-        907  38A 000037C8 GetModuleHandleExA = Ext_GetModuleHandleExA
-        908  38B 0000384C GetModuleHandleExW = Ext_GetModuleHandleExW
-        909  38C 0000372C GetModuleHandleW = Ext_GetModuleHandleW
+        906  389 000036A8 GetModuleHandleA = Ext_GetModuleHandleA
+        907  38A 000037A0 GetModuleHandleExA = Ext_GetModuleHandleExA
+        908  38B 00003824 GetModuleHandleExW = Ext_GetModuleHandleExW
+        909  38C 00003704 GetModuleHandleW = Ext_GetModuleHandleW
         910  38D          GetNLSVersion (forwarded to kernel32.GetNLSVersion)
         911  38E          GetNLSVersionEx (forwarded to kernel32.GetNLSVersionEx)
         912  38F          GetNamedLocaleHashNode (forwarded to kernelbase.GetNamedLocaleHashNode)
@@ -959,13 +959,13 @@ File Type: DLL
         940  3AB          GetNumberOfConsoleInputEvents (forwarded to kernel32.GetNumberOfConsoleInputEvents)
         941  3AC          GetNumberOfConsoleMouseButtons (forwarded to kernel32.GetNumberOfConsoleMouseButtons)
         942  3AD          GetOEMCP (forwarded to kernel32.GetOEMCP)
-        943  3AE 00003480 GetOsSafeBootMode = GetFirmwareType
+        943  3AE 00003458 GetOsSafeBootMode = GetFirmwareType
         944  3AF          GetOverlappedResult (forwarded to kernel32.GetOverlappedResult)
-        945  3B0 000030EC GetOverlappedResultEx = GetOverlappedResultEx
-        946  3B1 00001048 GetPackageFamilyName = GetPackageFullName
-        947  3B2 00001048 GetPackageFullName = GetPackageFullName
+        945  3B0 000030C4 GetOverlappedResultEx = GetOverlappedResultEx
+        946  3B1 00001048 GetPackageFamilyName = GetPackagePathByFullName
+        947  3B2 00001048 GetPackageFullName = GetPackagePathByFullName
         948  3B3 000011C8 GetPackagePath = GetPackagePath
-        949  3B4 00001048 GetPackagePathByFullName = GetPackageFullName
+        949  3B4 00001048 GetPackagePathByFullName = GetPackagePathByFullName
         950  3B5 00001074 GetPackagesByPackageFamily = GetPackagesByPackageFamily
         951  3B6          GetPhysicallyInstalledSystemMemory (forwarded to kernel32.GetPhysicallyInstalledSystemMemory)
         952  3B7          GetPriorityClass (forwarded to kernel32.GetPriorityClass)
@@ -980,20 +980,20 @@ File Type: DLL
         961  3C0          GetPrivateProfileStringW (forwarded to kernel32.GetPrivateProfileStringW)
         962  3C1          GetPrivateProfileStructA (forwarded to kernel32.GetPrivateProfileStructA)
         963  3C2          GetPrivateProfileStructW (forwarded to kernel32.GetPrivateProfileStructW)
-        964  3C3 000053EC GetProcAddress = Stub_GetProcAddress
+        964  3C3 00005384 GetProcAddress = Stub_GetProcAddress
         965  3C4          GetProcessAffinityMask (forwarded to kernel32.GetProcessAffinityMask)
         966  3C5          GetProcessDEPPolicy (forwarded to kernel32.GetProcessDEPPolicy)
-        967  3C6 00004680 GetProcessDefaultCpuSetMasks = GetThreadSelectedCpuSets
-        968  3C7 00004680 GetProcessDefaultCpuSets = GetThreadSelectedCpuSets
+        967  3C6 00004618 GetProcessDefaultCpuSetMasks = GetProcessDefaultCpuSets
+        968  3C7 00004618 GetProcessDefaultCpuSets = GetProcessDefaultCpuSets
         969  3C8          GetProcessGroupAffinity (forwarded to kernel32.GetProcessGroupAffinity)
         970  3C9          GetProcessHandleCount (forwarded to kernel32.GetProcessHandleCount)
         971  3CA          GetProcessHeap (forwarded to kernel32.GetProcessHeap)
         972  3CB          GetProcessHeaps (forwarded to kernel32.GetProcessHeaps)
         973  3CC          GetProcessId (forwarded to kernel32.GetProcessId)
         974  3CD          GetProcessIdOfThread (forwarded to kernel32.GetProcessIdOfThread)
-        975  3CE 00004640 GetProcessInformation = PrefetchVirtualMemory
+        975  3CE 00005E28 GetProcessInformation = SetProcessInformation
         976  3CF          GetProcessIoCounters (forwarded to kernel32.GetProcessIoCounters)
-        977  3D0 00004704 GetProcessMitigationPolicy = GetProcessMitigationPolicy
+        977  3D0 0000469C GetProcessMitigationPolicy = GetProcessMitigationPolicy
         978  3D1          GetProcessPreferredUILanguages (forwarded to kernel32.GetProcessPreferredUILanguages)
         979  3D2          GetProcessPriorityBoost (forwarded to kernel32.GetProcessPriorityBoost)
         980  3D3          GetProcessShutdownParameters (forwarded to kernel32.GetProcessShutdownParameters)
@@ -1037,7 +1037,7 @@ File Type: DLL
        1018  3F9          GetStringTypeExA (forwarded to kernel32.GetStringTypeExA)
        1019  3FA          GetStringTypeExW (forwarded to kernel32.GetStringTypeExW)
        1020  3FB          GetStringTypeW (forwarded to kernel32.GetStringTypeW)
-       1021  3FC 00005888 GetSystemCpuSetInformation = GetSystemCpuSetInformation
+       1021  3FC 00005848 GetSystemCpuSetInformation = GetSystemCpuSetInformation
        1022  3FD          GetSystemDEPPolicy (forwarded to kernel32.GetSystemDEPPolicy)
        1023  3FE          GetSystemDefaultLCID (forwarded to kernel32.GetSystemDefaultLCID)
        1024  3FF          GetSystemDefaultLangID (forwarded to kernel32.GetSystemDefaultLangID)
@@ -1054,7 +1054,7 @@ File Type: DLL
        1035  40A          GetSystemTime (forwarded to kernel32.GetSystemTime)
        1036  40B          GetSystemTimeAdjustment (forwarded to kernel32.GetSystemTimeAdjustment)
        1037  40C          GetSystemTimeAsFileTime (forwarded to kernel32.GetSystemTimeAsFileTime)
-       1038  40D 00005924 GetSystemTimePreciseAsFileTime = GetSystemTimePreciseAsFileTime
+       1038  40D 000058E4 GetSystemTimePreciseAsFileTime = GetSystemTimePreciseAsFileTime
        1039  40E          GetSystemTimes (forwarded to kernel32.GetSystemTimes)
        1040  40F          GetSystemWindowsDirectoryA (forwarded to kernel32.GetSystemWindowsDirectoryA)
        1041  410          GetSystemWindowsDirectoryW (forwarded to kernel32.GetSystemWindowsDirectoryW)
@@ -1065,24 +1065,24 @@ File Type: DLL
        1046  415          GetTapeStatus (forwarded to kernel32.GetTapeStatus)
        1047  416          GetTempFileNameA (forwarded to kernel32.GetTempFileNameA)
        1048  417          GetTempFileNameW (forwarded to kernel32.GetTempFileNameW)
-       1049  418 00002F68 GetTempPath2A = GetTempPath2A
-       1050  419 00002F70 GetTempPath2W = GetTempPath2W
+       1049  418 00002F40 GetTempPath2A = GetTempPath2A
+       1050  419 00002F48 GetTempPath2W = GetTempPath2W
        1051  41A          GetTempPathA (forwarded to kernel32.GetTempPathA)
        1052  41B          GetTempPathW (forwarded to kernel32.GetTempPathW)
        1053  41C          GetThreadContext (forwarded to kernel32.GetThreadContext)
-       1054  41D 000055A8 GetThreadDescription = GetThreadDescription
+       1054  41D 00005540 GetThreadDescription = GetThreadDescription
        1055  41E          GetThreadErrorMode (forwarded to kernel32.GetThreadErrorMode)
        1056  41F          GetThreadGroupAffinity (forwarded to kernel32.GetThreadGroupAffinity)
        1057  420          GetThreadIOPendingFlag (forwarded to kernel32.GetThreadIOPendingFlag)
        1058  421          GetThreadId (forwarded to kernel32.GetThreadId)
        1059  422          GetThreadIdealProcessorEx (forwarded to kernel32.GetThreadIdealProcessorEx)
-       1060  423 000057CC GetThreadInformation = GetThreadInformation
+       1060  423 00005764 GetThreadInformation = GetThreadInformation
        1061  424          GetThreadLocale (forwarded to kernel32.GetThreadLocale)
        1062  425          GetThreadPreferredUILanguages (forwarded to kernel32.GetThreadPreferredUILanguages)
-       1063  426 000058A0 GetThreadPriority = Ext_GetThreadPriority
+       1063  426 00005860 GetThreadPriority = Ext_GetThreadPriority
        1064  427          GetThreadPriorityBoost (forwarded to kernel32.GetThreadPriorityBoost)
-       1065  428 00004680 GetThreadSelectedCpuSetMasks = GetThreadSelectedCpuSets
-       1066  429 00004680 GetThreadSelectedCpuSets = GetThreadSelectedCpuSets
+       1065  428 00004618 GetThreadSelectedCpuSetMasks = GetProcessDefaultCpuSets
+       1066  429 00004618 GetThreadSelectedCpuSets = GetProcessDefaultCpuSets
        1067  42A          GetThreadSelectorEntry (forwarded to kernel32.GetThreadSelectorEntry)
        1068  42B          GetThreadTimes (forwarded to kernel32.GetThreadTimes)
        1069  42C          GetThreadUILanguage (forwarded to kernel32.GetThreadUILanguage)
@@ -1097,7 +1097,7 @@ File Type: DLL
        1078  435          GetUILanguageInfo (forwarded to kernel32.GetUILanguageInfo)
        1079  436          GetUmsCompletionListEvent (forwarded to kernel32.GetUmsCompletionListEvent)
        1080  437          GetUmsSystemThreadInformation (forwarded to kernel32.GetUmsSystemThreadInformation)
-       1081  438 000032EC GetUserDefaultGeoName = GetUserDefaultGeoName
+       1081  438 000032C4 GetUserDefaultGeoName = GetUserDefaultGeoName
        1082  439          GetUserDefaultLCID (forwarded to kernel32.GetUserDefaultLCID)
        1083  43A          GetUserDefaultLangID (forwarded to kernel32.GetUserDefaultLangID)
        1084  43B          GetUserDefaultLocaleName (forwarded to kernel32.GetUserDefaultLocaleName)
@@ -1107,9 +1107,9 @@ File Type: DLL
        1088  43F          GetUserInfoWord (forwarded to kernelbase.GetUserInfoWord)
        1089  440          GetUserPreferredUILanguages (forwarded to kernel32.GetUserPreferredUILanguages)
        1090  441          GetVDMCurrentDirectories (forwarded to kernel32.GetVDMCurrentDirectories)
-       1091  442 00005944 GetVersion = Ext_GetVersion
-       1092  443 000059A8 GetVersionExA = Ext_GetVersionExA
-       1093  444 00005AF4 GetVersionExW = Ext_GetVersionExW
+       1091  442 00005904 GetVersion = Ext_GetVersion
+       1092  443 00005968 GetVersionExA = Ext_GetVersionExA
+       1093  444 00005AB4 GetVersionExW = Ext_GetVersionExW
        1094  445          GetVolumeInformationA (forwarded to kernel32.GetVolumeInformationA)
        1095  446          GetVolumeInformationByHandleW (forwarded to kernel32.GetVolumeInformationByHandleW)
        1096  447          GetVolumeInformationW (forwarded to kernel32.GetVolumeInformationW)
@@ -1152,7 +1152,7 @@ File Type: DLL
        1133  46C          Heap32Next (forwarded to kernel32.Heap32Next)
        1134  46D          HeapAlloc (forwarded to kernel32.HeapAlloc)
        1135  46E          HeapCompact (forwarded to kernel32.HeapCompact)
-       1136  46F 00003418 HeapCreate = Ext_HeapCreate
+       1136  46F 000033F0 HeapCreate = Ext_HeapCreate
        1137  470          HeapDestroy (forwarded to kernel32.HeapDestroy)
        1138  471          HeapFree (forwarded to kernel32.HeapFree)
        1139  472          HeapLock (forwarded to kernel32.HeapLock)
@@ -1179,10 +1179,10 @@ File Type: DLL
        1160  487          InitializeAcl (forwarded to kernelbase.InitializeAcl)
        1161  488          InitializeConditionVariable (forwarded to kernel32.InitializeConditionVariable)
        1162  489          InitializeContext (forwarded to kernel32.InitializeContext)
-       1163  48A 00002AE8 InitializeCriticalSection = Ext_InitializeCriticalSection
-       1164  48B 00002AF4 InitializeCriticalSectionAndSpinCount = Ext_InitializeCriticalSectionAndSpinCount
-       1165  48C 00002ABC InitializeCriticalSectionEx = Ext_InitializeCriticalSectionEx
-       1166  48D 00004308 InitializeProcThreadAttributeList = Ext_InitializeProcThreadAttributeList
+       1163  48A 00002BDC InitializeCriticalSection = Ext_InitializeCriticalSection
+       1164  48B 00002BE8 InitializeCriticalSectionAndSpinCount = Ext_InitializeCriticalSectionAndSpinCount
+       1165  48C 00002BB0 InitializeCriticalSectionEx = Ext_InitializeCriticalSectionEx
+       1166  48D 000042E0 InitializeProcThreadAttributeList = Ext_InitializeProcThreadAttributeList
        1167  48E          InitializeSListHead (forwarded to kernel32.InitializeSListHead)
        1168  48F          InitializeSRWLock (forwarded to kernel32.InitializeSRWLock)
        1169  490          InitializeSecurityDescriptor (forwarded to kernelbase.InitializeSecurityDescriptor)
@@ -1225,8 +1225,8 @@ File Type: DLL
        1206  4B5          IsDebuggerPresent (forwarded to kernel32.IsDebuggerPresent)
        1207  4B6          IsNLSDefinedString (forwarded to kernel32.IsNLSDefinedString)
        1208  4B7          IsNormalizedString (forwarded to kernel32.IsNormalizedString)
-       1209  4B8 000047F4 IsProcessCritical = IsProcessCritical
-       1210  4B9 00004840 IsProcessInJob = Ext_IsProcessInJob
+       1209  4B8 0000478C IsProcessCritical = IsProcessCritical
+       1210  4B9 000047D8 IsProcessInJob = Ext_IsProcessInJob
        1211  4BA          IsProcessorFeaturePresent (forwarded to kernel32.IsProcessorFeaturePresent)
        1212  4BB          IsSystemResumeAutomatic (forwarded to kernel32.IsSystemResumeAutomatic)
        1213  4BC          IsThreadAFiber (forwarded to kernel32.IsThreadAFiber)
@@ -1244,7 +1244,7 @@ File Type: DLL
        1225  4C8          IsValidSid (forwarded to kernelbase.IsValidSid)
        1226  4C9          IsWellKnownSid (forwarded to kernelbase.IsWellKnownSid)
        1227  4CA          IsWow64Process (forwarded to kernel32.IsWow64Process)
-       1228  4CB 00006238 IsWow64Process2 = IsWow64Process2
+       1228  4CB 00006210 IsWow64Process2 = IsWow64Process2
        1229  4CC          K32EmptyWorkingSet (forwarded to kernel32.K32EmptyWorkingSet)
        1230  4CD          K32EnumDeviceDrivers (forwarded to kernel32.K32EnumDeviceDrivers)
        1231  4CE          K32EnumPageFilesA (forwarded to kernel32.K32EnumPageFilesA)
@@ -1291,12 +1291,12 @@ File Type: DLL
        1272  4F7          LeaveCriticalSection (forwarded to kernel32.LeaveCriticalSection)
        1273  4F8          LeaveCriticalSectionWhenCallbackReturns (forwarded to kernel32.LeaveCriticalSectionWhenCallbackReturns)
        1274  4F9          LoadAppInitDlls (forwarded to kernel32.LoadAppInitDlls)
-       1275  4FA 00003888 LoadLibraryA = Ext_LoadLibraryA
-       1276  4FB 000038A0 LoadLibraryExA = Ext_LoadLibraryExA
-       1277  4FC 0000391C LoadLibraryExW = Ext_LoadLibraryExW
-       1278  4FD 00003894 LoadLibraryW = Ext_LoadLibraryW
+       1275  4FA 00003860 LoadLibraryA = Ext_LoadLibraryA
+       1276  4FB 00003878 LoadLibraryExA = Ext_LoadLibraryExA
+       1277  4FC 000038F4 LoadLibraryExW = Ext_LoadLibraryExW
+       1278  4FD 0000386C LoadLibraryW = Ext_LoadLibraryW
        1279  4FE          LoadModule (forwarded to kernel32.LoadModule)
-       1280  4FF 00003CFC LoadPackagedLibrary = LoadPackagedLibrary
+       1280  4FF 00003CD4 LoadPackagedLibrary = LoadPackagedLibrary
        1281  500          LoadResource (forwarded to kernel32.LoadResource)
        1282  501          LoadStringA (forwarded to kernelbase.LoadStringA)
        1283  502          LoadStringBaseExW (forwarded to kernel32.LoadStringBaseExW)
@@ -1326,12 +1326,12 @@ File Type: DLL
        1307  51A          MapUserPhysicalPages (forwarded to kernel32.MapUserPhysicalPages)
        1308  51B          MapUserPhysicalPagesScatter (forwarded to kernel32.MapUserPhysicalPagesScatter)
        1309  51C          MapViewOfFile (forwarded to kernel32.MapViewOfFile)
-       1310  51D 00006084 MapViewOfFile3 = MapViewOfFile3
-       1311  51E 000061AC MapViewOfFile3FromApp = MapViewOfFile3FromApp
+       1310  51D 0000605C MapViewOfFile3 = MapViewOfFile3
+       1311  51E 00006184 MapViewOfFile3FromApp = MapViewOfFile3FromApp
        1312  51F          MapViewOfFileEx (forwarded to kernel32.MapViewOfFileEx)
        1313  520          MapViewOfFileExNuma (forwarded to kernel32.MapViewOfFileExNuma)
-       1314  521 00005E90 MapViewOfFileFromApp = MapViewOfFileFromApp
-       1315  522 00005F28 MapViewOfFileNuma2 = MapViewOfFileNuma2
+       1314  521 00005E68 MapViewOfFileFromApp = MapViewOfFileFromApp
+       1315  522 00005F00 MapViewOfFileNuma2 = MapViewOfFileNuma2
        1316  523          Module32First (forwarded to kernel32.Module32First)
        1317  524          Module32FirstW (forwarded to kernel32.Module32FirstW)
        1318  525          Module32Next (forwarded to kernel32.Module32Next)
@@ -1366,14 +1366,14 @@ File Type: DLL
        1347  542          ObjectDeleteAuditAlarmW (forwarded to kernelbase.ObjectDeleteAuditAlarmW)
        1348  543          ObjectOpenAuditAlarmW (forwarded to kernelbase.ObjectOpenAuditAlarmW)
        1349  544          ObjectPrivilegeAuditAlarmW (forwarded to kernelbase.ObjectPrivilegeAuditAlarmW)
-       1350  545 00005D94 OfferVirtualMemory = OfferVirtualMemory
+       1350  545 00005D54 OfferVirtualMemory = OfferVirtualMemory
        1351  546          OpenConsoleW (forwarded to kernel32.OpenConsoleW)
        1352  547          OpenEventA (forwarded to kernel32.OpenEventA)
        1353  548          OpenEventW (forwarded to kernel32.OpenEventW)
        1354  549          OpenFile (forwarded to kernel32.OpenFile)
        1355  54A          OpenFileById (forwarded to kernel32.OpenFileById)
        1356  54B          OpenFileMappingA (forwarded to kernel32.OpenFileMappingA)
-       1357  54C 00005EFC OpenFileMappingFromApp = OpenFileMappingFromApp
+       1357  54C 00005ED4 OpenFileMappingFromApp = OpenFileMappingFromApp
        1358  54D          OpenFileMappingW (forwarded to kernel32.OpenFileMappingW)
        1359  54E          OpenJobObjectA (forwarded to kernel32.OpenJobObjectA)
        1360  54F          OpenJobObjectW (forwarded to kernel32.OpenJobObjectW)
@@ -1395,28 +1395,28 @@ File Type: DLL
        1376  55F          OutputDebugStringW (forwarded to kernel32.OutputDebugStringW)
        1377  560 00001140 PackageFamilyNameFromFullName = PackageFamilyNameFromFullName
        1378  561 000011A0 PackageIdFromFullName = PackageIdFromFullName
-       1379  562 00006BDC PathAllocCanonicalize = PathAllocCanonicalize
-       1380  563 00006FB8 PathAllocCombine = PathAllocCombine
-       1381  564 000071A0 PathCchAddBackslash = PathCchAddBackslash
-       1382  565 000071AC PathCchAddBackslashEx = PathCchAddBackslashEx
-       1383  566 000072A4 PathCchAddExtension = PathCchAddExtension
-       1384  567 000073A0 PathCchAppend = PathCchAppend
-       1385  568 000073A8 PathCchAppendEx = PathCchAppendEx
-       1386  569 000074A8 PathCchCanonicalize = PathCchCanonicalize
-       1387  56A 000074B0 PathCchCanonicalizeEx = PathCchCanonicalizeEx
-       1388  56B 00007874 PathCchCombine = PathCchCombine
-       1389  56C 00007888 PathCchCombineEx = PathCchCombineEx
-       1390  56D 00007934 PathCchFindExtension = PathCchFindExtension
-       1391  56E 00007994 PathCchIsRoot = PathCchIsRoot
-       1392  56F 00007A78 PathCchRemoveBackslash = PathCchRemoveBackslash
-       1393  570 00007A84 PathCchRemoveBackslashEx = PathCchRemoveBackslashEx
-       1394  571 00007BB8 PathCchRemoveExtension = PathCchRemoveExtension
-       1395  572 00007C40 PathCchRemoveFileSpec = PathCchRemoveFileSpec
-       1396  573 00007CE4 PathCchRenameExtension = PathCchRenameExtension
-       1397  574 00007D38 PathCchSkipRoot = PathCchSkipRoot
-       1398  575 00007E84 PathCchStripPrefix = PathCchStripPrefix
-       1399  576 00007F0C PathCchStripToRoot = PathCchStripToRoot
-       1400  577 00007FA4 PathIsUNCEx = PathIsUNCEx
+       1379  562 00006BB4 PathAllocCanonicalize = PathAllocCanonicalize
+       1380  563 00006F90 PathAllocCombine = PathAllocCombine
+       1381  564 00007178 PathCchAddBackslash = PathCchAddBackslash
+       1382  565 00007184 PathCchAddBackslashEx = PathCchAddBackslashEx
+       1383  566 0000727C PathCchAddExtension = PathCchAddExtension
+       1384  567 00007378 PathCchAppend = PathCchAppend
+       1385  568 00007380 PathCchAppendEx = PathCchAppendEx
+       1386  569 00007480 PathCchCanonicalize = PathCchCanonicalize
+       1387  56A 00007488 PathCchCanonicalizeEx = PathCchCanonicalizeEx
+       1388  56B 0000784C PathCchCombine = PathCchCombine
+       1389  56C 00007860 PathCchCombineEx = PathCchCombineEx
+       1390  56D 0000790C PathCchFindExtension = PathCchFindExtension
+       1391  56E 0000796C PathCchIsRoot = PathCchIsRoot
+       1392  56F 00007A50 PathCchRemoveBackslash = PathCchRemoveBackslash
+       1393  570 00007A5C PathCchRemoveBackslashEx = PathCchRemoveBackslashEx
+       1394  571 00007B90 PathCchRemoveExtension = PathCchRemoveExtension
+       1395  572 00007C18 PathCchRemoveFileSpec = PathCchRemoveFileSpec
+       1396  573 00007CBC PathCchRenameExtension = PathCchRenameExtension
+       1397  574 00007D10 PathCchSkipRoot = PathCchSkipRoot
+       1398  575 00007E5C PathCchStripPrefix = PathCchStripPrefix
+       1399  576 00007EE4 PathCchStripToRoot = PathCchStripToRoot
+       1400  577 00007F7C PathIsUNCEx = PathIsUNCEx
        1401  578          PeekConsoleInputA (forwarded to kernel32.PeekConsoleInputA)
        1402  579          PeekConsoleInputW (forwarded to kernel32.PeekConsoleInputW)
        1403  57A          PeekNamedPipe (forwarded to kernel32.PeekNamedPipe)
@@ -1424,7 +1424,7 @@ File Type: DLL
        1405  57C          PowerClearRequest (forwarded to kernel32.PowerClearRequest)
        1406  57D          PowerCreateRequest (forwarded to kernel32.PowerCreateRequest)
        1407  57E          PowerSetRequest (forwarded to kernel32.PowerSetRequest)
-       1408  57F 00004640 PrefetchVirtualMemory = PrefetchVirtualMemory
+       1408  57F 00005E28 PrefetchVirtualMemory = SetProcessInformation
        1409  580          PrepareTape (forwarded to kernel32.PrepareTape)
        1410  581          PrivCopyFileExW (forwarded to kernel32.PrivCopyFileExW)
        1411  582          PrivMoveFileIdentityW (forwarded to kernel32.PrivMoveFileIdentityW)
@@ -1435,10 +1435,10 @@ File Type: DLL
        1416  587          Process32Next (forwarded to kernel32.Process32Next)
        1417  588          Process32NextW (forwarded to kernel32.Process32NextW)
        1418  589          ProcessIdToSessionId (forwarded to kernel32.ProcessIdToSessionId)
-       1419  58A 00004F5C PssCaptureSnapshot = PssCaptureSnapshot
-       1420  58B 00004FB0 PssFreeSnapshot = PssFreeSnapshot
-       1421  58C 00005004 PssQuerySnapshot = PssQuerySnapshot
-       1422  58D 00005058 PssWalkMarkerCreate = PssWalkMarkerCreate
+       1419  58A 00004EF4 PssCaptureSnapshot = PssCaptureSnapshot
+       1420  58B 00004F48 PssFreeSnapshot = PssFreeSnapshot
+       1421  58C 00004F9C PssQuerySnapshot = PssQuerySnapshot
+       1422  58D 00004FF0 PssWalkMarkerCreate = PssWalkMarkerCreate
        1423  58E          PulseEvent (forwarded to kernel32.PulseEvent)
        1424  58F          PurgeComm (forwarded to kernel32.PurgeComm)
        1425  590          QueryActCtxSettingsW (forwarded to kernel32.QueryActCtxSettingsW)
@@ -1462,7 +1462,7 @@ File Type: DLL
        1443  5A2          QueryThreadpoolStackInformation (forwarded to kernel32.QueryThreadpoolStackInformation)
        1444  5A3          QueryUmsThreadInformation (forwarded to kernel32.QueryUmsThreadInformation)
        1445  5A4          QueryUnbiasedInterruptTime (forwarded to kernel32.QueryUnbiasedInterruptTime)
-       1446  5A5 0000593C QueryUnbiasedInterruptTimePrecise = QueryUnbiasedInterruptTimePrecise
+       1446  5A5 000058FC QueryUnbiasedInterruptTimePrecise = QueryUnbiasedInterruptTimePrecise
        1447  5A6          QueueUserAPC (forwarded to kernel32.QueueUserAPC)
        1448  5A7          QueueUserWorkItem (forwarded to kernel32.QueueUserWorkItem)
        1449  5A8          RaiseException (forwarded to kernel32.RaiseException)
@@ -1480,12 +1480,12 @@ File Type: DLL
        1461  5B4          ReadConsoleOutputW (forwarded to kernel32.ReadConsoleOutputW)
        1462  5B5          ReadConsoleW (forwarded to kernel32.ReadConsoleW)
        1463  5B6          ReadDirectoryChangesW (forwarded to kernel32.ReadDirectoryChangesW)
-       1464  5B7 00003228 ReadFile = Ext_ReadFile
+       1464  5B7 00003200 ReadFile = Ext_ReadFile
        1465  5B8          ReadFileEx (forwarded to kernel32.ReadFileEx)
        1466  5B9          ReadFileScatter (forwarded to kernel32.ReadFileScatter)
        1467  5BA          ReadProcessMemory (forwarded to kernel32.ReadProcessMemory)
        1468  5BB          ReadThreadProfilingData (forwarded to kernel32.ReadThreadProfilingData)
-       1469  5BC 00005DBC ReclaimVirtualMemory = ReclaimVirtualMemory
+       1469  5BC 00005D7C ReclaimVirtualMemory = ReclaimVirtualMemory
        1470  5BD          RegCloseKey (forwarded to kernel32.RegCloseKey)
        1471  5BE          RegCopyTreeW (forwarded to KxAdvapi.RegCopyTreeW)
        1472  5BF          RegCreateKeyExA (forwarded to kernel32.RegCreateKeyExA)
@@ -1551,7 +1551,7 @@ File Type: DLL
        1532  5FB          RemoveDirectoryTransactedA (forwarded to kernel32.RemoveDirectoryTransactedA)
        1533  5FC          RemoveDirectoryTransactedW (forwarded to kernel32.RemoveDirectoryTransactedW)
        1534  5FD          RemoveDirectoryW (forwarded to kernel32.RemoveDirectoryW)
-       1535  5FE 00003EF4 RemoveDllDirectory = Ext_RemoveDllDirectory
+       1535  5FE 00003ECC RemoveDllDirectory = Ext_RemoveDllDirectory
        1536  5FF          RemoveLocalAlternateComputerNameA (forwarded to kernel32.RemoveLocalAlternateComputerNameA)
        1537  600          RemoveLocalAlternateComputerNameW (forwarded to kernel32.RemoveLocalAlternateComputerNameW)
        1538  601          RemoveSecureMemoryCacheCallback (forwarded to kernel32.RemoveSecureMemoryCacheCallback)
@@ -1565,7 +1565,7 @@ File Type: DLL
        1546  609          RequestWakeupLatency (forwarded to kernel32.RequestWakeupLatency)
        1547  60A          ResetEvent (forwarded to kernel32.ResetEvent)
        1548  60B          ResetWriteWatch (forwarded to kernel32.ResetWriteWatch)
-       1549  60C 00002688 ResizePseudoConsole = ResizePseudoConsole
+       1549  60C 0000277C ResizePseudoConsole = ResizePseudoConsole
        1550  60D          ResolveDelayLoadedAPI (forwarded to KexDll.KexLdrResolveDelayLoadedAPI)
        1551  60E          ResolveLocaleName (forwarded to kernel32.ResolveLocaleName)
        1552  60F          RestoreLastError (forwarded to kernel32.RestoreLastError)
@@ -1625,7 +1625,7 @@ File Type: DLL
        1606  645          SetConsoleLocalEUDC (forwarded to kernel32.SetConsoleLocalEUDC)
        1607  646          SetConsoleMaximumWindowSize (forwarded to kernel32.SetConsoleMaximumWindowSize)
        1608  647          SetConsoleMenuClose (forwarded to kernel32.SetConsoleMenuClose)
-       1609  648 00002070 SetConsoleMode = Ext_SetConsoleMode
+       1609  648 000020FC SetConsoleMode = Ext_SetConsoleMode
        1610  649          SetConsoleNlsMode (forwarded to kernel32.SetConsoleNlsMode)
        1611  64A          SetConsoleNumberOfCommandsA (forwarded to kernel32.SetConsoleNumberOfCommandsA)
        1612  64B          SetConsoleNumberOfCommandsW (forwarded to kernel32.SetConsoleNumberOfCommandsW)
@@ -1644,7 +1644,7 @@ File Type: DLL
        1625  658          SetCurrentDirectoryW (forwarded to kernel32.SetCurrentDirectoryW)
        1626  659          SetDefaultCommConfigA (forwarded to kernel32.SetDefaultCommConfigA)
        1627  65A          SetDefaultCommConfigW (forwarded to kernel32.SetDefaultCommConfigW)
-       1628  65B 00003FF0 SetDefaultDllDirectories = Ext_SetDefaultDllDirectories
+       1628  65B 00003FC8 SetDefaultDllDirectories = Ext_SetDefaultDllDirectories
        1629  65C          SetDllDirectoryA (forwarded to kernel32.SetDllDirectoryA)
        1630  65D          SetDllDirectoryW (forwarded to kernel32.SetDllDirectoryW)
        1631  65E          SetDynamicTimeZoneInformation (forwarded to kernel32.SetDynamicTimeZoneInformation)
@@ -1676,7 +1676,7 @@ File Type: DLL
        1657  678          SetFirmwareEnvironmentVariableA (forwarded to kernel32.SetFirmwareEnvironmentVariableA)
        1658  679          SetFirmwareEnvironmentVariableW (forwarded to kernel32.SetFirmwareEnvironmentVariableW)
        1659  67A          SetHandleCount (forwarded to kernel32.SetHandleCount)
-       1660  67B 000033A0 SetHandleInformation = Ext_SetHandleInformation
+       1660  67B 00003378 SetHandleInformation = Ext_SetHandleInformation
        1661  67C          SetInformationJobObject (forwarded to kernel32.SetInformationJobObject)
        1662  67D          SetKernelObjectSecurity (forwarded to kernelbase.SetKernelObjectSecurity)
        1663  67E          SetLastConsoleEventActive (forwarded to kernel32.SetLastConsoleEventActive)
@@ -1696,10 +1696,10 @@ File Type: DLL
        1677  68C          SetProcessAffinityMask (forwarded to kernel32.SetProcessAffinityMask)
        1678  68D          SetProcessAffinityUpdateMode (forwarded to kernel32.SetProcessAffinityUpdateMode)
        1679  68E          SetProcessDEPPolicy (forwarded to kernel32.SetProcessDEPPolicy)
-       1680  68F 00004658 SetProcessDefaultCpuSetMasks = SetProcessDefaultCpuSets
-       1681  690 00004658 SetProcessDefaultCpuSets = SetProcessDefaultCpuSets
-       1682  691 00004640 SetProcessInformation = PrefetchVirtualMemory
-       1683  692 000046AC SetProcessMitigationPolicy = SetProcessMitigationPolicy
+       1680  68F 000057C4 SetProcessDefaultCpuSetMasks = SetProcessDefaultCpuSets
+       1681  690 000057C4 SetProcessDefaultCpuSets = SetProcessDefaultCpuSets
+       1682  691 00005E28 SetProcessInformation = SetProcessInformation
+       1683  692 00004644 SetProcessMitigationPolicy = SetProcessMitigationPolicy
        1684  693          SetProcessPreferredUILanguages (forwarded to kernel32.SetProcessPreferredUILanguages)
        1685  694          SetProcessPriorityBoost (forwarded to kernel32.SetProcessPriorityBoost)
        1686  695          SetProcessShutdownParameters (forwarded to kernel32.SetProcessShutdownParameters)
@@ -1725,19 +1725,19 @@ File Type: DLL
        1706  6A9          SetTermsrvAppInstallMode (forwarded to kernel32.SetTermsrvAppInstallMode)
        1707  6AA          SetThreadAffinityMask (forwarded to kernel32.SetThreadAffinityMask)
        1708  6AB          SetThreadContext (forwarded to kernel32.SetThreadContext)
-       1709  6AC 000056BC SetThreadDescription = SetThreadDescription
+       1709  6AC 00005654 SetThreadDescription = SetThreadDescription
        1710  6AD          SetThreadErrorMode (forwarded to kernel32.SetThreadErrorMode)
        1711  6AE          SetThreadExecutionState (forwarded to kernel32.SetThreadExecutionState)
        1712  6AF          SetThreadGroupAffinity (forwarded to kernel32.SetThreadGroupAffinity)
        1713  6B0          SetThreadIdealProcessor (forwarded to kernel32.SetThreadIdealProcessor)
        1714  6B1          SetThreadIdealProcessorEx (forwarded to kernel32.SetThreadIdealProcessorEx)
-       1715  6B2 00005714 SetThreadInformation = SetThreadInformation
+       1715  6B2 000056AC SetThreadInformation = SetThreadInformation
        1716  6B3          SetThreadLocale (forwarded to kernel32.SetThreadLocale)
        1717  6B4          SetThreadPreferredUILanguages (forwarded to kernel32.SetThreadPreferredUILanguages)
        1718  6B5          SetThreadPriority (forwarded to kernel32.SetThreadPriority)
        1719  6B6          SetThreadPriorityBoost (forwarded to kernel32.SetThreadPriorityBoost)
-       1720  6B7 00004658 SetThreadSelectedCpuSetMasks = SetProcessDefaultCpuSets
-       1721  6B8 00004658 SetThreadSelectedCpuSets = SetProcessDefaultCpuSets
+       1720  6B7 000057C4 SetThreadSelectedCpuSetMasks = SetProcessDefaultCpuSets
+       1721  6B8 000057C4 SetThreadSelectedCpuSets = SetProcessDefaultCpuSets
        1722  6B9          SetThreadStackGuarantee (forwarded to kernel32.SetThreadStackGuarantee)
        1723  6BA          SetThreadToken (forwarded to kernel32.SetThreadToken)
        1724  6BB          SetThreadUILanguage (forwarded to kernel32.SetThreadUILanguage)
@@ -1745,7 +1745,7 @@ File Type: DLL
        1726  6BD          SetThreadpoolThreadMaximum (forwarded to kernel32.SetThreadpoolThreadMaximum)
        1727  6BE          SetThreadpoolThreadMinimum (forwarded to kernel32.SetThreadpoolThreadMinimum)
        1728  6BF          SetThreadpoolTimer (forwarded to kernel32.SetThreadpoolTimer)
-       1729  6C0 0000582C SetThreadpoolTimerEx = SetThreadpoolTimerEx
+       1729  6C0 000057EC SetThreadpoolTimerEx = SetThreadpoolTimerEx
        1730  6C1          SetThreadpoolWait (forwarded to kernel32.SetThreadpoolWait)
        1731  6C2          SetTimeZoneInformation (forwarded to kernel32.SetTimeZoneInformation)
        1732  6C3          SetTimerQueueTimer (forwarded to kernel32.SetTimerQueueTimer)
@@ -1806,8 +1806,8 @@ File Type: DLL
        1787  6FA          UnlockFile (forwarded to kernel32.UnlockFile)
        1788  6FB          UnlockFileEx (forwarded to kernel32.UnlockFileEx)
        1789  6FC          UnmapViewOfFile (forwarded to kernel32.UnmapViewOfFile)
-       1790  6FD 00005FCC UnmapViewOfFile2 = UnmapViewOfFile2
-       1791  6FE 00006074 UnmapViewOfFileEx = UnmapViewOfFileEx
+       1790  6FD 00005FA4 UnmapViewOfFile2 = UnmapViewOfFile2
+       1791  6FE 0000604C UnmapViewOfFileEx = UnmapViewOfFileEx
        1792  6FF 00001284 UnregisterAppStateChangeNotification = UnregisterAppStateChangeNotification
        1793  700          UnregisterApplicationRecoveryCallback (forwarded to kernel32.UnregisterApplicationRecoveryCallback)
        1794  701          UnregisterApplicationRestart (forwarded to kernel32.UnregisterApplicationRestart)
@@ -1815,7 +1815,7 @@ File Type: DLL
        1796  703          UnregisterWait (forwarded to kernel32.UnregisterWait)
        1797  704          UnregisterWaitEx (forwarded to kernel32.UnregisterWaitEx)
        1798  705          UpdateCalendarDayOfWeek (forwarded to kernel32.UpdateCalendarDayOfWeek)
-       1799  706 000048B0 UpdateProcThreadAttribute = Ext_UpdateProcThreadAttribute
+       1799  706 00004848 UpdateProcThreadAttribute = Ext_UpdateProcThreadAttribute
        1800  707          UpdateResourceA (forwarded to kernel32.UpdateResourceA)
        1801  708          UpdateResourceW (forwarded to kernel32.UpdateResourceW)
        1802  709          VDMConsoleOperation (forwarded to kernel32.VDMConsoleOperation)
@@ -1826,17 +1826,17 @@ File Type: DLL
        1807  70E          VerifyConsoleIoHandle (forwarded to kernel32.VerifyConsoleIoHandle)
        1808  70F          VerifyScripts (forwarded to kernel32.VerifyScripts)
        1809  710          VerifyVersionInfoA (forwarded to kernel32.VerifyVersionInfoA)
-       1810  711 00005C4C VerifyVersionInfoW = Ext_VerifyVersionInfoW
-       1811  712 00006220 VirtualAlloc = Ext_VirtualAlloc
+       1810  711 00005C0C VerifyVersionInfoW = Ext_VerifyVersionInfoW
+       1811  712 000061F8 VirtualAlloc = Ext_VirtualAlloc
        1812  713          VirtualAllocEx (forwarded to kernel32.VirtualAllocEx)
        1813  714          VirtualAllocExNuma (forwarded to kernel32.VirtualAllocExNuma)
-       1814  715 00005ECC VirtualAllocFromApp = VirtualAllocFromApp
+       1814  715 00005EA4 VirtualAllocFromApp = VirtualAllocFromApp
        1815  716          VirtualFree (forwarded to kernel32.VirtualFree)
        1816  717          VirtualFreeEx (forwarded to kernel32.VirtualFreeEx)
        1817  718          VirtualLock (forwarded to kernel32.VirtualLock)
        1818  719          VirtualProtect (forwarded to kernel32.VirtualProtect)
        1819  71A          VirtualProtectEx (forwarded to kernel32.VirtualProtectEx)
-       1820  71B 00005EF4 VirtualProtectFromApp = VirtualProtectFromApp
+       1820  71B 00005ECC VirtualProtectFromApp = VirtualProtectFromApp
        1821  71C          VirtualQuery (forwarded to kernel32.VirtualQuery)
        1822  71D          VirtualQueryEx (forwarded to kernel32.VirtualQueryEx)
        1823  71E          VirtualUnlock (forwarded to kernel32.VirtualUnlock)
@@ -1853,7 +1853,7 @@ File Type: DLL
        1834  729          WaitForThreadpoolWorkCallbacks (forwarded to kernel32.WaitForThreadpoolWorkCallbacks)
        1835  72A          WaitNamedPipeA (forwarded to kernel32.WaitNamedPipeA)
        1836  72B          WaitNamedPipeW (forwarded to kernel32.WaitNamedPipeW)
-       1837  72C 00005558 WaitOnAddress = WaitOnAddress
+       1837  72C 000054F0 WaitOnAddress = WaitOnAddress
        1838  72D          WakeAllConditionVariable (forwarded to kernel32.WakeAllConditionVariable)
        1839  72E          WakeByAddressAll (forwarded to KexDll.KexRtlWakeAddressAll)
        1840  72F          WakeByAddressSingle (forwarded to KexDll.KexRtlWakeAddressSingle)
@@ -1881,7 +1881,7 @@ File Type: DLL
        1862  745          Wow64RevertWow64FsRedirection (forwarded to kernel32.Wow64RevertWow64FsRedirection)
        1863  746          Wow64SetThreadContext (forwarded to kernel32.Wow64SetThreadContext)
        1864  747          Wow64SuspendThread (forwarded to kernel32.Wow64SuspendThread)
-       1865  748 00001E9C WriteConsoleA = Ext_WriteConsoleA
+       1865  748 00001EF8 WriteConsoleA = Ext_WriteConsoleA
        1866  749          WriteConsoleInputA (forwarded to kernel32.WriteConsoleInputA)
        1867  74A          WriteConsoleInputVDMA (forwarded to kernel32.WriteConsoleInputVDMA)
        1868  74B          WriteConsoleInputVDMW (forwarded to kernel32.WriteConsoleInputVDMW)
@@ -1891,8 +1891,8 @@ File Type: DLL
        1872  74F          WriteConsoleOutputCharacterA (forwarded to kernel32.WriteConsoleOutputCharacterA)
        1873  750          WriteConsoleOutputCharacterW (forwarded to kernel32.WriteConsoleOutputCharacterW)
        1874  751          WriteConsoleOutputW (forwarded to kernel32.WriteConsoleOutputW)
-       1875  752 00001F44 WriteConsoleW = Ext_WriteConsoleW
-       1876  753 00003250 WriteFile = Ext_WriteFile
+       1875  752 00001FA0 WriteConsoleW = Ext_WriteConsoleW
+       1876  753 00003228 WriteFile = Ext_WriteFile
        1877  754          WriteFileEx (forwarded to kernel32.WriteFileEx)
        1878  755          WriteFileGather (forwarded to kernel32.WriteFileGather)
        1879  756          WritePrivateProfileSectionA (forwarded to kernel32.WritePrivateProfileSectionA)
