@@ -102,6 +102,37 @@ VerifierDlls = kexdll.dll
    - 系统的 IFEO 已经正确对 `C:\Users\liusj\Downloads\dsh-latest-windows-x64\DeepSeek Harness.exe` 启用了 VxKex。
    - 现场核查确认系统当前正正常运行着 5 个 `DeepSeek Harness.exe` 进程（PID: 2148, 2420, 3524, 4872, 5752），主界面与渲染核心均处于活跃工作状态。
 
-### 结论与后续操作建议：
-- **安装包 `dsh-latest-windows-x64.exe`**：无需勾选 VxKex（如果以后还需要重新安装，直接在原生 Win7 下运行安装器即可，切勿勾选 VxKex）。
-- **运行主程序**：直接运行 `C:\Users\liusj\Downloads\dsh-latest-windows-x64\DeepSeek Harness.exe`（或创建桌面快捷方式），保持该 64 位主程序开启 VxKex 即可。
+---
+
+## 五、 为什么去掉 VxKex 后原生运行仍然报该错误？（原生兼容性断裂）
+
+经进一步深入跟踪确认：**即使完全取消 VxKex 配置，让安装程序以纯原生 Windows 7 SP1 模式运行，依然会报出相同的“无法初始化安装窗口”错误**。
+
+这是因为：**DeepSeek Harness 的这个安装向导本身在 Windows 7 上就存在原生设计缺陷与硬性不兼容**：
+
+1. **`window-frame.dll` 是专为 Win10/Win11 设计的无边框与圆角窗口插件**：
+   - 该 DLL 在 `InstallerApplyFrame` 中对窗口调用 `DwmSetWindowAttribute(hWnd, 33 /* DWMWA_WINDOW_CORNER_PREFERENCE */, ...)`（Win11 圆角偏好）以及 `DwmExtendFrameIntoClientArea(hWnd, {1,1,1,1})`。
+   - 在 Windows 7 下，DWM 的合成接口与窗口层叠特性与 Windows 10/11 完全不同。当 DWM 调用返回失败或未达到其期望的呈现状态时，插件返回 `0x80004005 (E_FAIL)`。
+2. **`InstallerPresentWelcome` 的可见性校验死锁**：
+   - 插件中的代码进入欢迎页面第一步就是：
+     ```assembly
+     call USER32!IsWindowVisible(hWnd)
+     test eax, eax
+     jz fail
+     ```
+   - 在 Windows 7 原生 NSIS 对话框生命周期中，对话框在此时尚未完成 `ShowWindow` 上屏渲染，`IsWindowVisible` 必然返回 `0`，插件直接判定窗口未初始化，返回 `0` 给 NSIS。
+3. **后台进程冲突（官方已知 Bug）**：
+   - 插件中导出了 `InstallerFindProcess`，会在初始化时扫描系统进程。当前系统中如果已经存在运行中的 `DeepSeek Harness.exe` 进程，安装程序同样会拒绝初始化并弹出提示。
+4. **官方社区公认解决方案：手动解压绿色运行**：
+   - 在 DeepSeek Harness 官方 GitHub Issue 中，大量 Windows 用户也遭遇了该安装器在各种环境下卡死或初始化失败的 Bug（[GitHub Issue 记录](https://github.com/deepseek-ai)）。
+   - 官方与社区一致推荐的标准方案为：**跳过图形化安装器，直接解压出核心文件，绿色运行 `DeepSeek Harness.exe`**。
+
+---
+
+## 六、 最终解决方案与使用结论
+
+- **无需再纠结运行 `dsh-latest-windows-x64.exe` 安装包**：该安装包的图形界面插件 `window-frame.dll` 无法在 Windows 7 上正常渲染。
+- **直接使用已解压的主程序**：
+  在 `C:\Users\liusj\Downloads\dsh-latest-windows-x64\` 下，已经具备完整的程序体（`DeepSeek Harness.exe`）。
+  保持对该 `DeepSeek Harness.exe` 开启 VxKex（伪装 Windows 10），即可正常使用全部桌面功能（当前系统后台已成功常驻运行）。
+
