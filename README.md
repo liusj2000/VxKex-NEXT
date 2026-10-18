@@ -14,7 +14,7 @@
 - **零开销原生直通**：引入 `KxPseudoConsoleInitialized` 标志，未调用伪终端的应用（如 VS Code 渲染主进程、GPU 进程）执行 100% 原生直连，杜绝句柄泄漏与崩溃；
 - **Chromium / Electron 句柄保护兼容**：修复 `CloseHandle` 导出拦截破坏 Chromium `ScopedHandleVerifier` 导致的白屏崩溃问题，恢复系统原生转发并采用句柄槽惰性回收机制。
 
-### 2. 现代 AI 插件与 API 集成适配（Codex / Claude Code / Antigravity）
+### 2. 现代 AI 插件与 API 集成适配（Codex / Antigravity / Copilot 等）
 - **解决 0xc0000139 符号缺失崩溃**：
   - 在 `KxNt` 中实现并导出 `IsApiSetImplemented`，解决现代 Rust / C++ 运行时在初始化阶段查询 ApiSet 导致的启动崩溃；
   - 在 `KxBase` 中实现并导出 `DeriveCapabilitySidsFromName`，支持 Windows 现代应用容器及沙箱权限派生。
@@ -45,24 +45,27 @@
 
 ### 2. 软件运行栈与已验证版本说明
 
-| 软件 / 组件 | 实测验证版本 | 架构与运行说明 |
+| 软件 / 组件 | 实测验证版本 | 架构与 Win7 兼容性说明 |
 | :--- | :--- | :--- |
 | **VS Code** | **1.107.1**（win32-x64 便携版） | 内嵌 **Electron 39.2.3**，开启 VxKex Win10 伪装后全界面与扩展主机正常运行 |
 | **Node.js** | **v22.18.10**（VS Code 内置）<br>支持独立 **Node.js 18.x ~ 22.x** | 配合 KxBase ConPTY 桥接，支持伪终端子进程无损创建与管道重定向 |
-| **OpenAI Codex / ChatGPT** | `openai.chatgpt-26.1007.21434-win32-x64` | 内置 `codex.exe 0.162.0-alpha.17.2`（Rust），补齐 ApiSet 与安全 SID 后 100% 正常登录 |
-| **Claude Code** | `anthropic.claude-code-2.1.301-win32-x64` | 现代 AI 命令行辅助插件，支持本地/代理网络认证与交互 |
-| **Claude Dev / Roo Code** | `saoudrizwan.claude-dev-4.1.25` | 现代自主代码生成与 Agent 插件，完全兼容 |
-| **GitHub Copilot & Chat** | `github.copilot-1.388.0`<br>`github.copilot-chat-0.36.2` | 官方代码补全与对话助手，支持实时生成与流式对话 |
-| **Google Antigravity** | `google.google-antigravity-1.8.0` | 完整支持代理环境下通信与双向工作区协作 |
-| **Cline CLI** | **3.0.70** | 基于伪终端的自动化 Agent CLI 工具 |
-| **C/C++ & CMake** | `ms-vscode.cpptools-1.34.4-win32-x64`<br>`ms-vscode.cmake-tools-1.24.42` | 原生 C/C++ 语言服务、IntelliSense、调试器与 CMake 构建集成 |
-| **PowerShell 终端与扩展** | `ms-vscode.powershell-2025.4.0`<br>结合 **PowerShell 7.6.7** / 7.2.24 | 结合活动屏幕缓冲区 VT 共享与经典控制台模式，中文无乱码 |
-| **Python & Jupyter** | `ms-toolsai.jupyter-2025.9.1-win32-x64` | 数据科学交互笔记本与 Python 内核 |
-| **Java 开发环境** | `redhat.java-1.57.0-win32-x64`<br>`vscjava.vscode-gradle-3.18.1`<br>`vscjava.vscode-maven-0.46.0` | 现代 Java Language Server 与 Gradle / Maven 构建套件 |
+| **OpenAI Codex / ChatGPT** | `openai.chatgpt-26.1007.21434-win32-x64` | ✔️ **完全兼容**。内置 `codex.exe 0.162.0-alpha.17.2`（Rust），补齐 ApiSet 与安全能力 SID 后 100% 正常运行与登录 |
+| **Google Antigravity** | `google.google-antigravity-1.8.0` | ✔️ **完全兼容**。完整支持代理环境下通信与双向工作区协作 |
+| **GitHub Copilot & Chat** | `github.copilot-1.388.0`<br>`github.copilot-chat-0.36.2` | ✔️ **完全兼容**。官方代码补全与对话助手，支持实时生成与流式对话 |
+| **Claude Dev / Roo Code** | `saoudrizwan.claude-dev-4.1.25` | ✔️ **完全兼容**。现代自主代码生成与 Agent 插件，完全兼容 |
+| **Cline CLI** | **3.0.70** | ✔️ **完全兼容**。基于伪终端的自动化 Agent CLI 工具 |
+| ❌ **Claude Code CLI** | `anthropic.claude-code-2.1.301-win32-x64` | ⚠️ **无法在 Win7 下正常运行（无法修复）**。基于 Bun 编译，其本地服务与 Token 换取在 Win7 兼容层下触发底层网络 TCP RST 连接重置，纯用户态兼容层无法突破内核网络模型，建议使用 Codex / Antigravity 替代 |
+| ❌ **OpenCode CLI** | `sst-dev.opencode-1.0.0` / CLI 2.0.6 | ⚠️ **无法在 Win7 下正常运行（无法修复）**。基于 Bun 编译，依赖微服务架构（`opencode serve` 监听 49374），因 Win7 AFD 异步驱动脱节导致入站 HTTP 握手后即被服务端底层掐断，产生端口死锁与崩溃 |
+| **C/C++ & CMake** | `ms-vscode.cpptools-1.34.4-win32-x64`<br>`ms-vscode.cmake-tools-1.24.42` | ✔️ 原生 C/C++ 语言服务、IntelliSense、调试器与 CMake 构建集成 |
+| **PowerShell 终端与扩展** | `ms-vscode.powershell-2025.4.0`<br>结合 **PowerShell 7.6.7** / 7.2.24 | ✔️ 结合活动屏幕缓冲区 VT 共享与经典控制台模式，中文无乱码 |
+| **Python & Jupyter** | `ms-toolsai.jupyter-2025.9.1-win32-x64` | ✔️ 数据科学交互笔记本与 Python 内核 |
+| **Java 开发环境** | `redhat.java-1.57.0-win32-x64`<br>`vscjava.vscode-gradle-3.18.1`<br>`vscjava.vscode-maven-0.46.0` | ✔️ 现代 Java Language Server 与 Gradle / Maven 构建套件 |
 
-> [!NOTE]
-> **关于 Bun / Deno 运行时的补充说明**：
-> 基于 Bun 单文件运行时的程序（如早期 OpenCode CLI）深度依赖 Win10+ 内核的 `NtCreateWaitCompletionPacket`（等待完成包挂接 IOCP）以及现代 `afd.sys` Winsock 状态机，其**本地 HTTP/WebSocket 服务端**在 Win7 兼容层下存在系统驱动级断流现象。建议优先选择基于 Node.js 运行时或远程微服务架构的开发工具。
+> [!WARNING]
+> **关于 Bun 运行时缺陷及 Claude Code / OpenCode 无法在 Win7 运行的根本原因（无法修复）**：
+> 1. **内核等待完成包（Wait Completion Packet）缺失**：Bun / JavaScriptCore 引擎强依赖 Windows 8/10 引入的内核级系统调用 `NtCreateWaitCompletionPacket`、`NtAssociateWaitCompletionPacket` 将内核等待对象直接挂入完成端口（IOCP），Win7 原生内核不存在此系统调用（报 `0xc0000139`）；
+> 2. **Winsock 内核驱动（`afd.sys`）状态机差异导致 TCP RST**：现代 Bun 底层网络库（`uSockets`/`libuv`）移除了对 Win7 AFD 异步驱动特性的兼容 Workaround。导致 Bun 的 `Bun.serve()` 服务端在 Win7 上虽能监听端口，但任何客户端完成 TCP 三次握手发送 HTTP 数据时，服务端底层会直接发出 `TCP RST` 强行掐断连接（返回 `Connection reset by peer` / `10054`）；
+> 3. **纯用户态兼容层的边界**：VxKex 属于纯用户态兼容层，可补充 Win32 API 导出与版本伪装，但**无法突破操作系统内核驱动机制与 `afd.sys` 的异步完成模型**。因此，任何基于 Bun 微服务架构构建的本地命令行工具（如 Claude Code CLI、OpenCode CLI）在 Windows 7 下**根本无法修复，不能正常使用**，请务必改用基于 Node.js / Rust 构建的成熟替代方案（如 Codex、Antigravity、VS Code 官方插件）。
 
 ### 3. PowerShell 环境与依赖安装完整说明（WMF 5.1 与 PowerShell 7）
 

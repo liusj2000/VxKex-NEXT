@@ -29,16 +29,19 @@
 - **VS Code**：**1.107.1**（win32-x64 便携版，内嵌 Electron 39.2.3）
 - **Node.js**：**v22.18.10**（VS Code 内置），支持独立 **Node.js 18.x ~ 22.x**
 - **已实测 AI / 编程插件列表**：
-  - **OpenAI Codex / ChatGPT**：`openai.chatgpt-26.1007.21434-win32-x64`（包含 `codex.exe 0.162.0-alpha.17.2`）
-  - **Claude Code**：`anthropic.claude-code-2.1.301-win32-x64`
-  - **Claude Dev / Roo Code**：`saoudrizwan.claude-dev-4.1.25`
-  - **GitHub Copilot & Chat**：`github.copilot-1.388.0` / `github.copilot-chat-0.36.2`
-  - **Google Antigravity**：`google.google-antigravity-1.8.0`
-  - **Cline CLI**：`3.0.70`
+  - **OpenAI Codex / ChatGPT**：`openai.chatgpt-26.1007.21434-win32-x64`（包含 `codex.exe 0.162.0-alpha.17.2`，✔️ 完全兼容）
+  - **Google Antigravity**：`google.google-antigravity-1.8.0`（✔️ 完全兼容）
+  - **GitHub Copilot & Chat**：`github.copilot-1.388.0` / `github.copilot-chat-0.36.2`（✔️ 完全兼容）
+  - **Claude Dev / Roo Code**：`saoudrizwan.claude-dev-4.1.25`（✔️ 完全兼容）
+  - **Cline CLI**：`3.0.70`（✔️ 完全兼容）
+  - ❌ **Claude Code CLI**：`anthropic.claude-code-2.1.301-win32-x64`（⚠️ **无法在 Win7 下正常运行且无法修复**：基于 Bun 编译，底层网络在 Win7 兼容层下触发 TCP RST 连接重置）
+  - ❌ **OpenCode CLI**：`sst-dev.opencode-1.0.0` / CLI 2.0.6（⚠️ **无法在 Win7 下正常运行且无法修复**：基于 Bun 编译，依赖微服务架构，Win7 AFD 驱动差异导致入站监听断流崩溃）
   - **C/C++ & CMake**：`ms-vscode.cpptools-1.34.4-win32-x64` / `ms-vscode.cmake-tools-1.24.42`
   - **PowerShell**：`ms-vscode.powershell-2025.4.0`（结合 `PowerShell 7.6.7` / 7.2.24）
   - **Python / Jupyter**：`ms-toolsai.jupyter-2025.9.1-win32-x64`
   - **Java**：`redhat.java-1.57.0-win32-x64` / `vscjava.vscode-gradle-3.18.1` / `vscjava.vscode-maven-0.46.0`
+
+> ⚠️ **重要提示**：基于 Bun 单文件运行时的程序依赖 Win10+ 内核的 `NtCreateWaitCompletionPacket` 以及现代 `afd.sys` Winsock 状态机，纯用户态兼容层无法修复其底层网络缺陷。请务必使用基于 Node.js / Rust 构建的工具（如 Codex、Antigravity、VS Code 官方插件）。
 
 ### PowerShell 依赖与环境要求
 - **原生 Windows PowerShell 5.1**：需安装 .NET Framework 4.5.2+（推荐 .NET 4.8）与 WMF 5.1（KB3191566）；
