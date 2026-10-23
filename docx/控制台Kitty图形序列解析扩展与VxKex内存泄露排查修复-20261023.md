@@ -87,3 +87,41 @@
 3. **推荐使用姿态**：
    对于 `opencode2-node` 等高度依赖现代全屏虚拟终端的复杂 TUI 工具，**强烈建议直接在系统独立的命令提示符 / pwsh 窗口中运行**。配合新版 `KxBase.dll`，界面字符、阴影框线和弹出层均由 VxKex 原生内嵌引擎精准转译，能获得丝滑纯净的交互体验，彻底避开 Win7 下 VS Code `winpty` 抓屏的先天架构缺陷。
 
+---
+
+## 五、关于能否通过 VxKex 将 VS Code / node-pty 伪装为 Win10 以启用 ConPTY 的专项评估
+
+### 1. 核心问题与技术设想
+* **问题背景**：VS Code 在 Windows 7 下使用的是开源的 `winpty-agent.exe` 进行后台抓屏（Screen Scraping）。`node-pty` 的底层逻辑检测到操作系统内核版本号为 `6.1.7601`（低于 Win10 1809 的 `10.0.17763`），因此直接硬编码分流到了 `winpty`，根本没有去调用 `CreatePseudoConsole`。
+* **用户设想**：能否通过 VxKex 的版本伪装功能（属性中勾选 VxKex 并设置伪装版本为 Windows 10），将 VS Code (`Code.exe`) 或 `node-pty` 设置为 Win10，从而让其激活 ConPTY，摆脱对 `winpty-agent.exe` 的依赖？
+
+### 2. 评估结论
+**技术上可以通过 VxKex 实现版本号伪装，但在工程上绝对不可行，会导致两项致命破坏性后果：**
+1. **内置终端彻底瘫痪，完全丧失键盘交互能力（`isTTY === false`）**；
+2. **VS Code 主程序（Electron）极易发生黑屏、无响应或启动崩溃**。
+
+### 3. 底层机制与致命阻断深入分析
+
+#### 阻断一：终端句柄退化为非 TTY 管道，交互能力彻底丧失
+* **真正的 Win10 ConPTY**：依赖 Windows 10 内核设备驱动 `\Device\ConDrv` 与常驻无头服务端 `conhost.exe --headless`。子进程启动后拿到的是真实的控制台字符设备句柄（`FILE_TYPE_CHAR`），`GetConsoleMode()` 成功，`process.stdout.isTTY` 为 `true`，同时服务端将屏幕二维字符变化异步翻译为 VT100 字节流发给前端。
+* **VxKex 当前的 ConPTY 实现**：
+  * 正如设计文档 [`docx/伪控制台最小启动补丁设计-20261013.md`](file:///d:/project/VxKex-NEXT/docx/伪控制台最小启动补丁设计-20261013.md) 与源码所记录，当前实现是**轻量级管道式桥接后端（Pipe Compatibility Backend）**；
+  * 其核心作用是为 Cline CLI 等静态导入伪控制台接口的程序提供符号导出与匿名管道重定向，避免出现 `0xc0000139` 崩溃；
+  * 当子进程通过该桥接启动时，子进程拿到的标准输入输出是**匿名管道（`FILE_TYPE_PIPE`）**。
+* **强行开启 Win10 伪装的后果**：
+  * `node-pty` 以为系统是 Win10，调用了 `CreatePseudoConsole` 并拉起子进程；
+  * 子进程（如 `powershell.exe`）启动后检测标准输出句柄，发现是管道而非控制台，调用 `GetConsoleMode()` 立即失败（返回 `ERROR_INVALID_HANDLE`）；
+  * PowerShell 判定当前处于**非交互式管道重定向状态**（如 `cmd < in.txt > out.txt`），不再输出命令行提示符（Prompt），Tab 补全、上下历史键全部失效；
+  * 像 `opencode`、`npm`、`git` 等交互式命令行检测到 `isTTY === false`，会直接抛出 `Error: Interactive terminal requires a TTY` 并退出。
+
+#### 阻断二：VS Code（Electron / Chromium）DWM 与图形层断裂导致黑屏崩溃
+* VS Code 基于 Electron / Chromium 架构。当前能在 Win7 上稳定运行的便携版 VS Code，底层专门针对 Win7 做了参数降级（如特定的 DWM 边框调用、GPU 沙箱降级）；
+* 若将 `Code.exe` 伪装为 Win10（`KEX_WinVerSpoof = 4`），Chromium 内核会认为底层是现代系统，强行启用 Win10 专有的 DWM 无边框、窗口阴影（Window Frame）、DirectComposition 合成和 DirectX 12 探测；
+* 但 Win7 系统的 `dwmapi.dll` 和显卡驱动并不支持这些高级属性，函数调用返回错误后会引发未处理异常；
+* 此现象已有完全确凿的历史证据验证：此前在排查 DeepSeek Harness（同为 Electron 架构）时，开启 Win10 伪装后即因 DWM 与窗口钩子时序冲突，直接导致其弹出“无法初始化安装窗口”并闪退退出。
+
+### 4. 最终分工与认知建议
+1. **VS Code 内置终端**：在 Windows 7 上依赖 `winpty-agent.exe` 虽有全屏 TUI 渲染缺陷，但它是目前**唯一能够维持 Win7 终端键盘交互与 `isTTY=true` 的成熟支柱**。适合承载代码构建、Git 提交等基于纯文本流的常规操作；
+2. **现代复杂全屏 TUI**（如 `opencode2-node`）：**在系统原生的 `cmd` / `pwsh` 独立控制台窗口中运行**。配合最新修复的 `KxBase.dll`，所有 ANSI 转义码、阴影块转换和弹窗快照均由 VxKex 原生内嵌引擎在内存中完美调度，是 Win7 下体验全功能交互的最佳方案。
+
+
