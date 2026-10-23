@@ -1,0 +1,16 @@
+[1023/232014.495:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: 系统找不到指定的文件。 (0x2)
+{"test":"valid version skips download","result":"PASS","probeCalls":1,"downloadCalls":0,"verifiedReuse":false}
+{"test":"failed probe and matching SHA512 reuse","result":"PASS","probeCalls":1,"downloadCalls":0,"verifiedReuse":true}
+{"test":"timeout and matching SHA512 reuse","result":"PASS","probeCalls":1,"downloadCalls":0,"verifiedReuse":true}
+{"test":"digest mismatch downloads","result":"PASS","probeCalls":2,"downloadCalls":1,"verifiedReuse":false}
+{"test":"missing binary downloads","result":"PASS","probeCalls":0,"downloadCalls":1,"verifiedReuse":false}
+{"test":"old working version downloads update","result":"PASS","probeCalls":1,"downloadCalls":1,"verifiedReuse":false}
+{"test":"release channel change downloads","result":"PASS","probeCalls":1,"downloadCalls":1,"verifiedReuse":false}
+{"test":"missing checksum downloads","result":"PASS","probeCalls":2,"downloadCalls":1,"verifiedReuse":false}
+{"test":"malformed checksum downloads","result":"PASS","probeCalls":2,"downloadCalls":1,"verifiedReuse":false}
+{"test":"file replaced while hashing downloads","result":"PASS","probeCalls":2,"downloadCalls":1,"verifiedReuse":false}
+{"test":"offline valid version reuses","result":"PASS","probeCalls":1,"downloadCalls":0,"verifiedReuse":false}
+{"test":"offline failed probe keeps original download path","result":"PASS","probeCalls":2,"downloadCalls":1,"verifiedReuse":false}
+{"test":"installed backend matches official manifest despite failed probe","result":"PASS","probeCalls":1,"downloadCalls":0,"verifiedReuse":true}
+{"test":"installed backend real version probe","result":"PASS","probeCalls":1,"downloadCalls":0,"verifiedReuse":false}
+PASS 14 behavioral checks; installer functions extracted from C:/Users/liusj/AppData/Local/Temp/antigravity-extension-repaired.js

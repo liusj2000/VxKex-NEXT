@@ -1,0 +1,5 @@
+{"node":"v22.21.1","electron":"39.2.3"}
+{"options":{"timeout":5000},"elapsedMs":770,"stdout":"1.4.6\n","stderr":"","exitCode":0}
+{"options":{"timeout":5000,"windowsHide":true},"elapsedMs":594,"stdout":"1.4.6\n","stderr":"","exitCode":0}
+{"options":{"timeout":30000},"elapsedMs":866,"stdout":"1.4.6\n","stderr":"","exitCode":0}
+{"options":{"timeout":30000,"windowsHide":true},"elapsedMs":399,"stdout":"1.4.6\n","stderr":"","exitCode":0}

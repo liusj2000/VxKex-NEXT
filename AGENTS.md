@@ -93,3 +93,31 @@ MSBuild.exe "D:\project\VxKex-NEXT\VxKex.sln" /p:Configuration=Release /p:Platfo
 - 补齐导出不等于完整 ConPTY 实现；没有后端时不能返回成功或假句柄。
 - 实现前核对官方接口契约和实际调用方行为；之后分阶段验证 ABI/导出、构建、`--version`、`--help`、交互及子进程功能。
 - 现状：KxBase 伪控制台补丁源码已实施并编译通过（x64 Release），**未部署、未做 Cline 运行验证**；后续恢复须再次核实。
+
+## Antigravity 插件后端重复下载缺陷与自动升级修复约定
+
+- **核心背景与路径**：
+  - VS Code 便携版路径：`D:\VSCode-win32-x64-1.107.1`
+  - 扩展安装目录：`D:\VSCode-win32-x64-1.107.1\data\extensions\google.google-antigravity-X.Y.Z`
+  - 后端二进制路径：`C:\Users\liusj\.gemini\bin\agy.exe`（大小约 200MB）
+  - 安装日志路径：`C:\Users\liusj\.gemini\logs\install.log`
+  - 历史诊断与修复文档：[`docx/Antigravity重复下载安装原因与修复-20261023.md`](docx/Antigravity重复下载安装原因与修复-20261023.md)、[`docx/Antigravity重复下载安装修复设计-20261023.md`](docx/Antigravity重复下载安装修复设计-20261023.md)
+  - 备份与回滚工具：[`docx/repair-antigravity-backend-cache.ps1`](docx/repair-antigravity-backend-cache.ps1)
+
+- **底层缺陷机制**：
+  扩展在启动时调用 `inspectBinaryVersion` 执行 `execFile(agy.exe, ['--version'])`。在 Windows 7 兼容层环境下，该探测偶发失败或超出默认 5 秒超时限制。原版扩展在探测失败后，即使本地 `agy.exe` 文件完整无损且与官方清单哈希一致，也缺少对磁盘文件的 SHA512/SHA256 发布清单核验逻辑，而是直接盲目重新下载约 200MB 的后端，导致每次重启或重载窗口陷入“重复下载”死循环。
+
+- **⚠️ 升级覆盖风险与 AI 助手自动修复触发规则（必须严格遵守）**：
+  1. **升级覆盖风险**：当 Antigravity 扩展从 1.9.0 自动或手动升级到更高版本（如 1.9.1+）时，VS Code 会创建新的扩展子目录或全量覆盖 `extension.js`，导致之前应用的防重复下载补丁失效。
+  2. **新会话自动检测机制**：
+     - 当开启新会话、或用户提到/出现 `Installing Antigravity Backend: Downloading` 提示时，AI 助手**必须主动核查** `D:\VSCode-win32-x64-1.107.1\data\extensions\` 下最新启用的 Antigravity 扩展版本；
+     - 读取该版本目录下的 `extension.js`，检查是否包含 `Reusing existing backend ... manifest verification` 标识；
+  3. **自动分析与按记录修复流程**：
+     - **若官方新版本已内置本地哈希比对复用机制**：保留官方实现，不注入历史补丁；
+     - **若官方新版本仍未修复该缺陷**（即依然仅凭 `--version` 探测判定、无本地文件校验和直接重复触发下载）：
+       AI 助手**必须自动根据本记录与设计文档**执行修复流程：
+       - ① 备份新版 `extension.js` 为 `extension.js.original` 并记录 SHA256 到备份目录（如 `data\antigravity-repair-backups\`）；
+       - ② 在新版 `extension.js` 中定位 `acquireInstalledBinaryPath` 与 `inspectBinaryVersion` 函数；
+       - ③ 植入安全校验逻辑：在版本探测失败时，调用 Node 内置 `crypto` 计算现有 `agy.exe` 的 SHA512/SHA256 并与当前已拉取的发布清单比对，若完全一致则将清单版本写入缓存并返回“版本有效，跳过下载”；
+       - ④ 执行 `node --check` 语法与健全性验证；
+       - ⑤ 验证通过后写入补丁，并指引用户执行 `Developer: Reload Window` 重载生效。

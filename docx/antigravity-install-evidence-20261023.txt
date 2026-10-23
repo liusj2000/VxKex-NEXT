@@ -1,0 +1,580 @@
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Binary path does not exist: C:\Users\liusj\.gemini\bin\agy.exe
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Release channel change detected (last installed URL: 'undefined', target URL: 'https://antigravity-cli-auto-updater-974169037036.us-central1.run.app'). Forcing backend binary re-download.
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.177373e6-1a42-448c-8852-06e65721fdce...
+[INSTALL] Download progress: 10% (19988309/199837848 bytes)
+[INSTALL] Download progress: 20% (39976960/199837848 bytes)
+[INSTALL] Download progress: 30% (59953472/199837848 bytes)
+[INSTALL] Download progress: 40% (79942089/199837848 bytes)
+[INSTALL] Download progress: 50% (99918924/199837848 bytes)
+[INSTALL] Download progress: 60% (119907218/199837848 bytes)
+[INSTALL] Download progress: 70% (139895543/199837848 bytes)
+[INSTALL] Download progress: 80% (159888502/199837848 bytes)
+[INSTALL] Download progress: 90% (179860706/199837848 bytes)
+[INSTALL] Download progress: 100% (199837848/199837848 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49947 is READY after 1 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.ec3d64ad-524c-4506-84e3-068186ca37ac...
+[INSTALL] Download progress: 10% (19986745/199837848 bytes)
+[INSTALL] Download progress: 20% (39998674/199837848 bytes)
+[INSTALL] Download progress: 30% (59959010/199837848 bytes)
+[INSTALL] Download progress: 40% (79974597/199837848 bytes)
+[INSTALL] Download progress: 50% (99918924/199837848 bytes)
+[INSTALL] Download progress: 60% (119906523/199837848 bytes)
+[INSTALL] Download progress: 70% (139895884/199837848 bytes)
+[INSTALL] Download progress: 80% (159871755/199837848 bytes)
+[INSTALL] Download progress: 90% (179870403/199837848 bytes)
+[INSTALL] Download progress: 100% (199837848/199837848 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.9ef0bf8b
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.9ef0bf8b
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:50550 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.6df63928-a5a7-4abd-a50f-1bcf438fa03a...
+[INSTALL] Download progress: 10% (19993295/199837848 bytes)
+[INSTALL] Download progress: 20% (39993009/199837848 bytes)
+[INSTALL] Download progress: 30% (59953442/199837848 bytes)
+[INSTALL] Download progress: 40% (79941756/199837848 bytes)
+[INSTALL] Download progress: 50% (99935308/199837848 bytes)
+[INSTALL] Download progress: 60% (119907212/199837848 bytes)
+[INSTALL] Download progress: 70% (139895623/199837848 bytes)
+[INSTALL] Download progress: 80% (159872441/199837848 bytes)
+[INSTALL] Download progress: 90% (179860373/199837848 bytes)
+[INSTALL] Download progress: 100% (199837848/199837848 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.f7f7ff01
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.f7f7ff01
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49175 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.2b60b133-4727-4c92-9db7-905deafb7182...
+[INSTALL] Download progress: 10% (19995145/199837848 bytes)
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.57cbc9ae-4943-469b-9d6c-7c44975109a7...
+[INSTALL] Download progress: 10% (19988342/199837848 bytes)
+[INSTALL] Download progress: 20% (39976932/199837848 bytes)
+[INSTALL] Download progress: 30% (59986202/199837848 bytes)
+[INSTALL] Download progress: 40% (79942098/199837848 bytes)
+[INSTALL] Download progress: 50% (99918924/199837848 bytes)
+[INSTALL] Download progress: 60% (119907263/199837848 bytes)
+[INSTALL] Download progress: 70% (139894975/199837848 bytes)
+[INSTALL] Download progress: 80% (159872098/199837848 bytes)
+[INSTALL] Download progress: 90% (179860775/199837848 bytes)
+[INSTALL] Download progress: 100% (199837848/199837848 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.76187578
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.76187578
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49180 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.2d995cf6-a487-4e3b-9238-913b0ae5964b...
+[INSTALL] Download progress: 10% (20004682/199837848 bytes)
+[INSTALL] Download progress: 20% (39976076/199837848 bytes)
+[INSTALL] Download progress: 30% (59953467/199837848 bytes)
+[INSTALL] Download progress: 40% (79941519/199837848 bytes)
+[INSTALL] Download progress: 50% (99918924/199837848 bytes)
+[INSTALL] Download progress: 60% (119907264/199837848 bytes)
+[INSTALL] Download progress: 70% (139895856/199837848 bytes)
+[INSTALL] Download progress: 80% (159870701/199837848 bytes)
+[INSTALL] Download progress: 90% (179861014/199837848 bytes)
+[INSTALL] Download progress: 100% (199837848/199837848 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.2b68e5dd
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.2b68e5dd
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49173 is READY after 2 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.82dca247-9218-4282-999d-82666b1eabed...
+[INSTALL] Download progress: 10% (19988359/199837848 bytes)
+[INSTALL] Download progress: 20% (39976960/199837848 bytes)
+[INSTALL] Download progress: 30% (59952971/199837848 bytes)
+[INSTALL] Download progress: 40% (79942110/199837848 bytes)
+[INSTALL] Download progress: 50% (99930170/199837848 bytes)
+[INSTALL] Download progress: 60% (119906971/199837848 bytes)
+[INSTALL] Download progress: 70% (139895617/199837848 bytes)
+[INSTALL] Download progress: 80% (159872131/199837848 bytes)
+[INSTALL] Download progress: 90% (179860733/199837848 bytes)
+[INSTALL] Download progress: 100% (199837848/199837848 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.5bd14232
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.5bd14232
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49176 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.640e3a5b-4a4c-4a33-88b1-389920ed2cf5...
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.0 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.efe763ae-a016-49f0-8d41-1fd35730ef88...
+[INSTALL] Download progress: 10% (19988376/199837848 bytes)
+[INSTALL] Download progress: 20% (39967692/199837848 bytes)
+[INSTALL] Download progress: 30% (59952999/199837848 bytes)
+[INSTALL] Download progress: 40% (79942094/199837848 bytes)
+[INSTALL] Download progress: 50% (99918924/199837848 bytes)
+[INSTALL] Download progress: 60% (119907302/199837848 bytes)
+[INSTALL] Download progress: 70% (139895856/199837848 bytes)
+[INSTALL] Download progress: 80% (159872452/199837848 bytes)
+[INSTALL] Download progress: 90% (179860062/199837848 bytes)
+[INSTALL] Download progress: 100% (199837848/199837848 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.c8679a91
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.c8679a91
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49216 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found existing valid binary v1.4.0 (>= 1.1.11). Checking for updates with 3s budget...
+[INSTALL] Installed binary is valid (actual version 1.4.0 >= target 1.4.0). Skipping download.
+[LAUNCH] Server at http://127.0.0.1:49522 is READY after 7 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found existing valid binary v1.4.0 (>= 1.1.11). Checking for updates with 3s budget...
+[INSTALL] Could not fetch release manifest: Error: Update check timed out after 3000ms. Falling back to validation target version 1.1.11.
+[INSTALL] Fast-path update check skipped; continuing with existing binary v1.4.0.
+[LAUNCH] Server at http://127.0.0.1:50871 is READY after 5 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Version check failed: actual='1.4.0', expected>=1.4.2
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.fff62f3f-856e-4399-b5d5-4447ad49b03e...
+[INSTALL] Download progress: 10% (20102757/200970904 bytes)
+[INSTALL] Download progress: 20% (40194181/200970904 bytes)
+[INSTALL] Download progress: 30% (60297187/200970904 bytes)
+[INSTALL] Download progress: 40% (80416871/200970904 bytes)
+[INSTALL] Download progress: 50% (100491386/200970904 bytes)
+[INSTALL] Download progress: 60% (120582543/200970904 bytes)
+[INSTALL] Download progress: 70% (140685607/200970904 bytes)
+[INSTALL] Download progress: 80% (160776724/200970904 bytes)
+[INSTALL] Download progress: 90% (180879779/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.818f042f
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.818f042f
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:51461 is READY after 4 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Could not fetch release manifest: Error: Failed to fetch release manifest for https://antigravity-cli-auto-updater-974169037036.us-central1.run.app. Details:
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.fb31cfb9-0dc5-4b72-8167-52ffff1c8149...
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.d24ee8e2-adac-4da7-bc22-0bc5e90de68d...
+[INSTALL] Download progress: 10% (20109354/200970904 bytes)
+[INSTALL] Download progress: 20% (40208575/200970904 bytes)
+[INSTALL] Download progress: 30% (60291936/200970904 bytes)
+[INSTALL] Download progress: 40% (80388362/200970904 bytes)
+[INSTALL] Download progress: 50% (100497716/200970904 bytes)
+[INSTALL] Download progress: 60% (120598927/200970904 bytes)
+[INSTALL] Download progress: 70% (140681730/200970904 bytes)
+[INSTALL] Download progress: 80% (160787975/200970904 bytes)
+[INSTALL] Download progress: 90% (180882985/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.c352788d
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.c352788d
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:54317 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.d08ee91f-ee2c-4cd3-b108-599f68a53df8...
+[INSTALL] Download progress: 10% (20103026/200970904 bytes)
+[INSTALL] Download progress: 20% (40255464/200970904 bytes)
+[INSTALL] Download progress: 30% (60297131/200970904 bytes)
+[INSTALL] Download progress: 40% (80400004/200970904 bytes)
+[INSTALL] Download progress: 50% (100503201/200970904 bytes)
+[INSTALL] Download progress: 60% (120582543/200970904 bytes)
+[INSTALL] Download progress: 70% (140685561/200970904 bytes)
+[INSTALL] Download progress: 80% (160793108/200970904 bytes)
+[INSTALL] Download progress: 90% (180879754/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.9153e5d0
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.9153e5d0
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49173 is READY after 2 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.5f43fe11-9cb3-4822-a1d3-af49ecd818ea...
+[INSTALL] Download progress: 10% (20144705/200970904 bytes)
+[INSTALL] Download progress: 20% (40224468/200970904 bytes)
+[INSTALL] Download progress: 30% (60330117/200970904 bytes)
+[INSTALL] Download progress: 40% (80400517/200970904 bytes)
+[INSTALL] Download progress: 50% (100493278/200970904 bytes)
+[INSTALL] Download progress: 60% (120611082/200970904 bytes)
+[INSTALL] Download progress: 70% (140705589/200970904 bytes)
+[INSTALL] Download progress: 80% (160776724/200970904 bytes)
+[INSTALL] Download progress: 90% (180889747/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.973ce939
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.973ce939
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49622 is READY after 4 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.12b7fb81-1add-4ee3-bed0-d7fa83da9cf1...
+[INSTALL] Download progress: 10% (20107507/200970904 bytes)
+[INSTALL] Download progress: 20% (40210565/200970904 bytes)
+[INSTALL] Download progress: 30% (60297732/200970904 bytes)
+[INSTALL] Download progress: 40% (80402884/200970904 bytes)
+[INSTALL] Download progress: 50% (100491905/200970904 bytes)
+[INSTALL] Download progress: 60% (120594698/200970904 bytes)
+[INSTALL] Download progress: 70% (140686087/200970904 bytes)
+[INSTALL] Download progress: 80% (160776724/200970904 bytes)
+[INSTALL] Download progress: 90% (180880409/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.b8339628
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.b8339628
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:50312 is READY after 2 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Installed binary is valid (actual version 1.4.2 >= target 1.4.2). Skipping download.
+[LAUNCH] Server at http://127.0.0.1:49176 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.ed50b1d0-51be-413a-96af-8781e32fefb7...
+[INSTALL] Download progress: 10% (20102966/200970904 bytes)
+[INSTALL] Download progress: 20% (40205987/200970904 bytes)
+[INSTALL] Download progress: 30% (60297141/200970904 bytes)
+[INSTALL] Download progress: 40% (80400453/200970904 bytes)
+[INSTALL] Download progress: 50% (100507704/200970904 bytes)
+[INSTALL] Download progress: 60% (120594642/200970904 bytes)
+[INSTALL] Download progress: 70% (140700314/200970904 bytes)
+[INSTALL] Download progress: 80% (160788852/200970904 bytes)
+[INSTALL] Download progress: 90% (180874150/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.69c17e54
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.69c17e54
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49656 is READY after 3 attempt(s).
+[INSTALL] Cleaned up abandoned download artifact: C:\Users\liusj\.gemini\bin\agy.tmp.2b60b133-4727-4c92-9db7-905deafb7182
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.67ad865e-0141-44da-90e9-dd958d592ca6...
+[INSTALL] Download progress: 10% (20097550/200970904 bytes)
+[INSTALL] Download progress: 20% (40194181/200970904 bytes)
+[INSTALL] Download progress: 30% (60297227/200970904 bytes)
+[INSTALL] Download progress: 40% (80388362/200970904 bytes)
+[INSTALL] Download progress: 50% (100491387/200970904 bytes)
+[INSTALL] Download progress: 60% (120598927/200970904 bytes)
+[INSTALL] Download progress: 70% (140685141/200970904 bytes)
+[INSTALL] Download progress: 80% (160788536/200970904 bytes)
+[INSTALL] Download progress: 90% (180879547/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.18231783
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.18231783
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:50794 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.fc12fa77-8c4b-4024-ae42-bb55bb07f66c...
+[INSTALL] Download progress: 10% (20102953/200970904 bytes)
+[INSTALL] Download progress: 20% (40194181/200970904 bytes)
+[INSTALL] Download progress: 30% (60296887/200970904 bytes)
+[INSTALL] Download progress: 40% (80400486/200970904 bytes)
+[INSTALL] Download progress: 50% (100491079/200970904 bytes)
+[INSTALL] Download progress: 60% (120598927/200970904 bytes)
+[INSTALL] Download progress: 70% (140685545/200970904 bytes)
+[INSTALL] Download progress: 80% (160776724/200970904 bytes)
+[INSTALL] Download progress: 90% (180879717/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.bdb998b0
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.bdb998b0
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:51162 is READY after 2 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.2 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.65dcc49f-43bc-4891-b3bb-fc123990a2b9...
+[INSTALL] Download progress: 10% (20110397/200970904 bytes)
+[INSTALL] Download progress: 20% (40194181/200970904 bytes)
+[INSTALL] Download progress: 30% (60346346/200970904 bytes)
+[INSTALL] Download progress: 40% (80388362/200970904 bytes)
+[INSTALL] Download progress: 50% (100491128/200970904 bytes)
+[INSTALL] Download progress: 60% (120582543/200970904 bytes)
+[INSTALL] Download progress: 70% (140684955/200970904 bytes)
+[INSTALL] Download progress: 80% (160776724/200970904 bytes)
+[INSTALL] Download progress: 90% (180879285/200970904 bytes)
+[INSTALL] Download progress: 100% (200970904/200970904 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.86e2c6fa
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.86e2c6fa
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:51739 is READY after 3 attempt(s).
+[INSTALL] Cleaned up abandoned download artifact: C:\Users\liusj\.gemini\bin\agy.tmp.640e3a5b-4a4c-4a33-88b1-389920ed2cf5
+[INSTALL] Cleaned up abandoned download artifact: C:\Users\liusj\.gemini\bin\agy.tmp.fb31cfb9-0dc5-4b72-8167-52ffff1c8149
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.8.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.5 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.5-4952523841339392/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.433b5f9e-f87b-4ad7-a1fb-848dd653f1d6...
+[INSTALL] Download progress: 10% (20315004/203141272 bytes)
+[INSTALL] Download progress: 20% (40628255/203141272 bytes)
+[INSTALL] Download progress: 30% (60944253/203141272 bytes)
+[INSTALL] Download progress: 40% (81256510/203141272 bytes)
+[INSTALL] Download progress: 50% (101573892/203141272 bytes)
+[INSTALL] Download progress: 60% (121901149/203141272 bytes)
+[INSTALL] Download progress: 70% (142200137/203141272 bytes)
+[INSTALL] Download progress: 80% (162517764/203141272 bytes)
+[INSTALL] Download progress: 90% (182850185/203141272 bytes)
+[INSTALL] Download progress: 100% (203141272/203141272 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.882d11e3
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.882d11e3
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:54078 is READY after 2 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.9.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Could not fetch release manifest: Error: Failed to fetch release manifest for https://antigravity-cli-auto-updater-974169037036.us-central1.run.app. Details:
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.5 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.5-4952523841339392/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.20b2fe4c-33ea-4797-ad37-8732eeccee89...
+[INSTALL] Download progress: 10% (20314858/203141272 bytes)
+[INSTALL] Download progress: 20% (40628255/203141272 bytes)
+[INSTALL] Download progress: 30% (60946649/203141272 bytes)
+[INSTALL] Download progress: 40% (81256510/203141272 bytes)
+[INSTALL] Download progress: 50% (101579641/203141272 bytes)
+[INSTALL] Download progress: 60% (121901149/203141272 bytes)
+[INSTALL] Download progress: 70% (142199424/203141272 bytes)
+[INSTALL] Download progress: 80% (162516578/203141272 bytes)
+[INSTALL] Download progress: 90% (182827992/203141272 bytes)
+[INSTALL] Download progress: 100% (203141272/203141272 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.1c0bf44d
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.1c0bf44d
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:54456 is READY after 2 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.9.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Version check failed: actual='1.4.5', expected>=1.4.6
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.6 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.6-4884751325200384/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.42b03eff-e5dd-43dc-af74-01c87abbc947...
+[INSTALL] Download progress: 10% (20402639/204022936 bytes)
+[INSTALL] Download progress: 20% (40804588/204022936 bytes)
+[INSTALL] Download progress: 30% (61218868/204022936 bytes)
+[INSTALL] Download progress: 40% (81609176/204022936 bytes)
+[INSTALL] Download progress: 50% (102021648/204022936 bytes)
+[INSTALL] Download progress: 60% (122413764/204022936 bytes)
+[INSTALL] Download progress: 70% (142816493/204022936 bytes)
+[INSTALL] Download progress: 80% (163246596/204022936 bytes)
+[INSTALL] Download progress: 90% (183632328/204022936 bytes)
+[INSTALL] Download progress: 100% (204022936/204022936 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.3d6590c3
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.3d6590c3
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:49197 is READY after 3 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.9.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found existing valid binary v1.4.6 (>= 1.1.11). Checking for updates with 3s budget...
+[INSTALL] Installed binary is valid (actual version 1.4.6 >= target 1.4.6). Skipping download.
+[LAUNCH] Server at http://127.0.0.1:50570 is READY after 5 attempt(s).
+[INSTALL] Initializing update check. Platform: win32-x64, Extension Version: 1.9.0
+[INSTALL] Using custom channel override: production
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking for updates at releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Failed to execute binary C:\Users\liusj\.gemini\bin\agy.exe: Error: Command failed: C:\Users\liusj\.gemini\bin\agy.exe --version
+[INSTALL] Checking Antigravity releases...
+[INSTALL] Fetching manifest from releaseBaseUrl=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app...
+[INSTALL] Found release v1.4.6 (win32-x64): https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.6-4884751325200384/windows-x64/cli_windows_x64.exe
+[INSTALL] Downloading Antigravity Backend to temporary path C:\Users\liusj\.gemini\bin\agy.tmp.a91afbfc-70c0-477a-92b1-3c6840846a71...
+[INSTALL] Download progress: 10% (20447232/204022936 bytes)
+[INSTALL] Download progress: 20% (40849443/204022936 bytes)
+[INSTALL] Download progress: 30% (61207632/204022936 bytes)
+[INSTALL] Download progress: 40% (81618507/204022936 bytes)
+[INSTALL] Download progress: 50% (102016964/204022936 bytes)
+[INSTALL] Download progress: 60% (122413764/204022936 bytes)
+[INSTALL] Download progress: 70% (142817774/204022936 bytes)
+[INSTALL] Download progress: 80% (163219601/204022936 bytes)
+[INSTALL] Download progress: 90% (183635543/204022936 bytes)
+[INSTALL] Download progress: 100% (204022936/204022936 bytes)
+[INSTALL] Verifying SHA512 checksum...
+[INSTALL] SHA512 checksum verified successfully.
+[INSTALL] Staged existing Windows binary aside to C:\Users\liusj\.gemini\bin\agy.exe.old.5712a707
+[INSTALL] Cleaned up stale binary backup: C:\Users\liusj\.gemini\bin\agy.exe.old.5712a707
+[INSTALL] Antigravity Backend successfully installed to C:\Users\liusj\.gemini\bin\agy.exe.
+[LAUNCH] Server at http://127.0.0.1:50656 is READY after 3 attempt(s).
