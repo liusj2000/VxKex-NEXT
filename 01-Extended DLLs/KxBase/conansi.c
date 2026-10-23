@@ -40,6 +40,65 @@ STATIC ULONG g_ConsoleANSISupport = 0; // VXKEX_CONSOLE_*
 STATIC COORD g_SavedCursorPosition; // 1-based, viewport-relative.
 STATIC WORD g_DefaultTextAttributes;
 
+STATIC struct {
+	BOOLEAN		Active;
+	COORD		SavedCursorPosition;
+	PCHAR_INFO	Buffer;
+	COORD		BufferSize;
+	SMALL_RECT	WindowRect;
+} g_AlternateScreen = {0};
+
+STATIC CONST WCHAR DecLineDrawingTable[0x20] = {
+	0x00A0, // 0x5F: blank / non-breaking space
+	0x2666, // 0x60 '`': diamond
+	0x2592, // 0x61 'a': checkerboard / shaded block
+	0x2409, // 0x62 'b': HT symbol
+	0x240C, // 0x63 'c': FF symbol
+	0x240D, // 0x64 'd': CR symbol
+	0x240A, // 0x65 'e': LF symbol
+	0x00B0, // 0x66 'f': degree sign
+	0x00B1, // 0x67 'g': plus-minus
+	0x2424, // 0x68 'h': NL symbol
+	0x240B, // 0x69 'i': VT symbol
+	0x2518, // 0x6A 'j': lower right corner
+	0x2510, // 0x6B 'k': upper right corner
+	0x250C, // 0x6C 'l': upper left corner
+	0x2514, // 0x6D 'm': lower left corner
+	0x253C, // 0x6E 'n': crossing lines
+	0x23BA, // 0x6F 'o': scan line 1
+	0x23BB, // 0x70 'p': scan line 3
+	0x2500, // 0x71 'q': horizontal line
+	0x23BC, // 0x72 'r': scan line 7
+	0x23BD, // 0x73 's': scan line 9
+	0x251C, // 0x74 't': left tee
+	0x2524, // 0x75 'u': right tee
+	0x2534, // 0x76 'v': bottom tee
+	0x252C, // 0x77 'w': top tee
+	0x2502, // 0x78 'x': vertical line
+	0x2264, // 0x79 'y': less-than-or-equal
+	0x2265, // 0x7A 'z': greater-than-or-equal
+	0x03C0, // 0x7B '{': pi
+	0x2260, // 0x7C '|': not-equal
+	0x00A3, // 0x7D '}': pound
+	0x00B7  // 0x7E '~': centered dot / bullet
+};
+
+STATIC BOOLEAN g_DecLineDrawing = FALSE;
+
+#define MAX_PENDING_ESCAPE_CCH 64
+
+STATIC struct {
+	WCHAR	Buffer[MAX_PENDING_ESCAPE_CCH];
+	ULONG	Cch;
+	HANDLE	ConsoleHandle;
+} g_PendingEscape = {0};
+
+STATIC VOID VTLeaveAlternateScreenBuffer(
+	IN	HANDLE	ConsoleHandle);
+
+STATIC VOID VTEnterAlternateScreenBuffer(
+	IN	HANDLE	ConsoleHandle);
+
 BOOL IsConsoleHandle(
 	IN	HANDLE	Handle)
 {
@@ -99,6 +158,10 @@ BOOLEAN BaseEnableConsoleAnsiSupport(
 BOOLEAN BaseDisableConsoleAnsiSupport(
 	IN	HANDLE	ConsoleHandle)
 {
+	VTLeaveAlternateScreenBuffer(ConsoleHandle);
+	g_PendingEscape.Cch = 0;
+	g_DecLineDrawing = FALSE;
+
 	g_ConsoleANSISupport &= ~VXKEX_CONSOLE_ANSI_OUTPUT;
 	KexLogDebugEvent(L"Disabled escape sequence processing");
 	return TRUE;
@@ -323,6 +386,134 @@ STATIC BOOLEAN ExecuteCSISetGraphicsRendition(
 	return SetConsoleTextAttribute(ConsoleHandle, TextAttribute);
 }
 
+STATIC VOID VTEnterAlternateScreenBuffer(
+	IN	HANDLE	ConsoleHandle)
+{
+	CONSOLE_SCREEN_BUFFER_INFO Sbi;
+	SHORT Width, Height;
+	ULONG CellCount;
+
+	if (g_AlternateScreen.Active) {
+		return;
+	}
+
+	if (!GetConsoleScreenBufferInfo(ConsoleHandle, &Sbi)) {
+		return;
+	}
+
+	Width = Sbi.srWindow.Right - Sbi.srWindow.Left + 1;
+	Height = Sbi.srWindow.Bottom - Sbi.srWindow.Top + 1;
+	if (Width <= 0 || Height <= 0) {
+		return;
+	}
+
+	g_AlternateScreen.SavedCursorPosition = Sbi.dwCursorPosition;
+	g_AlternateScreen.WindowRect = Sbi.srWindow;
+	g_AlternateScreen.BufferSize.X = Width;
+	g_AlternateScreen.BufferSize.Y = Height;
+
+	CellCount = (ULONG) Width * Height;
+
+	if (g_AlternateScreen.Buffer) {
+		RtlFreeHeap(RtlProcessHeap(), 0, g_AlternateScreen.Buffer);
+		g_AlternateScreen.Buffer = NULL;
+	}
+
+	g_AlternateScreen.Buffer = (PCHAR_INFO) RtlAllocateHeap(
+		RtlProcessHeap(),
+		HEAP_ZERO_MEMORY,
+		CellCount * sizeof(CHAR_INFO));
+
+	if (g_AlternateScreen.Buffer) {
+		COORD BufferCoord = {0, 0};
+		SMALL_RECT ReadRegion = Sbi.srWindow;
+		if (!ReadConsoleOutputW(
+			ConsoleHandle,
+			g_AlternateScreen.Buffer,
+			g_AlternateScreen.BufferSize,
+			BufferCoord,
+			&ReadRegion)) {
+			HANDLE ConOut = CreateFileW(
+				L"CONOUT$",
+				GENERIC_READ | GENERIC_WRITE,
+				FILE_SHARE_READ | FILE_SHARE_WRITE,
+				NULL,
+				OPEN_EXISTING,
+				0,
+				NULL);
+			if (ConOut != INVALID_HANDLE_VALUE) {
+				ReadConsoleOutputW(
+					ConOut,
+					g_AlternateScreen.Buffer,
+					g_AlternateScreen.BufferSize,
+					BufferCoord,
+					&ReadRegion);
+				CloseHandle(ConOut);
+			}
+		}
+	}
+
+	g_AlternateScreen.Active = TRUE;
+
+	// Clear the viewport and place cursor at (Left, Top)
+	{
+		COORD Origin;
+		ULONG TotalCells;
+		ULONG Written;
+
+		Origin.X = Sbi.srWindow.Left;
+		Origin.Y = Sbi.srWindow.Top;
+		TotalCells = (ULONG) Sbi.dwSize.X * Height;
+
+		FillConsoleOutputCharacterW(ConsoleHandle, L' ', TotalCells, Origin, &Written);
+		FillConsoleOutputAttribute(ConsoleHandle, g_DefaultTextAttributes ? g_DefaultTextAttributes : Sbi.wAttributes, TotalCells, Origin, &Written);
+		SetConsoleCursorPosition(ConsoleHandle, Origin);
+	}
+}
+
+STATIC VOID VTLeaveAlternateScreenBuffer(
+	IN	HANDLE	ConsoleHandle)
+{
+	if (!g_AlternateScreen.Active) {
+		return;
+	}
+
+	if (g_AlternateScreen.Buffer) {
+		COORD BufferCoord = {0, 0};
+		SMALL_RECT WriteRegion = g_AlternateScreen.WindowRect;
+		if (!WriteConsoleOutputW(
+			ConsoleHandle,
+			g_AlternateScreen.Buffer,
+			g_AlternateScreen.BufferSize,
+			BufferCoord,
+			&WriteRegion)) {
+			HANDLE ConOut = CreateFileW(
+				L"CONOUT$",
+				GENERIC_READ | GENERIC_WRITE,
+				FILE_SHARE_READ | FILE_SHARE_WRITE,
+				NULL,
+				OPEN_EXISTING,
+				0,
+				NULL);
+			if (ConOut != INVALID_HANDLE_VALUE) {
+				WriteConsoleOutputW(
+					ConOut,
+					g_AlternateScreen.Buffer,
+					g_AlternateScreen.BufferSize,
+					BufferCoord,
+					&WriteRegion);
+				CloseHandle(ConOut);
+			}
+		}
+
+		RtlFreeHeap(RtlProcessHeap(), 0, g_AlternateScreen.Buffer);
+		g_AlternateScreen.Buffer = NULL;
+	}
+
+	SetConsoleCursorPosition(ConsoleHandle, g_AlternateScreen.SavedCursorPosition);
+	g_AlternateScreen.Active = FALSE;
+}
+
 STATIC BOOLEAN ExecuteCSIErase(
 	IN	HANDLE	ConsoleHandle,
 	IN	SHORT	Parameter,
@@ -381,6 +572,21 @@ STATIC BOOLEAN ExecuteCSIErase(
 		}
 
 		break;
+	case 3:
+		if (LineOnly) {
+			EraseStart.X = 0;
+			EraseEnd.X = Sbi.dwSize.X - 1;
+			EraseStart.Y = Sbi.dwCursorPosition.Y;
+			EraseEnd.Y = Sbi.dwCursorPosition.Y;
+		} else {
+			// erase whole screen buffer including scrollback
+			EraseStart.X = 0;
+			EraseStart.Y = 0;
+			EraseEnd.X = Sbi.dwSize.X - 1;
+			EraseEnd.Y = Sbi.dwSize.Y - 1;
+		}
+
+		break;
 	default:
 		KexLogDebugEvent(L"Invalid parameter %hu to CSI 'J' or 'K' escape", Parameter);
 		return FALSE;
@@ -411,6 +617,7 @@ STATIC BOOLEAN ExecuteCSIErase(
 STATIC BOOLEAN ExecuteCSI(
 	IN	HANDLE	ConsoleHandle,
 	IN	WCHAR	Command,
+	IN	BOOLEAN	IsPrivateMode,
 	IN	SHORT	CsiParameters[MAX_CSI_PARAMETER_COUNT],
 	IN	ULONG	ParameterCount)
 {
@@ -442,13 +649,13 @@ STATIC BOOLEAN ExecuteCSI(
 			ConsoleHandle,
 			-max(1, CsiParameters[0]));
 	case 'G': // Cursor Horizontal Absolute
-		return VTSetCursorHorizontalPosition(ConsoleHandle, CsiParameters[0]);
+		return VTSetCursorHorizontalPosition(ConsoleHandle, max(1, CsiParameters[0]));
 	case 'd': // Vertical Line Position Absolute
-		return VTSetCursorVerticalPosition(ConsoleHandle, CsiParameters[0]);
+		return VTSetCursorVerticalPosition(ConsoleHandle, max(1, CsiParameters[0]));
 	case 'H': // Cursor Position
 	case 'f': // Horizontal Vertical Position
-		Coord.Y = CsiParameters[0];
-		Coord.X = CsiParameters[1];
+		Coord.Y = max(1, CsiParameters[0]);
+		Coord.X = max(1, CsiParameters[1]);
 		return VTSetCursorPosition(ConsoleHandle, Coord);
 	case 'J': // Erase in Display
 		return ExecuteCSIErase(ConsoleHandle, CsiParameters[0], FALSE);
@@ -471,6 +678,53 @@ STATIC BOOLEAN ExecuteCSI(
 		}
 
 		break;
+	case 'h': // Set Mode (SM / DECSET)
+	case 'l': // Reset Mode (RM / DECRST)
+		if (IsPrivateMode) {
+			ULONG ParamIndex;
+			for (ParamIndex = 0; ParamIndex < max(1, ParameterCount); ++ParamIndex) {
+				SHORT Param = CsiParameters[ParamIndex];
+				switch (Param) {
+				case 25: { // DECTCEM: Text Cursor Enable Mode
+					CONSOLE_CURSOR_INFO CursorInfo;
+					if (GetConsoleCursorInfo(ConsoleHandle, &CursorInfo)) {
+						CursorInfo.bVisible = (Command == 'h');
+						SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+					}
+					break;
+				}
+				case 47:
+				case 1047:
+				case 1049: { // Alternate Screen Buffer
+					if (Command == 'h') {
+						VTEnterAlternateScreenBuffer(ConsoleHandle);
+					} else {
+						VTLeaveAlternateScreenBuffer(ConsoleHandle);
+					}
+					break;
+				}
+				case 1:    // DECCKM
+				case 7:    // DECAWM
+				case 12:   // Cursor blink
+				case 1000: // Mouse reporting
+				case 1002: // Mouse motion
+				case 1003:
+				case 1004:
+				case 1005:
+				case 1006: // SGR mouse
+				case 2004: // Bracketed paste mode
+					// Silently accept
+					break;
+				default:
+					KexLogDebugEvent(L"Unhandled DEC private mode ?%hd%c", Param, Command);
+					break;
+				}
+			}
+			return TRUE;
+		} else {
+			// Standard ANSI modes (e.g. 4 = Insert Mode)
+			return TRUE;
+		}
 	case 'm': // Set Graphics Rendition (SGR)
 		return ExecuteCSISetGraphicsRendition(ConsoleHandle, CsiParameters, ParameterCount);
 	case 's': // Save Cursor (ANSI.SYS)
@@ -511,9 +765,12 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 
 	if (EscapeSequenceCch < 2) {
 		// Minimum length of an escape sequence is 2 characters.
-		// If it's 1 character then we will just ignore it.
-		// This means that there was just a stray ESC character at the end of
-		// the buffer passed to WriteConsole.
+		// If it's a single ESC at the end of the buffer, save to pending buffer.
+		if (BufferCch == 1 && ((Unicode && *(PCWSTR)Buffer == ESC) || (!Unicode && *(PCSTR)Buffer == ESC))) {
+			g_PendingEscape.Buffer[0] = ESC;
+			g_PendingEscape.Cch = 1;
+			g_PendingEscape.ConsoleHandle = ConsoleHandle;
+		}
 		CchProcessed = EscapeSequenceCch;
 		goto Exit;
 	}
@@ -521,8 +778,15 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 	if (Unicode) {
 		RtlCopyMemory(EscapeSequence, Buffer, EscapeSequenceCch * sizeof(WCHAR));
 	} else {
+		UINT CodePage;
+
+		CodePage = GetConsoleOutputCP();
+		if (!CodePage) {
+			CodePage = CP_ACP;
+		}
+
 		EscapeSequenceCch = MultiByteToWideChar(
-			CP_ACP,
+			CodePage,
 			0,
 			(PCSTR) Buffer,
 			min(BufferCch, ARRAYSIZE(EscapeSequence) - 1),
@@ -548,6 +812,26 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 	CchProcessed = 2;
 
 	switch (EscapeSequence[1]) {
+	case '(':
+	case ')': {
+		if (EscapeSequenceCch < 3) {
+			if (BufferCch == EscapeSequenceCch && EscapeSequenceCch < ARRAYSIZE(g_PendingEscape.Buffer)) {
+				RtlCopyMemory(g_PendingEscape.Buffer, EscapeSequence, EscapeSequenceCch * sizeof(WCHAR));
+				g_PendingEscape.Cch = EscapeSequenceCch;
+				g_PendingEscape.ConsoleHandle = ConsoleHandle;
+			}
+			CchProcessed = EscapeSequenceCch;
+			goto Exit;
+		}
+
+		CchProcessed = 3;
+		if (EscapeSequence[2] == '0') {
+			g_DecLineDrawing = TRUE;
+		} else if (EscapeSequence[2] == 'B' || EscapeSequence[2] == 'A') {
+			g_DecLineDrawing = FALSE;
+		}
+		break;
+	}
 	case 'M': {
 		COORD RelativeMovement;
 		// Reverse Index.
@@ -571,11 +855,17 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 		SHORT CsiParameters[MAX_CSI_PARAMETER_COUNT] = {0};
 		WCHAR Command;
 		ULONG ParameterCount;
+		BOOLEAN IsPrivateMode;
 
 		// CSI
 
 		if (EscapeSequenceCch < 3) {
-			KexLogDebugEvent(L"Unterminated CSI ANSI escape");
+			if (BufferCch == EscapeSequenceCch && EscapeSequenceCch < ARRAYSIZE(g_PendingEscape.Buffer)) {
+				RtlCopyMemory(g_PendingEscape.Buffer, EscapeSequence, EscapeSequenceCch * sizeof(WCHAR));
+				g_PendingEscape.Cch = EscapeSequenceCch;
+				g_PendingEscape.ConsoleHandle = ConsoleHandle;
+			}
+			CchProcessed = EscapeSequenceCch;
 			goto Exit;
 		}
 
@@ -589,18 +879,33 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 		until (Csi[CsiLength] >= 0x40 && Csi[CsiLength] <= 0x7E) {
 			++CsiLength;
 
-			if (CchProcessed + CsiLength >= EscapeSequenceCch) {
-				KexLogDebugEvent(L"Unterminated CSI ANSI escape");
+			if (2 + CsiLength >= EscapeSequenceCch) {
+				if (BufferCch == EscapeSequenceCch && EscapeSequenceCch < ARRAYSIZE(g_PendingEscape.Buffer)) {
+					RtlCopyMemory(g_PendingEscape.Buffer, EscapeSequence, EscapeSequenceCch * sizeof(WCHAR));
+					g_PendingEscape.Cch = EscapeSequenceCch;
+					g_PendingEscape.ConsoleHandle = ConsoleHandle;
+				} else {
+					KexLogDebugEvent(L"Unterminated CSI ANSI escape");
+				}
+				CchProcessed = EscapeSequenceCch;
 				goto Exit;
 			}
 		}
 
 		// add 1 for the terminating character, which is the command
 		++CsiLength;
-		CchProcessed += CsiLength;
+		CchProcessed = 2 + CsiLength;
 
 		// final character determines command
 		Command = Csi[CsiLength - 1];
+
+		// Check for private mode prefix ('?' or '>' or '!')
+		IsPrivateMode = FALSE;
+		if (CsiLength > 1 && (*Csi == '?' || *Csi == '>' || *Csi == '!')) {
+			IsPrivateMode = (*Csi == '?');
+			++Csi;
+			--CsiLength;
+		}
 
 		//
 		// Parse CSI sequence parameters
@@ -647,7 +952,7 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 			++ParameterCount;
 		}
 
-		ExecuteCSI(ConsoleHandle, Command, CsiParameters, ParameterCount);
+		ExecuteCSI(ConsoleHandle, Command, IsPrivateMode, CsiParameters, ParameterCount);
 		break;
 			  }
 	case ']': {
@@ -668,8 +973,15 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 		until (Osc[OscLength] == BEL || Osc[OscLength] == ESC) {
 			++OscLength;
 
-			if (CchProcessed + OscLength >= EscapeSequenceCch) {
-				KexLogDebugEvent(L"Unterminated OSC ANSI escape sequence");
+			if (2 + OscLength >= EscapeSequenceCch) {
+				if (BufferCch == EscapeSequenceCch && EscapeSequenceCch < ARRAYSIZE(g_PendingEscape.Buffer)) {
+					RtlCopyMemory(g_PendingEscape.Buffer, EscapeSequence, EscapeSequenceCch * sizeof(WCHAR));
+					g_PendingEscape.Cch = EscapeSequenceCch;
+					g_PendingEscape.ConsoleHandle = ConsoleHandle;
+				} else {
+					KexLogDebugEvent(L"Unterminated OSC ANSI escape sequence");
+				}
+				CchProcessed = EscapeSequenceCch;
 				goto Exit;
 			}
 		}
@@ -730,6 +1042,80 @@ Exit:
 	return TRUE;
 }
 
+STATIC BOOL WriteConsoleTextAorW(
+	IN	HANDLE	ConsoleHandle,
+	IN	PCVOID	Buffer,
+	IN	ULONG	CchToWrite,
+	OUT	PULONG	CchWrittenOut OPTIONAL,
+	IN	BOOLEAN	Unicode)
+{
+	if (!g_DecLineDrawing) {
+		return WriteConsoleAorW(
+			ConsoleHandle,
+			Buffer,
+			CchToWrite,
+			CchWrittenOut,
+			NULL,
+			Unicode);
+	}
+
+	// Translate DEC Line Drawing characters and output via WriteConsoleW
+	{
+		WCHAR LocalBuf[256];
+		ULONG TotalWritten = 0;
+		ULONG Remaining = CchToWrite;
+
+		while (Remaining > 0) {
+			ULONG Chunk = min(Remaining, (ULONG) ARRAYSIZE(LocalBuf));
+			ULONG Index;
+			ULONG WrittenThisChunk;
+			BOOL Ok;
+
+			if (Unicode) {
+				PCWSTR Src = (PCWSTR) Buffer + TotalWritten;
+				for (Index = 0; Index < Chunk; ++Index) {
+					WCHAR Ch = Src[Index];
+					if (Ch >= 0x5F && Ch <= 0x7E) {
+						LocalBuf[Index] = DecLineDrawingTable[Ch - 0x5F];
+					} else {
+						LocalBuf[Index] = Ch;
+					}
+				}
+			} else {
+				PCSTR Src = (PCSTR) Buffer + TotalWritten;
+				for (Index = 0; Index < Chunk; ++Index) {
+					UCHAR Ch = (UCHAR) Src[Index];
+					if (Ch >= 0x5F && Ch <= 0x7E) {
+						LocalBuf[Index] = DecLineDrawingTable[Ch - 0x5F];
+					} else {
+						LocalBuf[Index] = (WCHAR) Ch;
+					}
+				}
+			}
+
+			Ok = WriteConsoleW(ConsoleHandle, LocalBuf, Chunk, &WrittenThisChunk, NULL);
+			if (!Ok) {
+				if (CchWrittenOut) {
+					*CchWrittenOut = TotalWritten;
+				}
+				return FALSE;
+			}
+
+			TotalWritten += WrittenThisChunk;
+			Remaining -= WrittenThisChunk;
+			if (WrittenThisChunk == 0) {
+				break;
+			}
+		}
+
+		if (CchWrittenOut) {
+			*CchWrittenOut = TotalWritten;
+		}
+
+		return TRUE;
+	}
+}
+
 BOOL WriteConsoleWithEscapeSequencesAorW(
 	IN	HANDLE	ConsoleHandle,
 	IN	PCVOID	Buffer,
@@ -745,6 +1131,61 @@ BOOL WriteConsoleWithEscapeSequencesAorW(
 	Success = TRUE;
 	CchWritten = 0;
 	CbOfChar = Unicode ? sizeof(WCHAR) : sizeof(CHAR);
+
+	//
+	// Handle pending escape sequence split across calls
+	//
+	if (g_PendingEscape.Cch > 0 && g_PendingEscape.ConsoleHandle == ConsoleHandle && CchToWrite > 0) {
+		WCHAR Combined[MAX_PENDING_ESCAPE_CCH + 64];
+		ULONG PendingCch = g_PendingEscape.Cch;
+		ULONG AppendCch;
+		ULONG TotalCombinedCch;
+		ULONG CchProcessedCombined;
+
+		RtlCopyMemory(Combined, g_PendingEscape.Buffer, PendingCch * sizeof(WCHAR));
+
+		AppendCch = min(CchToWrite, (ULONG)(ARRAYSIZE(Combined) - PendingCch - 1));
+		if (Unicode) {
+			RtlCopyMemory(&Combined[PendingCch], Buffer, AppendCch * sizeof(WCHAR));
+		} else {
+			UINT CodePage = GetConsoleOutputCP();
+			if (!CodePage) {
+				CodePage = CP_ACP;
+			}
+			AppendCch = MultiByteToWideChar(
+				CodePage,
+				0,
+				(PCSTR) Buffer,
+				AppendCch,
+				&Combined[PendingCch],
+				ARRAYSIZE(Combined) - PendingCch - 1);
+		}
+
+		TotalCombinedCch = PendingCch + AppendCch;
+		CchProcessedCombined = 0;
+
+		// Clear pending before calling so ProcessEscapeSequence can refill it if still truncated
+		g_PendingEscape.Cch = 0;
+
+		ProcessEscapeSequenceAorW(
+			ConsoleHandle,
+			Combined,
+			TotalCombinedCch,
+			&CchProcessedCombined,
+			TRUE);
+
+		if (CchProcessedCombined > PendingCch) {
+			ULONG ConsumedFromBuffer = CchProcessedCombined - PendingCch;
+			ConsumedFromBuffer = min(ConsumedFromBuffer, CchToWrite);
+
+			CchWritten += ConsumedFromBuffer;
+			CchToWrite -= ConsumedFromBuffer;
+			Buffer = RVA_TO_VA(Buffer, ConsumedFromBuffer * CbOfChar);
+		} else if (g_PendingEscape.Cch == 0 && TotalCombinedCch >= MAX_PENDING_ESCAPE_CCH) {
+			// Sequence could not be completed and exceeded max pending size, discard
+			KexLogDebugEvent(L"Discarding oversized pending escape sequence");
+		}
+	}
 
 	until (CchToWrite == 0) {
 		ULONG CchToNextEscape;
@@ -762,12 +1203,11 @@ BOOL WriteConsoleWithEscapeSequencesAorW(
 		if (CchToNextEscape > 0) {
 			ULONG CchWrittenThisCall;
 
-			Success = WriteConsoleAorW(
+			Success = WriteConsoleTextAorW(
 				ConsoleHandle,
 				Buffer,
 				CchToNextEscape,
 				&CchWrittenThisCall,
-				NULL,
 				Unicode);
 
 			if (!Success) {

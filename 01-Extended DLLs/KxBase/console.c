@@ -303,10 +303,12 @@ KXBASEAPI BOOL WINAPI Ext_SetConsoleMode(
 		SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 		return FALSE;
 	}
-	Success = SetConsoleMode(ConsoleHandle, Mode);
-	if (!Success && GetLastError() == ERROR_INVALID_PARAMETER && (Mode & Mask)) {
+	if (Mode & Mask) {
 		Success = SetConsoleMode(ConsoleHandle, Mode & ~Mask);
 		Emulated = Success;
+	} else {
+		Success = SetConsoleMode(ConsoleHandle, Mode);
+		Emulated = FALSE;
 	}
 
 	if (Success) {
