@@ -341,6 +341,9 @@ NTSTATUS NTAPI Ext_NtMapViewOfSection(
 							(PCLDR_DLL_NOTIFICATION_DATA)&NotificationData,
 							NULL);
 					}
+					if (FullDllName.Buffer) {
+						SafeFree(FullDllName.Buffer);
+					}
 				}
 			}
 		}

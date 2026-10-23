@@ -187,6 +187,23 @@ int main(void)
     printf("Restored primary screen: '%.*ws'\n", 14, readBuf);
     CHECK(wcsncmp(readBuf, L"PRIMARY_MARKER", 14) == 0);
 
+    printf("\n--- Test 5: APC (Kitty graphics query) Suppression ---\n");
+    // Clear line 22
+    testCoord.X = 0;
+    testCoord.Y = sbi.srWindow.Top + 22;
+    FillConsoleOutputCharacterW(conout, L' ', 80, testCoord, &written);
+    SetConsoleCursorPosition(conout, testCoord);
+
+    // Send Kitty graphics query: \x1b_Gi=31,s=1,v=1,a=q,t=d,f=24;AAAA\x1b\\ (ST terminated)
+    WRITE_STR(conout, "\x1b_Gi=31,s=1,v=1,a=q,t=d,f=24;AAAA\x1b\\");
+
+    // Read back line 22: It must be all spaces, 0 characters leaked!
+    RtlZeroMemory(readBuf, sizeof(readBuf));
+    ReadConsoleOutputCharacterW(conout, readBuf, 20, testCoord, &readChars);
+    printf("Read back after APC query: '%.*ws'\n", readChars, readBuf);
+    CHECK(readBuf[0] == L' ');
+    CHECK(readBuf[1] == L' ');
+
     printf("\n=== SUMMARY ===\n");
     if (failures == 0) {
         printf("ALL TESTS PASSED SUCCESSFULLY! (failures = 0)\n");

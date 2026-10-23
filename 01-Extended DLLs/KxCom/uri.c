@@ -39,6 +39,10 @@ ULONG STDMETHODCALLTYPE CUriRuntimeClass_Release(
 	NewRefCount = InterlockedDecrement(&This->RefCount);
 
 	if (NewRefCount == 0) {
+		if (This->Uri) {
+			This->Uri->lpVtbl->Release(This->Uri);
+			This->Uri = NULL;
+		}
 		SafeFree(This);
 	}
 

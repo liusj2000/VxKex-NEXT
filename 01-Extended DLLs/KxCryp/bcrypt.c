@@ -383,11 +383,10 @@ KXCRYPAPI NTSTATUS WINAPI Ext_BCryptGenerateSymmetricKey(
 	if (Algorithm && Status == STATUS_INVALID_HANDLE) {
 		PALGORITHM AlgorithmPointer = (PALGORITHM)Algorithm;
 		if (AlgorithmPointer->Id == ALG_ID_PBKDF2/* || AlgorithmPointer->Id == ALG_ID_SP800108_CTR_HMAC || AlgorithmPointer->Id == ALG_ID_CAPI_KDF*/) {
-			PKEY_OBJECT NewKey = SafeAlloc(KEY_OBJECT, 1);
-			if (NewKey) {
-				PUCHAR NewSecret = (PUCHAR)RtlAllocateHeap(RtlProcessHeap(), 0, SecretLength);
-				if (NewSecret) {
-					PKEY_OBJECT NewKey = SafeAlloc(KEY_OBJECT, 1);
+			PUCHAR NewSecret = (PUCHAR)RtlAllocateHeap(RtlProcessHeap(), 0, SecretLength);
+			if (NewSecret) {
+				PKEY_OBJECT NewKey = SafeAlloc(KEY_OBJECT, 1);
+				if (NewKey) {
 					ZeroMemory(NewKey, sizeof(KEY_OBJECT));
 					InitializeCriticalSection(&NewKey->Data.Symmetric.CriticalSection);
 					NewKey->Magic						= MAGIC_KEY;
@@ -400,7 +399,7 @@ KXCRYPAPI NTSTATUS WINAPI Ext_BCryptGenerateSymmetricKey(
 					*Key = NewKey;
 					Status = STATUS_SUCCESS;
 				} else {
-					SafeFree(NewKey);
+					RtlFreeHeap(RtlProcessHeap(), 0, NewSecret);
 				}
 			}
 		}

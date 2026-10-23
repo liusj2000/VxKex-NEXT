@@ -85,7 +85,7 @@ STATIC CONST WCHAR DecLineDrawingTable[0x20] = {
 
 STATIC BOOLEAN g_DecLineDrawing = FALSE;
 
-#define MAX_PENDING_ESCAPE_CCH 64
+#define MAX_PENDING_ESCAPE_CCH 256
 
 STATIC struct {
 	WCHAR	Buffer[MAX_PENDING_ESCAPE_CCH];
@@ -955,7 +955,11 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 		ExecuteCSI(ConsoleHandle, Command, IsPrivateMode, CsiParameters, ParameterCount);
 		break;
 			  }
-	case ']': {
+	case ']': // OSC (Operating System Command)
+	case '_': // APC (Application Program Command, e.g. Kitty graphics query)
+	case 'P': // DCS (Device Control String)
+	case '^': // PM  (Privacy Message)
+	{
 		PWCHAR Osc;
 		ULONG OscLength;
 		ULONG NumberOfTerminatingCharacters;
@@ -997,7 +1001,7 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 		OscLength += NumberOfTerminatingCharacters;
 		CchProcessed += OscLength;
 
-		if ((Osc[0] == '0' || Osc[0] == '2') && Osc[1] == ';') {
+		if (EscapeSequence[1] == ']' && (Osc[0] == '0' || Osc[0] == '2') && Osc[1] == ';') {
 			BOOL Success;
 			WCHAR ConsoleTitle[256];
 			ULONG ConsoleTitleCch;
@@ -1005,6 +1009,7 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 			// Set Window Title
 
 			ConsoleTitleCch = OscLength - 2 - NumberOfTerminatingCharacters;
+			ConsoleTitleCch = min(ConsoleTitleCch, (ULONG) ARRAYSIZE(ConsoleTitle) - 1);
 
 			//
 			// Copy and null-terminate the title string.
