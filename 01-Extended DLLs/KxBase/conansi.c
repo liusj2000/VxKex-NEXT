@@ -678,6 +678,42 @@ STATIC BOOLEAN ExecuteCSI(
 		}
 
 		break;
+	case 'n': // Device Status Report (DSR)
+		if (CsiParameters[0] == 6) { // Cursor Position Report (CPR)
+			COORD CursorPosition;
+			WCHAR Response[32];
+			INT Length;
+
+			if (VTGetCursorPosition(ConsoleHandle, &CursorPosition)) {
+				Length = _snwprintf_s(
+					Response,
+					ARRAYSIZE(Response),
+					_TRUNCATE,
+					IsPrivateMode ? L"\x1b[?%hd;%hd;1R" : L"\x1b[%hd;%hdR",
+					CursorPosition.Y,
+					CursorPosition.X);
+
+				if (Length > 0 && Length < (INT) ARRAYSIZE(Response)) {
+					return InjectStringToConsoleInput(
+						GetStdHandle(STD_INPUT_HANDLE),
+						Response);
+				}
+			}
+			return FALSE;
+		} else if (CsiParameters[0] == 5) { // Status Report -> "OK"
+			return InjectStringToConsoleInput(
+				GetStdHandle(STD_INPUT_HANDLE),
+				L"\x1b[0n");
+		}
+		return FALSE;
+	case 'S': // Scroll Up (SU)
+		return VTScrollDisplay(ConsoleHandle, max(1, CsiParameters[0]));
+	case 'T': // Scroll Down (SD)
+		return VTScrollDisplay(ConsoleHandle, -max(1, CsiParameters[0]));
+	case 'r': // DECSTBM (Set Scrolling Margins) / Reset Margins
+		Coord.X = 1;
+		Coord.Y = 1;
+		return VTSetCursorPosition(ConsoleHandle, Coord);
 	case 'h': // Set Mode (SM / DECSET)
 	case 'l': // Reset Mode (RM / DECRST)
 		if (IsPrivateMode) {

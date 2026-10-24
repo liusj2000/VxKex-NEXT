@@ -167,6 +167,45 @@ BOOLEAN VTMoveCursorVerticalRelativeWithHorizontalReset(
 	return SetConsoleCursorPosition(ConsoleHandle, Sbi.dwCursorPosition);
 }
 
+//
+// Scroll the visible console viewport vertically.
+// Lines > 0: scroll up (content moves up, blank lines appear at bottom).
+// Lines < 0: scroll down (content moves down, blank lines appear at top).
+//
+BOOLEAN VTScrollDisplay(
+	IN	HANDLE	ConsoleHandle,
+	IN	SHORT	Lines)
+{
+	BOOLEAN Success;
+	CONSOLE_SCREEN_BUFFER_INFO Sbi;
+	SMALL_RECT ScrollRect;
+	COORD DestCoord;
+	CHAR_INFO Fill;
+
+	if (Lines == 0) {
+		return TRUE;
+	}
+
+	Success = GetConsoleScreenBufferInfo(ConsoleHandle, &Sbi);
+	if (!Success) {
+		return FALSE;
+	}
+
+	ScrollRect = Sbi.srWindow;
+	DestCoord.X = Sbi.srWindow.Left;
+	DestCoord.Y = Sbi.srWindow.Top - Lines;
+
+	Fill.Char.UnicodeChar = L' ';
+	Fill.Attributes = Sbi.wAttributes;
+
+	return ScrollConsoleScreenBufferW(
+		ConsoleHandle,
+		&ScrollRect,
+		&Sbi.srWindow,
+		DestCoord,
+		&Fill);
+}
+
 BOOLEAN GetConsoleTextAttribute(
 	IN	HANDLE	ConsoleHandle,
 	OUT	PWORD	Attribute)

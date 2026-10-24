@@ -228,6 +228,10 @@ BOOLEAN VTSetCursorPosition(
 	IN	HANDLE	ConsoleHandle,
 	IN	COORD	AbsolutePosition);
 
+BOOLEAN VTScrollDisplay(
+	IN	HANDLE	ConsoleHandle,
+	IN	SHORT	Lines);
+
 BOOLEAN InjectStringToConsoleInput(
 	IN	HANDLE	ConsoleHandle,
 	IN	PCWSTR	String);
