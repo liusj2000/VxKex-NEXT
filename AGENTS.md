@@ -2,10 +2,10 @@
 ## ⚠️ 最新会话任务（2026-10-24 记录，开始前必读）
 
 - **当前状态与核心任务**：
-  1. **pwsh 中文双写与黑屏闪退修复已完成**：修复 `01-Extended DLLs/KxBase/conansi.c` 中的 `WriteConsoleUnicodeText`，消除错误的宽字符双格单元写入，回滚 Profile 中的强制 UTF-8/chcp 65001 避免 Win7 原生 0x1F 错误。
-  2. **全量构建通过**：x64/Win32 Release 全量编译通过，`ansi-features-test.exe` 全部 PASS；新安装包已生成：`D:\project\VxKex-NEXT\KexSetup_Release.exe`（SHA256: `8a1d2cade36fe3bc81f0b1381fe40b3b37a453f021a04325cf78073811958b5e`）。
-  3. **待部署验收**：当前已安装在 `C:\Program Files\VxKex\Kex64\KxBase.dll` 仍为带双格 Bug 的旧候选（B19E1D7D...），需要用户退出命令行与 VS Code，运行新安装包部署升级；
-  4. **VS Code 终端滚动重行根因已查明**：Inline TUI 动画行长超出列宽时产生自动折行（Line Wrap），`\r` 无法跨行清除上一行，导致历史帧被推入 Scrollback Buffer。拉宽终端至 >= 120 列或按 `Ctrl+K` 清屏即可解决。
+  1. **pwsh 中文双写与黑屏闪退修复已部署**：修复 `01-Extended DLLs/KxBase/conansi.c` 中的 `WriteConsoleUnicodeText`，消除错误的宽字符双格单元写入；用户已运行新安装包部署完毕（`C:\Program Files\VxKex\Kex64\KxBase.dll` 校验通过）；
+  2. **OpenCode 输入夹杂字母（`继s续`）与占位符错位根因查明并解决**：Win7 conhost 在 UTF-8 (65001) 下汉字仅按单列宽推进，导致覆盖占位符 `Ask ` 时遗漏 Col 1 的 `'s'`。彻底移除 Profile 中的强制 `chcp 65001`，恢复原生 CP936 确保双列宽对齐推进；
+  3. **独立控制台方块乱码消除**：控制台从默认点阵字体切换为 Consolas 矢量字体即可完整渲染方块与框线；
+  4. **InitializeDefaultDrives 报错根因**：VirtualBox 宿主机失效的 `tools` 共享挂载导致 `Y:` 盘报错，在虚拟机共享文件夹设置中删除 `tools` 即可彻底消除。
 - 相关排查设计与报告：[pwsh 字符双写黑屏与 VS Code 终端滚动重行排查解决](docx/pwsh黑屏与VSCode终端滚动重行排查解决-20261024.md)、`docx/当前工作.md`。
 - 提交身份仅配置在本仓库：`liusj <liusj2000@users.noreply.github.com>`。
 
