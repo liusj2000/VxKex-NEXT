@@ -1,0 +1,24 @@
+
+7-Zip (r) 23.01 (x86) : Igor Pavlov : Public domain : 2023-06-20
+
+Scanning the drive for archives:
+1 file, 5033926 bytes (4916 KiB)
+
+Extracting archive: D:\project\VxKex-NEXT\KexSetup_Release.exe
+--
+Path = D:\project\VxKex-NEXT\KexSetup_Release.exe
+Type = 7z
+Offset = 44544
+Physical Size = 4989382
+Headers Size = 1348
+Method = LZMA:24 BCJ
+Solid = +
+Blocks = 2
+
+Everything is Ok
+
+Files: 36
+Size:       12061224
+Compressed: 5033926
+MATCH x64\Release\KxBase.dll B19E1D7D5835E859694750CBDB88A1973C0682B54CE69A3E8282BF3635B7FE11
+MATCH Release\KxBase.dll 57170E13FACD6DC97C5CB32F174411B0371A17000266831E26AE556875CB9027

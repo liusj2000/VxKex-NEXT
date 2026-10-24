@@ -1,0 +1,40 @@
+{
+  "time": "2026-10-24T05:20:39.897Z",
+  "installed": "D:\\VSCode-win32-x64-1.107.1\\data\\extensions\\google.google-antigravity-1.9.0\\extension.js",
+  "candidate": "D:\\project\\VxKex-NEXT\\docx\\antigravity-proxy-candidate-20261024.js",
+  "beforeHash": "57027f41332aedd78e91917f2a2bd8e059edcd612e63ae6aff72a08af2c61a06",
+  "candidateHash": "9a5ea28267ac6860023235c1e7218523d659e2030e7b4d34f777edd1bc146f17",
+  "status": "applied_pending_extension_reload",
+  "nodeCheckExitCode": 0,
+  "oldResolverSelectedStaleProxy": true,
+  "checks": [
+    {
+      "name": "explicit config replaces stale environment",
+      "passed": true
+    },
+    {
+      "name": "no explicit config preserves environment",
+      "passed": true
+    },
+    {
+      "name": "blank explicit config preserves environment",
+      "passed": true
+    },
+    {
+      "name": "trim explicit config",
+      "passed": true
+    },
+    {
+      "name": "lowercase environment is replaced",
+      "passed": true
+    },
+    {
+      "name": "explicit config works without environment",
+      "passed": true
+    }
+  ],
+  "change": "Only backend environment: explicit http.proxy takes precedence; no explicit proxy preserves inherited environment",
+  "manifestReusePreserved": true,
+  "backup": "D:\\VSCode-win32-x64-1.107.1\\data\\antigravity-proxy-backup-20261024-132132\\extension.js.original",
+  "appliedAt": "2026-10-24T13:21:32.5703038+08:00"
+}

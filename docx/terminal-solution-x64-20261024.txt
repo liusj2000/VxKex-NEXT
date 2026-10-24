@@ -1,0 +1,317 @@
+  strmap.c
+  KexSmp.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexSmp.lib
+  mls.c
+  KexMLS.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexMLS.lib
+  KexPathCch.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexPathCch.lib
+  cpiwbypa.c
+  ctxmenu.c
+  delcfg.c
+  dskclnup.c
+  elevate.c
+  getcfg.c
+  kexdir.c
+  kxcfgp.c
+  kxschanl.c
+  logging.c
+  msisup.c
+  openkey.c
+  preserve.c
+  setcfg.c
+  KxCfgHlp.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxCfgHlp.lib
+  file.c
+  kexw32ml.c
+  registry.c
+  txapi.c
+  KexW32ML.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexW32ML.lib
+  ctlsx.c
+  dpi.c
+  fldrpkr.c
+  kexgui.c
+  locale.c
+  mls.c
+  msgbox.c
+  shprops.c
+  window.c
+  wndx.c
+  KexGui.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexGui.lib
+  apiset.c
+  ash.c
+  ashcrsup.c
+  ashselec.c
+  avrf.c
+  cpiwbypa.c
+  critsect.c
+  dllmain.c
+  dllnotif.c
+  dllpath.c
+  dllrewrt.c
+  dload.c
+  etw.c
+  except.c
+  initapc.c
+  kexdata.c
+  kexhe.c
+  kexhk.c
+  kexldr.c
+  kexrtl.c
+  kexrtlp.c
+  logging.c
+  ntalrtid.c
+  ntcondrv.c
+  ntfile.c
+  ntjob.c
+  ntobj.c
+  ntpriv.c
+  ntps.c
+  ntreg.c
+  ntsect.c
+  ntthread.c
+  ntvmem.c
+  ntwnf.c
+  propagte.c
+  rtlsec.c
+  rtlwoa.c
+  rtlwow64.c
+  status.c
+  syscal.c
+  verspoof.c
+  vxlopcl.c
+  vxlpriv.c
+  vxlquery.c
+  vxlread.c
+  vxlsever.c
+  vxlwrite.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KexDll.lib and object D:\project\VxKex-NEXT\x64\Release\KexDll.exp
+  Generating code
+  Finished generating code
+  KexDll.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexDll.dll
+  backend.c
+  backendp.c
+  config.c
+  details.c
+  filters.c
+  globals.c
+  goto.c
+  helpabout.c
+  listview.c
+  statusbar.c
+  vxlview.c
+  Generating code
+  Finished generating code
+  VxlView.vcxproj -> D:\project\VxKex-NEXT\x64\Release\VxlView.exe
+  ckxshlex.c
+  clsfctry.c
+  dllmain.c
+  gui.c
+  lnkfile.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KexShlEx.lib and object D:\project\VxKex-NEXT\x64\Release\KexShlEx.exp
+  Generating code
+  Finished generating code
+  KexShlEx.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexShlEx.dll
+  dllmain.c
+  Generating code
+  Finished generating code
+  CpiwBypa.vcxproj -> D:\project\VxKex-NEXT\x64\Release\CpiwBypa.dll
+  cmdline.c
+  gui.c
+  main.c
+  util.c
+  Generating code
+  Finished generating code
+  KexCfg.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KexCfg.exe
+  dllmain.c
+  forwards.c
+  reggval.c
+  regqval.c
+  time.c
+  token.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxAdvapi.lib and object D:\project\VxKex-NEXT\x64\Release\KxAdvapi.exp
+  Generating code
+  Finished generating code
+  KxAdvapi.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxAdvapi.dll
+  dllmain.c
+  forwards.c
+  stubs.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxNt.lib and object D:\project\VxKex-NEXT\x64\Release\KxNt.exp
+  Generating code
+  Finished generating code
+  KxNt.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxNt.dll
+  appmodel.c
+  appstate.c
+  cfgmgr.c
+  conansi.c
+  console.c
+  consup.c
+  critsect.c
+  dllmain.c
+  file.c
+  forwards.c
+  geoname.c
+  handle.c
+  heap.c
+  misc.c
+  module.c
+  process.c
+  pssapi.c
+  security.c
+  stubs.c
+  support.c
+  synch.c
+  thread.c
+  time.c
+  token.c
+  verspoof.c
+  vmem.c
+  wow64.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxBase.lib and object D:\project\VxKex-NEXT\x64\Release\KxBase.exp
+  Generating code
+  Finished generating code
+  kxbase.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxBase.dll
+  actfact.c
+  dllmain.c
+  firefoxpatch.c
+  forwards.c
+  glprstat.c
+  launcher.c
+  mta.c
+  roapi.c
+  robuffer.c
+  roerror.c
+  rofactry.c
+  roinit.c
+  uisettings.c
+  uiview.c
+  uri.c
+  winrt.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxCom.lib and object D:\project\VxKex-NEXT\x64\Release\KxCom.exp
+  Generating code
+  Finished generating code
+  KxCom.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxCom.dll
+  dcmpstub.c
+  debug.c
+  direct2d.c
+  dllmain.c
+  dx11.c
+  dx12stub.c
+  dxgi.c
+  factory.c
+  forwards.c
+  iid.c
+  mfplat.c
+  rptnoint.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxDx.lib and object D:\project\VxKex-NEXT\x64\Release\KxDx.exp
+  Generating code
+  Finished generating code
+  KxDx.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxDx.dll
+  dllmain.c
+  forwards.c
+  powrprof.c
+  tbs.c
+  userenv.c
+  verspoof.c
+  wldp.c
+  wtsapi.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxMi.lib and object D:\project\VxKex-NEXT\x64\Release\KxMi.exp
+  Generating code
+  Finished generating code
+  KxMi.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxMi.dll
+  autorot.c
+  blutooth.c
+  chromiumpatch.c
+  dllmain.c
+  featurestaging.c
+  forwards.c
+  loadsyslib.c
+  misc.c
+  pointer.c
+  processref.c
+  pwrnotfy.c
+  scaling.c
+  syscal.c
+  sysmetrc.c
+  timer.c
+  window.c
+  winmsg.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxUser.lib and object D:\project\VxKex-NEXT\x64\Release\KxUser.exp
+  Generating code
+  Finished generating code
+  KxUser.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxUser.dll
+  main.c
+  Generating code
+  Finished generating code
+  CpiwBypaLdr.vcxproj -> D:\project\VxKex-NEXT\x64\Release\CpiwBypaLdr.exe
+  creaproc.c
+  gui.c
+  main.c
+  Generating code
+  Finished generating code
+  VxKexLdr.vcxproj -> D:\project\VxKex-NEXT\x64\Release\VxKexLdr.exe
+  dllmain.c
+  forwards.c
+  wcsftime.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxCrt.lib and object D:\project\VxKex-NEXT\x64\Release\KxCrt.exp
+  Generating code
+  Finished generating code
+  KxCrt.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxCrt.dll
+  dllmain.c
+  dns.c
+  forwards.c
+  gaiasync.c
+  lmjoin.c
+  stubs.c
+  winhttp.c
+  winsock.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxNet.lib and object D:\project\VxKex-NEXT\x64\Release\KxNet.exp
+  Generating code
+  Finished generating code
+  KxNet.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxNet.dll
+  dllmain.c
+  forwards.c
+  uiacore.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxUia.lib and object D:\project\VxKex-NEXT\x64\Release\KxUia.exp
+  Generating code
+  Finished generating code
+  KxUia.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxUia.dll
+  dllmain.c
+  factory.c
+  forwards.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxDw.lib and object D:\project\VxKex-NEXT\x64\Release\KxDw.exp
+  Generating code
+  Finished generating code
+  KxDw.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxDw.dll
+  bcrypt.c
+  credhndl.c
+  dllmain.c
+  forwards.c
+  isi.c
+  rng.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxCryp.lib and object D:\project\VxKex-NEXT\x64\Release\KxCryp.exp
+  Generating code
+  Finished generating code
+  KxCryp.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxCryp.dll
+  api.c
+  certs.c
+  credhndl.c
+  ctltoken.c
+  ctxattr.c
+  dllmain.c
+  encdec.c
+  hkdf.c
+  ioinfo.c
+  secctx.c
+  sspihack.c
+  tlsalert.c
+  tlsdec.c
+  tlsenc.c
+  tlsext.c
+  tlshello.c
+  tlshs.c
+  tlshs12.c
+  tlshs13.c
+  tlsrdwr.c
+  tlsshut.c
+  tlsutil.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxSChanl.lib and object D:\project\VxKex-NEXT\x64\Release\KxSChanl.exp
+  Generating code
+  Finished generating code
+  KxSChanl.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxSChanl.dll

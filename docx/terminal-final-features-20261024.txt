@@ -1,0 +1,52 @@
+font-before=Terminal family=0 size=10,20
+font-after=Consolas family=54 size=8,16
+Loaded: D:\project\VxKex-NEXT\x64\Release\KxBase.dll
+[PASS] line 57: setmode != NULL
+[PASS] line 58: getmode != NULL
+[PASS] line 59: write_a != NULL
+[PASS] line 60: write_w != NULL
+[PASS] line 73: conout != INVALID_HANDLE_VALUE
+[PASS] line 76: getmode(conout, &mode)
+Native console mode: 0x00000003
+Native SetConsoleMode(0x00000007): ret=1, GetLastError()=203
+[PASS] line 93: setmode(conout, mode)
+[PASS] line 97: getmode(conout, &newMode)
+Mode after setmode: 0x00000007 (has 0x4? YES)
+
+--- Test 1: DEC Private Mode Cursor Visibility (?25l / ?25h) ---
+Cursor initial: visible=1, size=25
+Cursor after ?25l: visible=0, size=25
+[PASS] line 109: curinfo.bVisible == FALSE
+Cursor after ?25h: visible=1, size=25
+[PASS] line 115: curinfo.bVisible == TRUE
+
+--- Test 2: DEC Line Drawing Character Set (ESC ( 0 / ESC ( B) ---
+Read back Unicode chars: 0x2592, 0x2500
+[PASS] line 132: readBuf[0] == 0x2592
+[PASS] line 133: readBuf[1] == 0x2500
+Read back ASCII char: 'a' (0x0061)
+[PASS] line 140: readBuf[0] == L'a'
+
+--- Test 3: Stream Split / Chunk Boundary Incomplete Sequence ---
+Read back col 1-10: '          '
+[PASS] line 160: readBuf[0] == L' '
+[PASS] line 161: readBuf[1] == L' '
+Read back col 15-18: 'TEST'
+[PASS] line 168: readBuf[0] == L'T' && readBuf[1] == L'E' && readBuf[2] == L'S' && readBuf[3] == L'T'
+
+--- Test 4: Alternate Screen Buffer (?1049h / ?1049l) ---
+[PASS] line 176: wcsncmp(readBuf, L"PRIMARY_MARKER", 14) == 0
+Alternate screen at marker pos: '              '
+[PASS] line 182: readBuf[0] == L' '
+Restored primary screen: 'PRIMARY_MARKER'
+[PASS] line 188: wcsncmp(readBuf, L"PRIMARY_MARKER", 14) == 0
+
+--- Test 5: APC (Kitty graphics query) Suppression ---
+Read back after APC query: '                    '
+[PASS] line 204: readBuf[0] == L' '
+[PASS] line 205: readBuf[1] == L' '
+
+=== SUMMARY ===
+ALL TESTS PASSED SUCCESSFULLY! (failures = 0)
+child-exit=0
+failures=0

@@ -1,0 +1,85 @@
+READ_ONLY_DIAGNOSTICS
+2026-10-24T12:13:12.6287018+08:00
+C:\ type=Fixed ready=True
+D:\ type=Fixed ready=True
+E:\ type=CDRom ready=True
+Y:\ type=Network ready=False
+Z:\ type=Network ready=True
+
+Name                    Length LastWriteTime
+----                    ------ -------------
+cli-20261017_174758.log 123884 10/17/2026 6:39:17 PM
+cli-20261017_184322.log  15546 10/17/2026 6:47:32 PM
+cli-20261017_190232.log  63445 10/17/2026 7:25:55 PM
+cli-20261017_193236.log  13131 10/17/2026 7:36:56 PM
+cli-20261017_195241.log 120156 10/17/2026 8:41:01 PM
+cli-20261017_205335.log  49555 10/17/2026 10:01:29 PM
+cli-20261017_221530.log  93561 10/17/2026 11:07:28 PM
+cli-20261017_231008.log  34579 10/17/2026 11:31:41 PM
+cli-20261017_233325.log 136970 10/18/2026 11:06:06 AM
+cli-20261018_120727.log  70738 10/18/2026 12:52:24 PM
+cli-20261018_125718.log  24357 10/18/2026 1:37:12 PM
+cli-20261018_134418.log  32423 10/18/2026 1:58:55 PM
+cli-20261018_140321.log  14346 10/18/2026 2:57:01 PM
+cli-20261018_150420.log  43030 10/18/2026 4:47:58 PM
+cli-20261018_165245.log  72617 10/18/2026 5:40:13 PM
+cli-20261018_174754.log  76144 10/18/2026 7:54:16 PM
+cli-20261018_200040.log  35710 10/18/2026 8:22:47 PM
+cli-20261018_202524.log 113396 10/18/2026 9:34:57 PM
+cli-20261018_213840.log  97823 10/22/2026 11:19:25 PM
+cli-20261022_232303.log  11565 10/22/2026 11:28:33 PM
+cli-20261022_233235.log 102643 10/23/2026 10:25:02 PM
+cli-20261023_223445.log  21629 10/23/2026 11:01:55 PM
+cli-20261023_230305.log  15428 10/23/2026 11:03:25 PM
+cli-20261023_230841.log  37266 10/23/2026 11:24:41 PM
+cli-20261023_232537.log  28237 10/23/2026 11:50:16 PM
+cli-20261023_235327.log  93156 10/24/2026 8:30:47 AM
+cli-20261024_083928.log  15721 10/24/2026 10:14:09 AM
+cli-20261024_114339.log   1295 10/24/2026 11:44:12 AM
+cli-20261024_114453.log   1296 10/24/2026 11:45:24 AM
+cli-20261024_114527.log   1296 10/24/2026 11:45:53 AM
+cli-20261024_115118.log   3616 10/24/2026 11:52:59 AM
+cli-20261024_120201.log    489 10/24/2026 12:02:03 PM
+cli-20261024_120233.log   1295 10/24/2026 12:03:01 PM
+cli-20261024_120506.log    489 10/24/2026 12:05:29 PM
+cli-20261024_120531.log   1296 10/24/2026 12:05:58 PM
+
+
+Name                                                Length LastWriteTime
+----                                                ------ -------------
+crash_1932_a55bddcb-11df-4ce1-a0aa-c18deb08d5ed.log      0 10/24/2026 12:05:31 PM
+
+xtensionLogs:[],binaryVersion:(k=g)!=null?k:"",binaryPath:c}}finally{b()}}getInstalledTargetPath(){return Hb()}async getAvailableEphemeralPort(){return await zc()}async acquireInstalledBinaryPath(a,
+b,c){rc();wc(c);var d=this.getOrCreateOutputChannel(),g,k=(g=this.activeTelemetry)!=null?g:this.telemetry,m=this.startingPromise!==void 0,p=Date.now(),r=process.uptime()*1E3;return await this.binaryAcquirer({context:a,outputChannel:d,progress:b,configOverride:c,targetPathOverride:this.getInstalledTargetPath(),onBinaryCheck:t=>{this.lastCacheHit=t.cacheHit;this.lastDownloadReason=t.downloadReason;m||t.cacheHit||(this.preflightAcquisition={cacheHit:!1,downloadReason:t.downloadReason,startedAtMs:p})}, // secret-detector:ignore
+onBinaryDownload:t=>{var v=this.wasSuspendedSince(p,r);if(t.success)k==null||k.logEvent(fa.AntigravityEvent.SERVER_BINARY_DOWNLOAD,{duration_ms:t.durationMs,download_reason:t.downloadReason,cli_version:t.cliVersion,suspend_detected:v,success:!0});else{let w;k==null||(w=k.logError)==null||w.call(k,fa.AntigravityEvent.SERVER_BINARY_DOWNLOAD,{duration_ms:t.durationMs,download_reason:t.downloadReason,cli_version:t.cliVersion,suspend_detected:v,failure_reason:"failed_download",error:t.error})}}})}async acquireBinaryPath(a,
+b){return await this.acquireInstalledBinaryPath(a,void 0,b)}async waitForServerReady(a,b,c){var d=f.asyncContextStart(),g=d();d=d(1);try{let k=process.env.ANTIGRAVITY_SERVER_READY_TIMEOUT_MS?Number(process.env.ANTIGRAVITY_SERVER_READY_TIMEOUT_MS):void 0,m=b!=null?b:k&&!isNaN(k)?k:pc.DEFAULT_SERVER_STARTUP_TIMEOUT_MS,p=Date.now(),r=0,t=a.endsWith("/healthz")?a:`${a.replace(/\/$/,"")}/healthz`,v;for(;Date.now()-p<m;){if(c&&!c()){let y;(y=this.outputChannel)==null||y.appendLine(`[LAUNCH ERROR] Server process terminated early during startup probe (attempt ${r}).`); // secret-detector:ignore
+return!1}r++;try{if(d(await g(new Promise(y=>{var D=r%2===1?t:a,H=mc.get(D,{agent:!1},M=>{M.resume();y(M.statusCode!==void 0&&M.statusCode>=200&&M.statusCode<500)}),K=!1;H.on("error",M=>{r%20===1&&console.log(`[LAUNCH POLL ${r}] Error connecting to ${D}: ${M.message}`);K||(v=(M==null?void 0:M.message)||String(M));y(!1)});H.setTimeout(2E3,()=>{K=!0;v="probe request timed out";H.destroy();y(!1)})})))){let y;(y=this.outputChannel)==null||y.appendLine(`[LAUNCH] Server at ${a} is READY after ${r} attempt(s).`);
+console.log(`[LAUNCH] Server at ${a} is READY after ${r} attempt(s).`);return!0}}catch(y){d(),v=y instanceof Error?y.message:String(y)}if(c&&!c()){let y;(y=this.outputChannel)==null||y.appendLine(`[LAUNCH ERROR] Server process terminated early during startup probe (attempt ${r}).`);return!1}d(await g(new Promise(y=>{setTimeout(y,250)})))}b=`[LAUNCH ERROR] Timed out waiting for server at ${a} after ${m}ms (${r} attempts, last error: ${v||"none"}).`;let w;(w=this.outputChannel)==null||w.appendLine(b);
+console.error(b);return!1}finally{g()}}async start(a,b,c,d){var g=typeof a.subscriptions!=="undefined"?{context:a,messageNotifier:b,configOverride:c,telemetry:d}:a,{context:k,telemetry:m}=g;this.getOrCreateOutputChannel();if(this.startingPromise)return this.startingPromise;if(this.serverProcess&&this.serverUrl)return this.serverUrl;this.lastStartOptions=g;this.cancelPendingRecovery();this.isStopping=!1;this.lastDownloadReason=this.lastCacheHit=this.lastStartupError=void 0;this.activeTelemetry=m;var p= // secret-detector:ignore
+Date.now(),r=process.uptime()*1E3;m==null||m.logEvent(fa.AntigravityEvent.SERVER_START);return this.startingPromise=(async()=>{var t=f.asyncContextStart(),v=t();t=t(1);try{let D,H,K,M,W,na=[],ba=()=>na.length>0?na.join("\n").slice(-pc.MAX_STDERR_TAIL_CHARS):void 0;try{var w=n.workspace.getConfiguration("antigravity").get("serverPort");let pa=Ac(g.configOverride),Ya=Number(w)||t(await v(this.getAvailableEphemeralPort()));w=`http://127.0.0.1:${Ya}`;let kb;g.skipAcquire&&this.lastBinaryPath?(kb=this.lastBinaryPath, // secret-detector:ignore
+this.lastCacheHit=!0):kb=t(await v(this.acquireBinaryPath(k,g.configOverride)));this.lastBinaryPath=kb;var y=this.preflightAcquisition;this.preflightAcquisition=void 0;y&&this.lastCacheHit&&(this.lastCacheHit=y.cacheHit,this.lastDownloadReason=y.downloadReason,p=Math.min(p,y.startedAtMs));let Nb=["--hub",`--hub-port=${Ya}`,"--app_data_dir=antigravity",`--csrf_token=${this.csrfToken}`],sc,Sb=(sc=n.workspace.workspaceFolders)!=null?sc:[];for(let pb of Sb){let Eb,db;((Eb=pb)==null?0:(db=Eb.uri)==null?
+0:db.fsPath)&&la.existsSync(pb.uri.fsPath)&&Nb.push(`--
+yCheck:t=>{this.lastCacheHit=t.cacheHit;this.lastDownloadReason=t.downloadReason;m||t.cacheHit||(this.preflightAcquisition={cacheHit:!1,downloadReason:t.downloadReason,startedAtMs:p})}, // secret-detector:ignore
+onBinaryDownload:t=>{var v=this.wasSuspendedSince(p,r);if(t.success)k==null||k.logEvent(fa.AntigravityEvent.SERVER_BINARY_DOWNLOAD,{duration_ms:t.durationMs,download_reason:t.downloadReason,cli_version:t.cliVersion,suspend_detected:v,success:!0});else{let w;k==null||(w=k.logError)==null||w.call(k,fa.AntigravityEvent.SERVER_BINARY_DOWNLOAD,{duration_ms:t.durationMs,download_reason:t.downloadReason,cli_version:t.cliVersion,suspend_detected:v,failure_reason:"failed_download",error:t.error})}}})}async acquireBinaryPath(a,
+b){return await this.acquireInstalledBinaryPath(a,void 0,b)}async waitForServerReady(a,b,c){var d=f.asyncContextStart(),g=d();d=d(1);try{let k=process.env.ANTIGRAVITY_SERVER_READY_TIMEOUT_MS?Number(process.env.ANTIGRAVITY_SERVER_READY_TIMEOUT_MS):void 0,m=b!=null?b:k&&!isNaN(k)?k:pc.DEFAULT_SERVER_STARTUP_TIMEOUT_MS,p=Date.now(),r=0,t=a.endsWith("/healthz")?a:`${a.replace(/\/$/,"")}/healthz`,v;for(;Date.now()-p<m;){if(c&&!c()){let y;(y=this.outputChannel)==null||y.appendLine(`[LAUNCH ERROR] Server process terminated early during startup probe (attempt ${r}).`); // secret-detector:ignore
+return!1}r++;try{if(d(await g(new Promise(y=>{var D=r%2===1?t:a,H=mc.get(D,{agent:!1},M=>{M.resume();y(M.statusCode!==void 0&&M.statusCode>=200&&M.statusCode<500)}),K=!1;H.on("error",M=>{r%20===1&&console.log(`[LAUNCH POLL ${r}] Error connecting to ${D}: ${M.message}`);K||(v=(M==null?void 0:M.message)||String(M));y(!1)});H.setTimeout(2E3,()=>{K=!0;v="probe request timed out";H.destroy();y(!1)})})))){let y;(y=this.outputChannel)==null||y.appendLine(`[LAUNCH] Server at ${a} is READY after ${r} attempt(s).`);
+console.log(`[LAUNCH] Server at ${a} is READY after ${r} attempt(s).`);return!0}}catch(y){d(),v=y instanceof Error?y.message:String(y)}if(c&&!c()){let y;(y=this.outputChannel)==null||y.appendLine(`[LAUNCH ERROR] Server process terminated early during startup probe (attempt ${r}).`);return!1}d(await g(new Promise(y=>{setTimeout(y,250)})))}b=`[LAUNCH ERROR] Timed out waiting for server at ${a} after ${m}ms (${r} attempts, last error: ${v||"none"}).`;let w;(w=this.outputChannel)==null||w.appendLine(b);
+console.error(b);return!1}finally{g()}}async start(a,b,c,d){var g=typeof a.subscriptions!=="undefined"?{context:a,messageNotifier:b,configOverride:c,telemetry:d}:a,{context:k,telemetry:m}=g;this.getOrCreateOutputChannel();if(this.startingPromise)return this.startingPromise;if(this.serverProcess&&this.serverUrl)return this.serverUrl;this.lastStartOptions=g;this.cancelPendingRecovery();this.isStopping=!1;this.lastDownloadReason=this.lastCacheHit=this.lastStartupError=void 0;this.activeTelemetry=m;var p= // secret-detector:ignore
+Date.now(),r=process.uptime()*1E3;m==null||m.logEvent(fa.AntigravityEvent.SERVER_START);return this.startingPromise=(async()=>{var t=f.asyncContextStart(),v=t();t=t(1);try{let D,H,K,M,W,na=[],ba=()=>na.length>0?na.join("\n").slice(-pc.MAX_STDERR_TAIL_CHARS):void 0;try{var w=n.workspace.getConfiguration("antigravity").get("serverPort");let pa=Ac(g.configOverride),Ya=Number(w)||t(await v(this.getAvailableEphemeralPort()));w=`http://127.0.0.1:${Ya}`;let kb;g.skipAcquire&&this.lastBinaryPath?(kb=this.lastBinaryPath, // secret-detector:ignore
+this.lastCacheHit=!0):kb=t(await v(this.acquireBinaryPath(k,g.configOverride)));this.lastBinaryPath=kb;var y=this.preflightAcquisition;this.preflightAcquisition=void 0;y&&this.lastCacheHit&&(this.lastCacheHit=y.cacheHit,this.lastDownloadReason=y.downloadReason,p=Math.min(p,y.startedAtMs));let Nb=["--hub",`--hub-port=${Ya}`,"--app_data_dir=antigravity",`--csrf_token=${this.csrfToken}`],sc,Sb=(sc=n.workspace.workspaceFolders)!=null?sc:[];for(let pb of Sb){let Eb,db;((Eb=pb)==null?0:(db=Eb.uri)==null?
+0:db.fsPath)&&la.existsSync(pb.uri.fsPath)&&Nb.push(`--add-dir=${pb.uri.fsPath}`)}let Fd,Af,Xb=(Af=(Fd=c==null?void 0:c.get("serverArgs"))!=null?Fd:n.workspace.getConfiguration("antigravity").get("serverArgs"))!=null?Af:[];Array.isArray(Xb)&&Xb.length>0&&Nb.push(...Xb);let tc=t(await v(nb(kb)));y=(this.lastCliVersion=W=tc)?` (v${tc})`:"";let Gd;(Gd=this.outputChannel)==null||Gd.appendLine(`[LAUNCH] Spawning ${kb}${y} ${Nb.join(" ")}`);console.log(`[LAUNCH] Spawning ${kb}${y} ${Nb.join(" ")}`);let Bf=
+yc(Sb,k.extensionPath),Kb=xc({configOverride:g.configOverride}),cc
+
+Name
+----
+bin
+out
+resources
+syntaxes
+webview
+.vsixmanifest
+LICENSE.md
+package.json
+readme.md
+
+DIAGNOSTICS_COMPLETE

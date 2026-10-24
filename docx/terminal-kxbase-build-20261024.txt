@@ -1,0 +1,31 @@
+  appmodel.c
+  appstate.c
+  cfgmgr.c
+  conansi.c
+  console.c
+  consup.c
+  critsect.c
+  dllmain.c
+  file.c
+  forwards.c
+  geoname.c
+  handle.c
+  heap.c
+  misc.c
+  module.c
+  process.c
+  pssapi.c
+  security.c
+  stubs.c
+  support.c
+  synch.c
+  thread.c
+  time.c
+  token.c
+  verspoof.c
+  vmem.c
+  wow64.c
+     Creating library D:\project\VxKex-NEXT\x64\Release\KxBase.lib and object D:\project\VxKex-NEXT\x64\Release\KxBase.exp
+  Generating code
+  Finished generating code
+  KxBase.vcxproj -> D:\project\VxKex-NEXT\x64\Release\KxBase.dll

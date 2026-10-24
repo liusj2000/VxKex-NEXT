@@ -1,0 +1,2 @@
+  terminal-redraw-test.c
+  terminal-redraw-test.vcxproj -> D:\project\VxKex-NEXT\test\x64\Release\terminal-redraw-test.exe

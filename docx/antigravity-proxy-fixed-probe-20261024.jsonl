@@ -1,0 +1,6 @@
+{"time":"2026-10-24T05:21:49.160Z","event":"spawn","pid":2392,"port":50419,"profile":"original"}
+{"time":"2026-10-24T05:21:51.717Z","event":"probe_error","endpoint":"/healthz","message":"probe_timeout","elapsedMs":2581}
+{"time":"2026-10-24T05:21:54.491Z","event":"probe_error","endpoint":"/","message":"probe_timeout","elapsedMs":5355}
+{"time":"2026-10-24T05:21:55.926Z","event":"http","endpoint":"/healthz","status":200,"elapsedMs":6790}
+{"time":"2026-10-24T05:21:55.929Z","event":"stop","reason":"ready","elapsedMs":6793}
+{"time":"2026-10-24T05:21:55.987Z","event":"exit","code":null,"signal":"SIGTERM"}

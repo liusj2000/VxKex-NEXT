@@ -1,0 +1,38 @@
+{
+  "checks": [
+    {
+      "name": "old schema default",
+      "actual": 30000,
+      "expected": 30000,
+      "passed": true
+    },
+    {
+      "name": "new user setting",
+      "actual": 120000,
+      "expected": 120000,
+      "passed": true
+    },
+    {
+      "name": "valid environment retains priority",
+      "actual": 45000,
+      "expected": 45000,
+      "passed": true
+    },
+    {
+      "name": "invalid environment falls through to setting",
+      "actual": 120000,
+      "expected": 120000,
+      "passed": true
+    },
+    {
+      "name": "invalid config retains original default",
+      "actual": 30000,
+      "expected": 30000,
+      "passed": true
+    }
+  ],
+  "launchPassesResolvedTimeout": true,
+  "shortHealthProbeUnchanged": true,
+  "manifestReusePresent": true,
+  "extensionHash": "57027f41332aedd78e91917f2a2bd8e059edcd612e63ae6aff72a08af2c61a06"
+}

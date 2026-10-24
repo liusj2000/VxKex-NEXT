@@ -1,0 +1,4 @@
+{"time":"2026-10-24T05:13:18.364Z","event":"spawn","pid":4796,"port":50180,"profile":"original"}
+{"time":"2026-10-24T05:13:20.758Z","event":"http","endpoint":"/healthz","status":200,"elapsedMs":2423}
+{"time":"2026-10-24T05:13:20.767Z","event":"stop","reason":"ready","elapsedMs":2432}
+{"time":"2026-10-24T05:13:20.990Z","event":"exit","code":null,"signal":"SIGTERM"}

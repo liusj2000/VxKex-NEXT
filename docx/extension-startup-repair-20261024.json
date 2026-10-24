@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "scope": "startup timeout mitigation; UI verification pending",
+  "time": "2026-10-24T04:17:51.145Z",
+  "results": [
+    {
+      "name": "codex",
+      "file": "D:\\VSCode-win32-x64-1.107.1\\data\\extensions\\openai.chatgpt-26.1021.22027-win32-x64\\out\\extension.js",
+      "backup": "D:\\VSCode-win32-x64-1.107.1\\data\\extension-startup-backup-20261024\\codex.extension.js.original",
+      "candidate": "D:\\VSCode-win32-x64-1.107.1\\data\\extension-startup-backup-20261024\\codex.candidate.js",
+      "beforeHash": "a9cc6736cd2c2d22f6cf43fc5763d5f8a873e4f741f522b44a600b1926f4e627",
+      "afterHash": "b3e3a8b193903aab19f4b85dc3360f6b6e5c12a8f6bff427852481e7356341d4",
+      "syntaxExit": 0
+    },
+    {
+      "name": "antigravity",
+      "file": "D:\\VSCode-win32-x64-1.107.1\\data\\extensions\\google.google-antigravity-1.9.0\\extension.js",
+      "backup": "D:\\VSCode-win32-x64-1.107.1\\data\\extension-startup-backup-20261024\\antigravity.extension.js.original",
+      "candidate": "D:\\VSCode-win32-x64-1.107.1\\data\\extension-startup-backup-20261024\\antigravity.candidate.js",
+      "beforeHash": "8cb67d343e4d4b407eb28204bc1014bc714567b792daa1989bbba7cde64333ae",
+      "afterHash": "57027f41332aedd78e91917f2a2bd8e059edcd612e63ae6aff72a08af2c61a06",
+      "syntaxExit": 0
+    }
+  ]
+}

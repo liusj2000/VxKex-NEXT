@@ -1,0 +1,26 @@
+font-before=Terminal family=0 size=10,20
+font-after=Consolas family=54 size=8,16
+DLL=C:\Program Files\VxKex\Kex64\kxbase.DLL
+CP=936
+Chinese cursor=13,0 window=0,0,79,24 size=80,100 attrs=0007 cells=68c0/0107 68c0/0207 67e5/0107 67e5/0207 9879/0107 9879/0207 76ee/0107 76ee/0207 72b6/0107 72b6/0207 6001/0107 6001/0207 0067/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 
+no-wrap cursor=1,25 expected=79,24
+FAIL line=226 err=203 s.dwCursorPosition.X==79 && s.dwCursorPosition.Y==24
+alt-full-last-row cursor=0,25 viewport-top=1
+restored cursor=0,0 window=0,0,79,24 size=80,100 attrs=0007 cells=0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 
+CP=65001
+Chinese cursor=7,0 window=0,0,79,24 size=80,100 attrs=0007 cells=68c0/0007 67e5/0007 9879/0007 76ee/0007 72b6/0007 6001/0007 0067/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 
+FAIL line=169 err=203 s.dwCursorPosition.X==13
+FAIL line=177 err=203 s.dwCursorPosition.X==4
+FAIL line=180 err=203 checkCells[0].Attributes & COMMON_LVB_LEADING_BYTE
+FAIL line=181 err=203 checkCells[1].Attributes & COMMON_LVB_TRAILING_BYTE
+FAIL line=182 err=203 checkCells[2].Char.UnicodeChar==0x2500
+FAIL line=183 err=203 checkCells[3].Char.UnicodeChar==L'g'
+FAIL line=197 err=203 s.dwCursorPosition.X==79 && s.dwCursorPosition.Y==1
+FAIL line=202 err=203 s.dwCursorPosition.X==2 && s.dwCursorPosition.Y==3
+FAIL line=206 err=203 s.dwCursorPosition.X==0 && s.dwCursorPosition.Y==4
+explicit-wide-pair cursor=79,3 window=0,0,79,24 size=80,100 attrs=0007 cells=68c0/0107 68c0/0207 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 
+no-wrap cursor=1,25 expected=79,24
+FAIL line=226 err=203 s.dwCursorPosition.X==79 && s.dwCursorPosition.Y==24
+alt-full-last-row cursor=0,25 viewport-top=1
+restored cursor=0,0 window=0,0,79,24 size=80,100 attrs=0007 cells=0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 0020/0007 
+failures=11

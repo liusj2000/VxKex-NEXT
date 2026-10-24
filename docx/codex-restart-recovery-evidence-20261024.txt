@@ -1,0 +1,22 @@
+Codex restart recovery evidence; log timestamps are Asia/Shanghai (UTC+8).
+SOURCE=D:\VSCode-win32-x64-1.107.1\data\user-data\logs\20261024T120404\window1\exthost\openai.chatgpt\Codex.log
+1: 2026-10-24 12:04:27.721 [info] Activating Codex extension
+6: 2026-10-24 12:04:38.891 [info] [CodexMcpConnection] Initialize received id=1
+9: 2026-10-24 12:05:04.619 [error] [CodexWebviewProvider] Webview renderer did not become ready elapsedMs=30031 extensionVersion=26.1021.22027 reason=renderer_ready_timeout receivedWebviewMessage=false role=sidebar stage=renderer timeoutMs=30000
+10: 2026-10-24 12:20:01.530 [info] Activating Codex extension
+14: 2026-10-24 12:20:05.930 [info] [CodexMcpConnection] Initialize received id=1
+16: 2026-10-24 12:20:54.784 [info] [statsig-refresh-diagnostics] React root render requested windowType=extension
+17: 2026-10-24 12:20:59.502 [info] [chatgpt-account-lookup] completed authenticatedAccountPresent=true authMethod=chatgpt hasEverErrored=false result=succeeded windowType=extension
+23: 2026-10-24 12:21:05.706 [info] [startup][renderer] app routes mounted after 54925ms
+28: 2026-10-24 12:21:20.686 [info] client.performance.span backgroundDurationMs=0 buildCommitSha=25b23a8f92412080d1a710e92a4a606f58c9fb91 clientPlatform=win32 durationMs=57116.3 hostType=extension initialSurface=home marksMs={"renderer_entry_evaluated":44490.6,"host_services_ready":45044.4,"renderer_ready":45053.2,"settings_ready":45166.7,"shell_visible":55418.6,"home_visible":57116} name=app_start outcome=success reason=null samplingReason=Bootstrap:Recognized samplingRuleId=1kYHoU5I4stzVcHY9M7LZK:100.00:4 timingQuality=heartbeat_gap wallDurationMs=65900.2
+SOURCE=D:\VSCode-win32-x64-1.107.1\data\user-data\logs\20261024T130435\window1\exthost\openai.chatgpt\Codex.log
+1: 2026-10-24 13:04:56.676 [info] Activating Codex extension
+6: 2026-10-24 13:05:08.289 [info] [CodexMcpConnection] Initialize received id=1
+10: 2026-10-24 13:05:22.874 [info] [statsig-refresh-diagnostics] React root render requested windowType=extension
+11: 2026-10-24 13:05:24.666 [info] [chatgpt-account-lookup] completed authenticatedAccountPresent=true authMethod=chatgpt hasEverErrored=false result=succeeded windowType=extension
+15: 2026-10-24 13:05:28.581 [info] [startup][renderer] app routes mounted after 38859ms
+21: 2026-10-24 13:05:29.749 [info] client.performance.span backgroundDurationMs=0 buildCommitSha=25b23a8f92412080d1a710e92a4a606f58c9fb91 clientPlatform=win32 durationMs=40011 hostType=extension initialSurface=home marksMs={"renderer_entry_evaluated":33504.2,"host_services_ready":33562.6,"renderer_ready":33569.2,"settings_ready":33658.2,"shell_visible":39054.8,"home_visible":40010.9} name=app_start outcome=success reason=null samplingReason=Bootstrap:Recognized samplingRuleId=1kYHoU5I4stzVcHY9M7LZK:100.00:4 timingQuality=foreground wallDurationMs=40010.9
+codex current=B3E3A8B193903AAB19F4B85DC3360F6B6E5C12A8F6BFF427852481E7356341D4 matchesAfter=True backupMatches=True
+antigravity current=57027F41332AEDD78E91917F2A2BD8E059EDCD612E63AE6AFF72A08AF2C61A06 matchesAfter=True backupMatches=True
+Codex exactly matches original with timeout-only replacement=True
+Codex Node --check exit=0 (rechecked this turn).

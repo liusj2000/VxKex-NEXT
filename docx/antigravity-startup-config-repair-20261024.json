@@ -1,0 +1,12 @@
+{
+  "time": "2026-10-24T13:15:11.8018195+08:00",
+  "settings": "D:\\VSCode-win32-x64-1.107.1\\data\\user-data\\User\\settings.json",
+  "backup": "D:\\VSCode-win32-x64-1.107.1\\data\\antigravity-startup-config-backup-20261024-131511\\settings.json.original",
+  "beforeHash": "CFA766FCD3A8E7CE2AF4EBF7894B3F97FC46657AE4897BBF7A746043824B178B",
+  "afterHash": "9E102CBB129902A1C287C86E661919ABD4867D86EE51F4BB7AEAA7BC1EFDC9A7",
+  "key": "antigravity.serverStartupTimeoutMs",
+  "oldValue": "absent (extension default 30000)",
+  "newValue": 120000,
+  "otherSettingsUnchanged": true,
+  "uiVerification": "pending Try again"
+}

@@ -1,0 +1,9 @@
+{
+  "cp": "65001",
+  "mode": "emit-fixed",
+  "event": {
+    "exitCode": 0
+  },
+  "passed": true,
+  "output": "\u001b[0m\u001b[0KBEGIN检查项目状态gEND\u001b[0K\u001b[?25l\r\n\u001b[0K\u001b[?25h"
+}

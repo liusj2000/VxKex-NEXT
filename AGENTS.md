@@ -1,15 +1,13 @@
 # VxKex NEXT：AI 助手工作约定
-## ⚠️ 下一次会话任务2026-10-18，开始前必读
-2026-10-13记录是针对于cline的，已经完成。
-当前工程最新工程是基于antigravity插件完成，codex插件也可以使用。
-##  下一次会话的首要任务（2026-10-13 记录，开始前必读）
+## ⚠️ 最新会话任务（2026-10-24 记录，开始前必读）
 
-- **下一次工作 = 验证 KxBase 伪控制台（ConPTY）实现的正确性**；不是继续下载/安装工具链（那部分已完成）。
-- 测试计划已写好：[ConPTY 正确性测试计划](docx/ConPTY正确性测试计划-20261013.md)。开始动手前先读它，再读 `docx\当前工作.md`。
-- 下一次会话很可能在 **VS Code + Cline 插件**中启动（不是 DSH Desktop）。本文件与仓库根 `.clinerules` 就是入口；请先把本节任务复述给用户确认，再开始执行。
-- 前置阻断（都需要用户明确安排）：新 `KxBase.dll` 尚未部署，已安装的 `C:\Program Files\VxKex\Kex64\KxBase.dll` 仍是缺 `ClosePseudoConsole` 的旧版；部署前必须备份 + 记录 SHA256 + 准备回滚。
-- 编译任何测试程序都要加 `/p:TrackFileAccess=false`（串行 `/m:1`），否则会被本机 VxKex 的导入重写缺陷误伤，见下文「已知阻断」。
-- 提交状态：上一轮改动已入库——`a38b938 feat: KxBase 增加伪控制台 API 与 CreateProcess 桥接`、`9dc7fb2 chore: 忽略各工程 x64/Win32 构建输出`，本文件 / `.clinerules` / `docx/` 随后以 `docs:` 提交。提交身份仅配置在本仓库：`liusj <liusj2000@users.noreply.github.com>`。
+- **当前状态与核心任务**：
+  1. **pwsh 中文双写与黑屏闪退修复已完成**：修复 `01-Extended DLLs/KxBase/conansi.c` 中的 `WriteConsoleUnicodeText`，消除错误的宽字符双格单元写入，回滚 Profile 中的强制 UTF-8/chcp 65001 避免 Win7 原生 0x1F 错误。
+  2. **全量构建通过**：x64/Win32 Release 全量编译通过，`ansi-features-test.exe` 全部 PASS；新安装包已生成：`D:\project\VxKex-NEXT\KexSetup_Release.exe`（SHA256: `8a1d2cade36fe3bc81f0b1381fe40b3b37a453f021a04325cf78073811958b5e`）。
+  3. **待部署验收**：当前已安装在 `C:\Program Files\VxKex\Kex64\KxBase.dll` 仍为带双格 Bug 的旧候选（B19E1D7D...），需要用户退出命令行与 VS Code，运行新安装包部署升级；
+  4. **VS Code 终端滚动重行根因已查明**：Inline TUI 动画行长超出列宽时产生自动折行（Line Wrap），`\r` 无法跨行清除上一行，导致历史帧被推入 Scrollback Buffer。拉宽终端至 >= 120 列或按 `Ctrl+K` 清屏即可解决。
+- 相关排查设计与报告：[pwsh 字符双写黑屏与 VS Code 终端滚动重行排查解决](docx/pwsh黑屏与VSCode终端滚动重行排查解决-20261024.md)、`docx/当前工作.md`。
+- 提交身份仅配置在本仓库：`liusj <liusj2000@users.noreply.github.com>`。
 
 ## 工作范围与会话恢复
 
@@ -46,7 +44,7 @@
   - MSBuild 引擎：`C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe`（4.0.30319.34209）
 - 安装/回滚脚本（均在 `D:\tools\Win7SDK`）：`install-cdrive.ps1`（管理员；复制 + `reg import Registry\W7SDK.reg` + `gacutil /i` 4 个 CPPTasks）；`rollback-cdrive-install.ps1 -DryRun`（正式回滚需管理员）。备份与清单：`D:\tools\Win7SDK\cdrive-backup-20261013-225229\install-plan.json`。
 - 旧路径说明：上一轮记录的 `prepare-win7-sdk.ps1`、`install-win7-sdk.ps1`（官方 setup 路线）仍在 `D:\tools\Win7SDK`，本轮未运行。
-
+- Node在D:\project\claude-code-engineering\node-v22.22.2-win-x64 目录中
 ### 编译命令
 
 必须显式加 `/p:TrackFileAccess=false`（原因见下），建议串行 `/m:1`：
