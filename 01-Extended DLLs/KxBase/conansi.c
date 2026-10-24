@@ -703,8 +703,22 @@ STATIC BOOLEAN ExecuteCSI(
 					}
 					break;
 				}
+				case 7: { // DECAWM: use the native wrap flag, not a no-op.
+					ULONG Mode;
+					if (!GetConsoleMode(ConsoleHandle, &Mode)) {
+						return FALSE;
+					}
+					if (Command == 'h') {
+						Mode |= ENABLE_WRAP_AT_EOL_OUTPUT;
+					} else {
+						Mode &= ~ENABLE_WRAP_AT_EOL_OUTPUT;
+					}
+					if (!SetConsoleMode(ConsoleHandle, Mode)) {
+						return FALSE;
+					}
+					break;
+				}
 				case 1:    // DECCKM
-				case 7:    // DECAWM
 				case 12:   // Cursor blink
 				case 1000: // Mouse reporting
 				case 1002: // Mouse motion
@@ -1047,6 +1061,15 @@ Exit:
 	return TRUE;
 }
 
+STATIC BOOL WriteConsoleUnicodeText(
+	IN HANDLE ConsoleHandle,
+	IN PCWSTR Buffer,
+	IN ULONG CchToWrite,
+	OUT PULONG CchWrittenOut OPTIONAL)
+{
+	return WriteConsoleW(ConsoleHandle, Buffer, CchToWrite, CchWrittenOut, NULL);
+}
+
 STATIC BOOL WriteConsoleTextAorW(
 	IN	HANDLE	ConsoleHandle,
 	IN	PCVOID	Buffer,
@@ -1055,6 +1078,9 @@ STATIC BOOL WriteConsoleTextAorW(
 	IN	BOOLEAN	Unicode)
 {
 	if (!g_DecLineDrawing) {
+		if (Unicode) {
+			return WriteConsoleUnicodeText(ConsoleHandle, (PCWSTR) Buffer, CchToWrite, CchWrittenOut);
+		}
 		return WriteConsoleAorW(
 			ConsoleHandle,
 			Buffer,
@@ -1098,7 +1124,7 @@ STATIC BOOL WriteConsoleTextAorW(
 				}
 			}
 
-			Ok = WriteConsoleW(ConsoleHandle, LocalBuf, Chunk, &WrittenThisChunk, NULL);
+			Ok = WriteConsoleUnicodeText(ConsoleHandle, LocalBuf, Chunk, &WrittenThisChunk);
 			if (!Ok) {
 				if (CchWrittenOut) {
 					*CchWrittenOut = TotalWritten;
