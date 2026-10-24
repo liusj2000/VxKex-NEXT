@@ -74,13 +74,11 @@
    其前 4 个字符为：Col 0: `'A'`, Col 1: `'s'`, Col 2: `'k'`, Col 3: `' '`（空格）。
 2. **Win7 conhost 在 65001 (UTF-8) 下的单列宽缺陷**：
    Windows 7 控制台在 `CP65001` 下**没有对中文字符做全角双宽适配**（该特性直到 Win10 1903 才加入控制台）。在 Win7 65001 下，`WriteConsoleW` 写入一个汉字 `继` 时，控制台光标**只向右移动了 1 列**（停留在 Col 1）！
-3. **两端列宽断层导致 `'s'` 残留**：
+3. **两端列宽模型不一致导致 `'s'` 残留**（本次复核实测，测量数据见第四节）：
    - OpenCode 前端（Node.js）按 Unicode 标准判定汉字 `继` 为双宽（占用 2 列，应当覆盖 Col 0 和 Col 1）；
-   - 但 Win7 控制台只把 `继` 写入了 Col 0，光标停留在 Col 1；
-   - **Col 1 上的原字符 `'s'` 完全没有被覆盖擦除**；
-   - 紧接着写入 `续`，落在了 Col 2（覆盖掉了原字符 `'k'`）；
-   - 最终屏幕组装呈现出：Col 0 (`继`) + Col 1 (`s`) + Col 2 (`续`) -> **`继s续`**！
-4. 并且，因为两个汉字在 Win7 65001 下总共只推进了 2 列，后面的 `anything...` 没有被向右推开 4 列，汉字与占位符发生直接撞击，光标也卡在文字中间。
+   - 但 Win7 控制台在 CP65001 下的宽字符推进并不可靠：`WriteConsoleW` 直接失败返回 `31 (0x1F)`；改走 `WriteConsoleA` 写 UTF-8 字节时，原生 conhost 实测每个汉字只推进 **1 列**（原生 python 进程 `X=2`），在 VxKex 注入的 `pwsh` 进程内则按字节推进 **3 列**（`X=6`）；
+   - 只要控制台实际推进列数与前端假定的 2 列不一致，前端按自身宽度模型重新定位后必有某一列未被覆盖。实测复现：CP65001 下前端在 0 列写 `继`、在 2 列写 `续`，Col 1 的 `'s'` 原样残留 → **`继s续`**；完全相同的写序列在 CP936 下得到正确的 `继续`（`X=2 → X=4`）；
+   - 同时，汉字总推进宽度与前端预期不符时，后面的 `anything...` 不会被正确推移，汉字与占位符直接碰撞重叠，光标卡在文字中间。
 
 ### 4. 独立控制台字符方块变成 `aa`、`aaaa` 与 `~` 根因
 - 独立控制台（`conhost.exe`）当前窗口使用的是系统默认的 **点阵字体（Raster Fonts）**。
@@ -143,3 +141,75 @@
 ### 5. VS Code 终端滚动重行应对方案
 - **拉宽终端视口**：将 VS Code 底部集成终端窗口拉宽至 120 列以上，使单行动态状态指示行不发生物理折行，彻底杜绝历史帧漏入滚动区；
 - **清理历史堆叠**：按快捷键 `Ctrl+K`（或输入 `Clear-Host`）一键清空 Scrollback 历史缓存。
+
+---
+
+## 四、本次复核验证（2026-10-24 实测记录）
+
+### 1. 自动化回归测试
+
+`test\x64\Release\ansi-features-test.exe`（显式 `LoadLibraryW` 加载 `D:\project\VxKex-NEXT\x64\Release\KxBase.dll` 后调用其导出）实际运行：
+
+```text
+WriteConsoleW CJK: written=4 (expected 4)
+Distinct glyphs found: 4 (expected 4, no duplicates)
+Cursor after CJK write: X=8 (full-width chars take 2 cells -> 8)
+WriteConsoleA CP936: written=4 (expected 4)
+Distinct glyphs found: 2 (expected 2, no duplicates)
+Cursor after CP936 write: X=4 (full-width chars take 2 cells -> 4)
+=== SUMMARY ===
+ALL TESTS PASSED SUCCESSFULLY! (failures = 0)
+TEST_EXIT=0
+```
+
+结论：当前 `KxBase` 的 `WriteConsoleW` 对 CJK 只写入一次（无重复字形），且按 2 列宽推进；`WriteConsoleA` + CP936 路径同样无重复并按 2 列宽推进。
+
+### 2. 宽字符推进宽度实测
+
+两次独立探测（脚本为临时验证用，留在 `C:\Users\liusj\AppData\Local\Temp\opencode\`，未纳入仓库）：
+
+| 宿主进程 | 代码页 | 写入方式 | 写入内容 | 返回 | 光标推进 | 回读屏幕 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 原生 `python.exe`（无 VxKex 注入） | 936 | `WriteConsoleW` | `继续` | 成功，`GetLastError()=0` | 2 列/汉字 → `X=4` | `继续anything...` |
+| 原生 `python.exe` | 65001 | `WriteConsoleW` | `继续` | **失败，`31 (0x1F)`** | 无推进 | 原内容不变 |
+| 原生 `python.exe` | 65001 | `WriteConsoleA`(UTF-8 字节) | `继续` | 成功 | 1 列/汉字 → `X=2` | `继续k anything...`（`k `、空格残留） |
+| VxKex 注入的 `pwsh` | 936 | `WriteConsoleW`，前端按 0/2 列自行定位 | `继` + `续` | 成功 | `X=2` → `X=4` | `继续anything...`（正确） |
+| VxKex 注入的 `pwsh` | 65001 | 同上 | `继` + `续` | **失败，`31 (0x1F)`** | 无推进 | 未写入，占位符原样保留 |
+| VxKex 注入的 `pwsh` | 65001 | `WriteConsoleA`(UTF-8 字节) | `继续` | 成功 | 3 列/汉字 → `X=6` | 按字节各占一格，字形错乱 |
+
+结论：CP936 是唯一在原生/VxKex 两条路径上都稳定给出「1 汉字 = 2 列」的代码页；CP65001 在不同进程、不同 API 下推进 1 列、3 列或直接失败，前端按 2 列计算必然错位，这就是真实界面出现 `继s续`、占位符碰撞与光标卡在字中的直接原因。
+
+### 3. 交付与部署一致性核验
+
+用 `01-Development Utilities\7zSfx\7zr.exe x` 从安装包解出文件后逐项比对：
+
+| 项目 | 路径 | SHA256 |
+| --- | --- | --- |
+| 安装包 | `D:\project\VxKex-NEXT\KexSetup_Release.exe` | `8a1d2cade36fe3bc81f0b1381fe40b3b37a453f021a04325cf78073811958b5e` |
+| 包内 x64 `KxBase.dll` = 已安装版本 | `C:\Program Files\VxKex\Kex64\KxBase.dll` | `fb5ede2194327022023dba29290d1bb7371a027573851f6a9d85c34a0513a94a`（160,768 字节，13:58:48） |
+| 包内 x86 `KxBase.dll` = 已安装版本 | `C:\Program Files\VxKex\Kex32\KxBase.dll` | `88616ed7456a65bd2fc95e9317b6e974e94d6cb4c2a0045b1a08cfdc6c9cae11`（150,528 字节，13:59:39） |
+
+打包完成后的第 4 步（`test\conpty-review-build.cmd`）又单独重编了一次 `KxBase`，使 `D:\project\VxKex-NEXT\x64\Release\KxBase.dll` 变为 `597e6ad9a0fd0a0825d7fc73f1a269d00e3db07b28ac4b73c59dd6ccfacf37f2`。与已安装版本逐字节比对，仅 6 个字节不同：PE 头部校验和等 3 字节，`.rdata` 内嵌构建时间戳/长度元数据 3 字节（两处相差 101 秒，与两次编译间隔一致），**`.text` 代码段完全一致**。
+
+> 更正：上一轮文档把 `597e6ad9…` 记为交付的 x64 `KxBase.dll` 哈希，实际交付并部署的是 `fb5ede21…`；`597e6ad9…` 只是打包后的重编产物。
+
+### 4. 未验证与边界
+
+- `opencode2-node` 在 CP936 下的真实中文输入、上下键选择需在交互窗口内人工复验；本报告不宣称已自动验证 UI。
+- VS Code 集成终端滚动重行只给出规避手段（拉宽 ≥ 120 列、`Ctrl+K`），未从 `xterm.js` / `winpty` 侧修复。
+- 本文只覆盖 BMP 宽字符与 ANSI/VT 行为，不构成完整 Unicode、ConPTY 或备用屏幕缓冲区实现。
+- Antigravity 120 秒启动超时与本问题无关，仍待重载日志确认。
+
+---
+
+## 五、部署与回滚指引
+
+1. 部署（升级）：
+   - 彻底关闭正在运行的 PowerShell、CMD、VS Code 及所有 `opencode2-node` 进程；
+   - 以管理员权限运行 `D:\project\VxKex-NEXT\KexSetup_Release.exe` 完成覆盖升级；
+   - 重开 `pwsh` 确认汉字单倍显示、无 `out-lineoutput ... 0x1F`；再运行 `opencode2-node` 确认输入不再夹杂字母、占位符无重叠。
+2. 回滚：
+   - 备份目录 `D:\project\VxKex-NEXT\backup-terminal-20261024\`，含原始安装包 `KexSetup_Previous.exe`、`KexSetup_Candidate.exe`、`System32\KexDll.dll`、`SysWOW64\KexDll.dll`、`VxKex\` 与 `Kex64\`/`Kex32\` 文件，哈希清单见 `sha256.csv`；
+   - 需回滚时先停用相关进程，再用备份文件覆盖 `C:\Program Files\VxKex\` 下对应文件（需管理员），或直接运行备份的原始安装包。
+3. 环境侧回滚：如需恢复 UTF-8 行为，只能在 Profile 中重新加入 `chcp 65001`，但会同时重现 `0x1F` 与 `继s续`，不建议。
+
