@@ -7,7 +7,8 @@
   3. **独立控制台方块乱码消除**：控制台从默认点阵字体切换为 Consolas 矢量字体即可完整渲染方块与框线；
   4. **InitializeDefaultDrives 报错根因**：VirtualBox 宿主机失效的 `tools` 共享挂载导致 `Y:` 盘报错，在虚拟机共享文件夹设置中删除 `tools` 即可彻底消除；
   5. **OpenCode 斜杠菜单偏离居中与重绘漂移解决**：用户实测确认，在恢复原生 CP936、禁用 `PSReadLine`、以及新版 `KxBase.dll` 生效的新终端中，按 `/` 展开菜单及按 `Esc` 退出后界面均严格居中稳定，无任何漂移与残影。详见 [`docx/OpenCode斜杠菜单显示偏离正中与界面重绘漂移排查解决-20261024.md`](docx/OpenCode斜杠菜单显示偏离正中与界面重绘漂移排查解决-20261024.md)；
-  6. **OpenCode 会话输入框位置漂移与缺失修复**：在 `KxBase` 中实现 CPR 光标查询（`CSI 6n`）、视口滚动（`CSI S` / `CSI T`）和边缘重置（`CSI r`），解决 `split-footer` 模式下底栏错位及裸控制台按键问题。全量安装包 `D:\project\VxKex-NEXT\KexSetup_Release.exe`（SHA256: `7c774705a3bd44e602ecc79ebb959a917a54f4fda58c9bf2cb2444a2d27e212f`）构建完成，待部署验收。详见 [`docx/控制台VT光标查询与滚动支持设计-20261024.md`](docx/控制台VT光标查询与滚动支持设计-20261024.md)。
+  6. **OpenCode 会话输入框位置漂移与缺失修复**：在 `KxBase` 中实现 CPR 光标查询（`CSI 6n`）、视口滚动（`CSI S` / `CSI T`）和边缘重置（`CSI r`），解决 `split-footer` 模式下底栏错位及裸控制台按键问题。全量安装包 `D:\project\VxKex-NEXT\KexSetup_Release.exe`（SHA256: `7c774705a3bd44e602ecc79ebb959a917a54f4fda58c9bf2cb2444a2d27e212f`）构建完成，待部署验收。详见 [`docx/控制台VT光标查询与滚动支持设计-20261024.md`](docx/控制台VT光标查询与滚动支持设计-20261024.md)；
+  7. **OpenCode 问答菜单上下键错乱、回车未提交与 VS Code 无反应查明并解决**：多选模式下回车设计为 `toggle` 勾选而非提交，按 `Tab` 切至 `Submit` 后回车方可提交；VS Code 上下键无反应因焦点处于 Submit 确认态（或终端面板失焦），按 `Tab` 或 `←` 可切回列表；pwsh 上下键错乱因普通缓冲区触底滚动截断光标回退导致，在 pwsh 中配置 `$env:OTUI_USE_ALTERNATE_SCREEN = "true"` 启用备用屏幕缓冲区即可 100% 根除。详见 [`docx/OpenCode问答菜单上下键错乱与回车提交问题排查解决-20261024.md`](docx/OpenCode问答菜单上下键错乱与回车提交问题排查解决-20261024.md)。
 - 相关排查设计与报告：[pwsh 字符双写黑屏与 VS Code 终端滚动重行排查解决](docx/pwsh黑屏与VSCode终端滚动重行排查解决-20261024.md)、`docx/当前工作.md`。
 - 提交身份仅配置在本仓库：`liusj <liusj2000@users.noreply.github.com>`。
 
