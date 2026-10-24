@@ -9,7 +9,7 @@
   5. **OpenCode 斜杠菜单偏离居中与重绘漂移解决**：用户实测确认，在恢复原生 CP936、禁用 `PSReadLine`、以及新版 `KxBase.dll` 生效的新终端中，按 `/` 展开菜单及按 `Esc` 退出后界面均严格居中稳定，无任何漂移与残影。详见 [`docx/OpenCode斜杠菜单显示偏离正中与界面重绘漂移排查解决-20261024.md`](docx/OpenCode斜杠菜单显示偏离正中与界面重绘漂移排查解决-20261024.md)；
   6. **OpenCode 会话输入框位置漂移与缺失修复**：在 `KxBase` 中实现 CPR 光标查询（`CSI 6n`）、视口滚动（`CSI S` / `CSI T`）和边缘重置（`CSI r`），解决 `split-footer` 模式下底栏错位及裸控制台按键问题。全量安装包 `D:\project\VxKex-NEXT\KexSetup_Release.exe`（SHA256: `7c774705a3bd44e602ecc79ebb959a917a54f4fda58c9bf2cb2444a2d27e212f`）构建完成，待部署验收。详见 [`docx/控制台VT光标查询与滚动支持设计-20261024.md`](docx/控制台VT光标查询与滚动支持设计-20261024.md)；
   7. **OpenCode 问答菜单上下键错乱、回车未提交与 VS Code 无反应查明并解决**：多选模式下回车设计为 `toggle` 勾选而非提交，按 `Tab` 切至 `Submit` 后回车方可提交；VS Code 上下键无反应因焦点处于 Submit 确认态（或终端面板失焦），按 `Tab` 或 `←` 可切回列表；pwsh 上下键错乱因普通缓冲区触底滚动截断光标回退导致，在 pwsh 中配置 `$env:OTUI_USE_ALTERNATE_SCREEN = "true"` 启用备用屏幕缓冲区即可 100% 根除。详见 [`docx/OpenCode问答菜单上下键错乱与回车提交问题排查解决-20261024.md`](docx/OpenCode问答菜单上下键错乱与回车提交问题排查解决-20261024.md)；
-  8. **pwsh 与 VS Code 问答菜单上下键均无反应现场留存（待下次开机恢复）**：用户实测反馈在单选与多选问答界面中按上下方向键均无任何移动反应。初步逆向发现 OpenCode 内置自定义 `StdinParser2`，存在 Kitty 键盘扩展探测、启动 CPR 与能力检测状态机挂起嫌疑。Profile 备用屏幕配置 `$env:OTUI_USE_ALTERNATE_SCREEN = "true"` 已写入，全量安装包待部署，下次恢复将聚焦 `StdinParser2` 离线事件分析。详见 `docx/当前工作.md`。
+  8. **问答菜单移光标无高亮/反色机制查明（待下次开机处理）**：用户实测更正：并非无法选中，而是按上下键移动后，当前选中的行没有任何背景高亮或反色，看不出选中了哪一行。根本原因已定位：OpenCode 依赖 ANSI 扩展背景色（SGR 48：`\x1b[48;2;...m` 设置 `formfieldFocusedBg`），而 `KxBase` 在 `conansi.c`（L372~384）中直接丢弃了 SGR 38/48 扩展颜色，导致高亮背景无法渲染。下次开机恢复将为 `KxBase` 实现 SGR 38/48 到 16 色调色板的量化映射。详见 `docx/当前工作.md`。
 - 相关排查设计与报告：[pwsh 字符双写黑屏与 VS Code 终端滚动重行排查解决](docx/pwsh黑屏与VSCode终端滚动重行排查解决-20261024.md)、`docx/当前工作.md`。
 - 提交身份仅配置在本仓库：`liusj <liusj2000@users.noreply.github.com>`。
 
