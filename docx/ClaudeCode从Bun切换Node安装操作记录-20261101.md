@@ -51,7 +51,7 @@ claude → claude.ps1 / claude.cmd → Node 22.22.2 的 node.exe → Claude 2.1.
 ### 3.1 排查原 Bun 版 ENOTSUP
 
 1. 读取工作记录，检查 Git 状态和原包入口。开始时 HEAD 为 `2e81e562c2970cafb742b2c1f64744c71bcee85a`、工作区干净；本次相关文档和启动器变更尚未提交。
-2. 检查进程及用户代理配置，当前为 `http://192.168.1.199:10809`。该代理 TCP 可达，curl 复测可完成 TLS 校验并收到 Anthropic 根路径 HTTP 404；也观察到偶发 TLS 超时。历史备用代理 `10.81.235.69:10809` 本次不可达。
+2. 检查进程及用户代理配置，当前为 `http://127.0.0.1:10809`。该代理 TCP 可达，curl 复测可完成 TLS 校验并收到 Anthropic 根路径 HTTP 404；也观察到偶发 TLS 超时。历史备用代理 `10.0.0.1:10809` 本次不可达。
 3. 使用隔离配置和隐藏 winpty 控制台复现原 Claude 2.1.316 启动错误；用本机临时 HTTP 代理作对照。Claude 两条代理路径均报 ENOTSUP；本机代理收到 2 次 TCP 连接、0 次 HTTP 请求。普通 Node 客户端访问同一代理正常。
 4. 故障主要定位于本机原生运行时在 Win7/VxKex 下的网络兼容路径，发生在 HTTP CONNECT 发出之前；具体产生 ENOTSUP 的调用尚未锁定。没有把通用国家提示认定为账号或地区封禁。
 5. 诊断工具的 ConPTY 在本机不可用，最终采用仓库已有的 `node-pty`、`useConpty:false` 路径。只结束本次创建的诊断进程和临时监听。

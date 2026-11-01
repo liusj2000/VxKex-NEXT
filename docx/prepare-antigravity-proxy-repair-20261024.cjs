@@ -24,7 +24,7 @@ function resolve(src,baseEnv,proxy){
  const result=f({baseEnv:env,platform:'win32',configOverride:{get:key=>key==='proxy'?proxy:undefined}});
  assert.deepEqual(env,baseEnv,'caller environment mutated');return result;
 }
-const old='http://192.168.1.199:10809',current='http://10.81.235.69:10809';
+const old='http://127.0.0.1:10809',current='http://10.0.0.1:10809';
 const base={HTTP_PROXY:old,HTTPS_PROXY:old,NO_PROXY:'localhost,127.0.0.1',KEEP:'unchanged',SSL_CERT_FILE:'existing-ca'};
 const oldActual=resolve(source,base,current);assert.equal(oldActual.HTTPS_PROXY,old);
 const checks=[];

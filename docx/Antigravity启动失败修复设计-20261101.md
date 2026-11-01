@@ -13,7 +13,7 @@
 5. 修改前备份扩展 JS/元数据到仓库 .tools，记录前后 SHA256；候选 node --check、离线分支/损坏文件/真实版本测试通过后部署。部署后回读核验，并用扩展实际环境构造逻辑运行已选后端做健康和页面请求验证。
 6. 内存中已加载的旧扩展需要重载窗口才会替换；优先利用可用的非破坏性重新激活能力，若当前会话无法重载，则明确将真实界面验收标记为待用户操作，不能把独立后端成功说成 UI 已恢复。
 
-当前代理是 192.168.1.199:10809，历史备用地址本次已不可达。修复不沿用 10 月 24 日的旧代理选择结论；之后按实际后端日志决定是否需要处理额外故障。
+当前代理是 127.0.0.1:10809，历史备用地址本次已不可达。修复不沿用 10 月 24 日的旧代理选择结论；之后按实际后端日志决定是否需要处理额外故障。
 
 
 ---
@@ -44,4 +44,4 @@
 2. **扩展脚本自适应放开升级（[`docx/antigravity-win7-backend-20261101.cjs`](file:///D:/project/VxKex-NEXT/docx/antigravity-win7-backend-20261101.cjs) V2）**：
    - 将 `kxAcquireWin7Backend` 更新为自适应检测：一旦检测到 `C:\Program Files\VxKex\Kex64\KxBase.dll` 已包含 `QueryInterruptTimePrecise` 导出（即用户运行新版 `KexSetup_Release.exe` 安装后），立即委托给官方原版 `Fc(options)`，直接使用 `1.4.12` 并支持未来所有版本正常自动升级；仅在旧版 `KxBase.dll` 尚未升级前临时回退至 `1.4.6`。
 3. **详细设计文档**：参见 [`docx/KxBase补充QueryInterruptTimePrecise导出支持Antigravity升级设计-20261101.md`](file:///D:/project/VxKex-NEXT/docx/KxBase%E8%A1%A5%E5%85%85QueryInterruptTimePrecise%E5%AF%BC%E5%87%BA%E6%94%AF%E6%8C%81Antigravity%E5%8D%87%E7%BA%A7%E8%AE%BE%E8%AE%A1-20261101.md)。
-当前代理是 192.168.1.199:10809，历史备用地址本次已不可达。修复不沿用 10 月 24 日的旧代理选择结论；之后按实际后端日志决定是否需要处理额外故障。
+当前代理是 127.0.0.1:10809，历史备用地址本次已不可达。修复不沿用 10 月 24 日的旧代理选择结论；之后按实际后端日志决定是否需要处理额外故障。

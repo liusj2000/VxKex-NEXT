@@ -12,7 +12,7 @@ Git HEAD 2e81e562c2970cafb742b2c1f64744c71bcee85a，初始工作区干净。Win7
 
 npm Claude 2.1.316 的 claude.ps1 直接启动 bin/claude.exe，没有 cli.js。npm 安装不等于 Node 运行。BUN_BE_BUN=1 不能进入通用 Bun 模式，-e 报未知参数，不属于成功的 fetch 实测。
 
-当前用户与进程代理均为 http://192.168.1.199:10809，TCP 可达；历史备用 10.81.235.69:10809 本次 TCP 超时。curl 经当前代理 CONNECT 200，首次 TLS 超时，复测 Anthropic 根路径 HTTP 404、证书校验结果 0、退出码 0。一般站点 example.com 本次超时，链路存在波动。404 仅说明已收到 HTTP 响应，不代表模型 API 验收。
+当前用户与进程代理均为 http://127.0.0.1:10809，TCP 可达；历史备用 10.0.0.1:10809 本次 TCP 超时。curl 经当前代理 CONNECT 200，首次 TLS 超时，复测 Anthropic 根路径 HTTP 404、证书校验结果 0、退出码 0。一般站点 example.com 本次超时，链路存在波动。404 仅说明已收到 HTTP 响应，不代表模型 API 验收。
 
 旧 Bun/Claude 文档是其他版本与 ECONNREFUSED 的历史证据，不能据此断言本次 ENOTSUP 的具体内核调用或不可修复。
 
@@ -29,7 +29,7 @@ npm Claude 2.1.316 的 claude.ps1 直接启动 bin/claude.exe，没有 cli.js。
 
 | 客户端/路径 | 结果 |
 | --- | --- |
-| Claude 2.1.316 → 192.168.1.199:10809 | 启动预检 ENOTSUP，退出 1 |
+| Claude 2.1.316 → 127.0.0.1:10809 | 启动预检 ENOTSUP，退出 1 |
 | 普通 Node HTTP → 临时 127.0.0.1 代理 | 收到测试端设计的 HTTP 502，证明监听及收发正常 |
 | Claude 2.1.316 → 同一临时代理 | ENOTSUP，退出 1；2 次 TCP 连接、0 次收到数据/HTTP 请求 |
 | curl → 当前代理 → api.anthropic.com | 复测 CONNECT 200、TLS 校验成功、HTTP 404、退出 0 |

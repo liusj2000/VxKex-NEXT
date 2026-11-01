@@ -9,7 +9,7 @@
 
 在启动或发起网络通信时均会出现两类致命网络故障，这也是此前不得不将 OpenCode 和 Claude Code 降级/切换为 Node.js 版的根本原因：
 1. **出站 HTTP/HTTPS/代理连接失败（`ENOTSUP` + `TCP RST`）**：
-   - 调用 `fetch()`、`Bun.connect()` 或 `node:http` 客户端连接本地代理（如 `127.0.0.1:15800`、`192.168.1.199:10809`）或直连目标服务器时，TCP 三次握手在内核层实际已完成（服务端 `accept` 已触发），但 Bun 立即抛出：
+   - 调用 `fetch()`、`Bun.connect()` 或 `node:http` 客户端连接本地代理（如 `127.0.0.1:15800`、`127.0.0.1:10809`）或直连目标服务器时，TCP 三次握手在内核层实际已完成（服务端 `accept` 已触发），但 Bun 立即抛出：
      ```text
      TypeError: ENOTSUP: Unable to connect. Is the computer able to access the url?
      ```

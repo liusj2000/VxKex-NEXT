@@ -6,9 +6,9 @@ const ext=fs.readFileSync('D:\\VSCode-win32-x64-1.107.1\\data\\extensions\\googl
 const begin=ext.indexOf('function xc(a){'),end=ext.indexOf('\npc.buildServerEnvironment=xc;',begin);
 assert(begin>=0&&end>begin);
 const builder=vm.runInNewContext(ext.slice(begin,end)+';xc',{process,la:fs,Ha:os,n:{env:{uriScheme:'vscode'}},qc:()=>undefined,vc:s=>s||'localhost,127.0.0.1'});
-const backendEnv=builder({baseEnv:{...process.env,HTTP_PROXY:'http://192.168.1.199:10809',HTTPS_PROXY:'http://192.168.1.199:10809'},configOverride:{get:key=>key==='proxy'?'http://10.81.235.69:10809':undefined}});
-assert.equal(backendEnv.HTTPS_PROXY,'http://10.81.235.69:10809');
-assert.equal(backendEnv.HTTP_PROXY,'http://10.81.235.69:10809');
+const backendEnv=builder({baseEnv:{...process.env,HTTP_PROXY:'http://127.0.0.1:10809',HTTPS_PROXY:'http://127.0.0.1:10809'},configOverride:{get:key=>key==='proxy'?'http://10.0.0.1:10809':undefined}});
+assert.equal(backendEnv.HTTPS_PROXY,'http://10.0.0.1:10809');
+assert.equal(backendEnv.HTTP_PROXY,'http://10.0.0.1:10809');
 const log=path.join(__dirname,'antigravity-proxy-fixed-probe-20261024.jsonl');
 fs.writeFileSync(log,'');
 const record=x=>{const row=JSON.stringify({time:new Date().toISOString(),...x});fs.appendFileSync(log,row+'\n');if(x.event)console.log(row);};

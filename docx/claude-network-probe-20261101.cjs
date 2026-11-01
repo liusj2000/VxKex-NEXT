@@ -15,7 +15,7 @@ async function run(label,proxy){
  });
 }
 (async()=>{
- await run('configured-proxy','http://192.168.1.199:10809');
+ await run('configured-proxy','http://127.0.0.1:10809');
  let connections=0,requests=0;const sockets=new Set();
  const server=net.createServer(s=>{connections++;sockets.add(s);s.on('close',()=>sockets.delete(s));s.on('error',()=>{});s.once('data',d=>{requests++;console.log('LOCAL_PROXY_REQUEST',d.toString().split('\r\n')[0]);s.end('HTTP/1.1 502 Diagnostic proxy\r\nContent-Length: 0\r\nConnection: close\r\n\r\n')})});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
