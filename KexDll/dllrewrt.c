@@ -583,6 +583,7 @@ KEXAPI BOOLEAN NTAPI KexIsRewriteForcedWindowsDll(
 	UNICODE_STRING WinInet;
 	UNICODE_STRING SspiCli;
 	UNICODE_STRING GdiPlus;
+	UNICODE_STRING Wsock32;
 
 	//
 	// If the DLL is WebIO (used by WinHTTP) or WinInet, then we will rewrite
@@ -608,10 +609,19 @@ KEXAPI BOOLEAN NTAPI KexIsRewriteForcedWindowsDll(
 
 	RtlInitConstantUnicodeString(&GdiPlus, L"GdiPlus.dll");
 
+	//
+	// Rewrite wsock32.dll imports so that its internal calls to WS2_32.dll
+	// (WSARecv, WSARecvFrom, setsockopt, getsockopt) go through KxNet.dll.
+	// Runtimes such as Bun/uSockets delay-load wsock32.dll by ordinal.
+	//
+
+	RtlInitConstantUnicodeString(&Wsock32, L"wsock32.dll");
+
 	if (RtlEqualUnicodeString(BaseDllName, &WebIo, TRUE) ||
 		RtlEqualUnicodeString(BaseDllName, &WinInet, TRUE) ||
 		RtlEqualUnicodeString(BaseDllName, &SspiCli, TRUE) ||
-		RtlEqualUnicodeString(BaseDllName, &GdiPlus, TRUE)) {
+		RtlEqualUnicodeString(BaseDllName, &GdiPlus, TRUE) ||
+		RtlEqualUnicodeString(BaseDllName, &Wsock32, TRUE)) {
 
 		return TRUE;
 	}

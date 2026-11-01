@@ -29,4 +29,9 @@ EXPORTS
 	GetAddrInfoExOverlappedResult
 	setsockopt							= Ext_setsockopt		@21
 	getsockopt							= Ext_getsockopt		@7
+	recv								= Ext_recv				@16
+	recvfrom							= Ext_recvfrom			@17
+	WSAIoctl							= Ext_WSAIoctl			@74
+	WSARecv								= Ext_WSARecv			@87
+	WSARecvFrom							= Ext_WSARecvFrom		@89
 	WSASetLastError						= Stub_WSASetLastError	@112

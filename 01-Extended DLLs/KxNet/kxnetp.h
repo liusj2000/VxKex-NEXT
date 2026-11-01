@@ -6,11 +6,39 @@
 
 EXTERN PKEX_PROCESS_DATA KexData;
 
-// For setsockopt and getsockopt.
-// These values are not supported on Win7.
-#define SO_REUSE_UNICASTPORT	0x3007
-#define SO_REUSE_MULTICASTPORT	0x3008
-#define SO_ORIGINAL_DST			0x300F
+// For setsockopt, getsockopt, recv, WSARecv, and WSAIoctl.
+// These values are only supported on Win8/Win10+ and fail on Win7.
+#define SO_REUSE_UNICASTPORT			0x3007
+#define SO_REUSE_MULTICASTPORT			0x3008
+#define SO_ORIGINAL_DST					0x300F
+
+#ifndef MSG_PUSH_IMMEDIATE
+#  define MSG_PUSH_IMMEDIATE			0x20
+#endif
+
+#ifndef SIO_LOOPBACK_FAST_PATH
+#  define SIO_LOOPBACK_FAST_PATH		0x98000010
+#endif
+
+#ifndef SIO_TCP_INITIAL_RTO
+#  define SIO_TCP_INITIAL_RTO			0x98000011
+#endif
+
+#ifndef TCP_FASTOPEN
+#  define TCP_FASTOPEN					15
+#endif
+
+#ifndef TCP_KEEPCNT
+#  define TCP_KEEPCNT					16
+#endif
+
+#ifndef TCP_KEEPINTVL
+#  define TCP_KEEPINTVL					17
+#endif
+
+#ifndef TCP_FAIL_CONNECT_ON_ICMP_ERROR
+#  define TCP_FAIL_CONNECT_ON_ICMP_ERROR 18
+#endif
 
 #define DNS_ADDR_MAX_SOCKADDR_LENGTH 32
 

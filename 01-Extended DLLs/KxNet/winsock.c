@@ -108,6 +108,23 @@ KXNETAPI INT WSAAPI Ext_setsockopt(
 		case SO_REUSE_UNICASTPORT:
 		case SO_REUSE_MULTICASTPORT:
 			KexLogDebugEvent(L"Faking success (OptionId 0x%x)", OptionId);
+			WSASetLastError(0);
+			ReturnCode = 0;
+			break;
+		}
+	}
+
+	if (ReturnCode == SOCKET_ERROR &&
+		(ErrorCode == WSAENOPROTOOPT || ErrorCode == WSAEINVAL) &&
+		Level == IPPROTO_TCP) {
+
+		switch (OptionId) {
+		case TCP_FASTOPEN:
+		case TCP_KEEPCNT:
+		case TCP_KEEPINTVL:
+		case TCP_FAIL_CONNECT_ON_ICMP_ERROR:
+			KexLogDebugEvent(L"Faking success for IPPROTO_TCP option %d", OptionId);
+			WSASetLastError(0);
 			ReturnCode = 0;
 			break;
 		}
@@ -193,6 +210,152 @@ KXNETAPI INT WSAAPI Ext_getsockopt(
 			OptionCb);
 
 		KexDebugCheckpoint();
+	}
+
+	return ReturnCode;
+}
+
+//
+// Bun (uSockets) passes MSG_PUSH_IMMEDIATE (0x20, added in Windows 8) to recv().
+// On Windows 7, mswsock.dll rejects bit 0x20 with WSAEOPNOTSUPP (10045), causing
+// Bun to abort every socket with ENOTSUP and TCP RST. Strip MSG_PUSH_IMMEDIATE
+// before forwarding to the native Winsock implementation.
+//
+KXNETAPI INT WSAAPI Ext_recv(
+	IN	SOCKET	SocketHandle,
+	OUT	PCHAR	Buffer,
+	IN	INT		BufferLength,
+	IN	INT		Flags)
+{
+	return recv(
+		SocketHandle,
+		Buffer,
+		BufferLength,
+		Flags & ~MSG_PUSH_IMMEDIATE);
+}
+
+KXNETAPI INT WSAAPI Ext_recvfrom(
+	IN		SOCKET				SocketHandle,
+	OUT		PCHAR				Buffer,
+	IN		INT					BufferLength,
+	IN		INT					Flags,
+	OUT		struct sockaddr		*FromAddress OPTIONAL,
+	IN OUT	PINT				FromAddressLength OPTIONAL)
+{
+	return recvfrom(
+		SocketHandle,
+		Buffer,
+		BufferLength,
+		Flags & ~MSG_PUSH_IMMEDIATE,
+		FromAddress,
+		FromAddressLength);
+}
+
+KXNETAPI INT WSAAPI Ext_WSARecv(
+	IN		SOCKET								SocketHandle,
+	IN OUT	LPWSABUF							Buffers,
+	IN		DWORD								BufferCount,
+	OUT		LPDWORD								NumberOfBytesRecvd OPTIONAL,
+	IN OUT	LPDWORD								Flags,
+	IN OUT	LPWSAOVERLAPPED						Overlapped OPTIONAL,
+	IN		LPWSAOVERLAPPED_COMPLETION_ROUTINE	CompletionRoutine OPTIONAL)
+{
+	DWORD LocalFlags;
+
+	if (Flags != NULL) {
+		*Flags &= ~((DWORD) MSG_PUSH_IMMEDIATE);
+	} else {
+		LocalFlags = 0;
+		Flags = &LocalFlags;
+	}
+
+	return WSARecv(
+		SocketHandle,
+		Buffers,
+		BufferCount,
+		NumberOfBytesRecvd,
+		Flags,
+		Overlapped,
+		CompletionRoutine);
+}
+
+KXNETAPI INT WSAAPI Ext_WSARecvFrom(
+	IN		SOCKET								SocketHandle,
+	IN OUT	LPWSABUF							Buffers,
+	IN		DWORD								BufferCount,
+	OUT		LPDWORD								NumberOfBytesRecvd OPTIONAL,
+	IN OUT	LPDWORD								Flags,
+	OUT		struct sockaddr						*FromAddress OPTIONAL,
+	IN OUT	LPINT								FromAddressLength OPTIONAL,
+	IN OUT	LPWSAOVERLAPPED						Overlapped OPTIONAL,
+	IN		LPWSAOVERLAPPED_COMPLETION_ROUTINE	CompletionRoutine OPTIONAL)
+{
+	DWORD LocalFlags;
+
+	if (Flags != NULL) {
+		*Flags &= ~((DWORD) MSG_PUSH_IMMEDIATE);
+	} else {
+		LocalFlags = 0;
+		Flags = &LocalFlags;
+	}
+
+	return WSARecvFrom(
+		SocketHandle,
+		Buffers,
+		BufferCount,
+		NumberOfBytesRecvd,
+		Flags,
+		FromAddress,
+		FromAddressLength,
+		Overlapped,
+		CompletionRoutine);
+}
+
+//
+// Emulate Windows 8+ SIO_TCP_INITIAL_RTO (0x98000011) and
+// SIO_LOOPBACK_FAST_PATH (0x98000010) which fail with WSAEOPNOTSUPP on Win7.
+//
+KXNETAPI INT WSAAPI Ext_WSAIoctl(
+	IN		SOCKET								SocketHandle,
+	IN		DWORD								IoControlCode,
+	IN		LPVOID								InBuffer OPTIONAL,
+	IN		DWORD								InBufferCb,
+	OUT		LPVOID								OutBuffer OPTIONAL,
+	IN		DWORD								OutBufferCb,
+	OUT		LPDWORD								BytesReturned,
+	IN OUT	LPWSAOVERLAPPED						Overlapped OPTIONAL,
+	IN		LPWSAOVERLAPPED_COMPLETION_ROUTINE	CompletionRoutine OPTIONAL)
+{
+	INT ReturnCode;
+	INT ErrorCode;
+
+	ReturnCode = WSAIoctl(
+		SocketHandle,
+		IoControlCode,
+		InBuffer,
+		InBufferCb,
+		OutBuffer,
+		OutBufferCb,
+		BytesReturned,
+		Overlapped,
+		CompletionRoutine);
+
+	if (ReturnCode == SOCKET_ERROR) {
+		ErrorCode = WSAGetLastError();
+
+		if ((ErrorCode == WSAEOPNOTSUPP || ErrorCode == WSAEINVAL) &&
+			(IoControlCode == SIO_TCP_INITIAL_RTO ||
+			 IoControlCode == SIO_LOOPBACK_FAST_PATH)) {
+
+			if (BytesReturned != NULL) {
+				*BytesReturned = 0;
+			}
+
+			WSASetLastError(0);
+			return 0;
+		}
+
+		WSASetLastError(ErrorCode);
 	}
 
 	return ReturnCode;

@@ -1,5 +1,11 @@
 # OpenCode CLI 在 Windows 7 下无法运行原因深度排查与架构分析（2026-10-18）
 
+> [!IMPORTANT]
+> **⚠️ 历史阶段性结论更正与修复声明（2026-11-01）**：
+> 本文下文所做的“Bun 在 Win7 下有不可修复的驱动级缺陷”、“必须放弃 Bun”为早期排查推论，**现已在 VxKex NEXT 中彻底排查清楚并完美修复**！
+> - **真实根因**：Bun 报 `TypeError: Unable to connect` 并发送 `TCP RST`，是因为 `uSockets` 在调用 `recv()` 时硬编码传入了 Windows 8+ 新增标志 `MSG_PUSH_IMMEDIATE (0x20)`，触发 Win7 `mswsock.dll` 报错 `WSAEOPNOTSUPP (10045)`；同时其延迟加载的 `wsock32.dll` 绕过了兼容层；
+> - **解决状态**：已在 `KxNet.dll` 过滤清除 `0x20` 标志，并在 `KexDll.dll` 中强制重写 `wsock32.dll`。包含修复的最新安装包 `KexSetup_Release.exe` 部署后，原生 Bun 编译的 `opencode.exe` 已可 100% 正常进行本地 HTTP 微服务通信与远端联网。详见 [`docx/Bun在Win7下ENOTSUP与网络失败根因逆向分析-20261101.md`](Bun在Win7下ENOTSUP与网络失败根因逆向分析-20261101.md) 与 [`docx/VxKex-NEXT修复Bun网络兼容性设计方案-20261101.md`](VxKex-NEXT修复Bun网络兼容性设计方案-20261101.md)。
+
 ## 一、现象与问题描述
 
 用户在 Windows 7 SP1 x64（VxKex NEXT 1.2.3.2463）环境下，运行位于 `D:\opencode-cli-2.0.6-windows-x64\opencode.exe` 的 OpenCode CLI 工具时，程序无法正常进入交互界面，表现为：

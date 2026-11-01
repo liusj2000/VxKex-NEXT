@@ -22,3 +22,6 @@
 # 用户级工程设置
 *.user
 *.suo
+
+# Claude local settings
+.claude/
