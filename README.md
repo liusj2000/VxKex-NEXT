@@ -54,8 +54,8 @@
 | **GitHub Copilot & Chat** | `github.copilot-1.388.0`<br>`github.copilot-chat-0.36.2` | ✔️ **完全兼容**。官方代码补全与对话助手，支持实时生成与流式对话 |
 | **Claude Dev / Roo Code** | `saoudrizwan.claude-dev-4.1.25` | ✔️ **完全兼容**。现代自主代码生成与 Agent 插件，完全兼容 |
 | **Cline CLI** | **3.0.70** | ✔️ **完全兼容**。基于伪终端的自动化 Agent CLI 工具 |
-| ❌ **Claude Code CLI** | `anthropic.claude-code-2.1.301-win32-x64` | ⚠️ **无法在 Win7 下正常运行（无法修复）**。基于 Bun 编译，其本地服务与 Token 换取在 Win7 兼容层下触发底层网络 TCP RST 连接重置，纯用户态兼容层无法突破内核网络模型，建议使用 Codex / Antigravity 替代 |
-| ❌ **OpenCode CLI** | `sst-dev.opencode-1.0.0` / CLI 2.0.6 | ⚠️ **无法在 Win7 下正常运行（无法修复）**。基于 Bun 编译，依赖微服务架构（`opencode serve` 监听 49374），因 Win7 AFD 异步驱动脱节导致入站 HTTP 握手后即被服务端底层掐断，产生端口死锁与崩溃 |
+| ❌ **Claude Code CLI** | `anthropic.claude-code-2.1.301-win32-x64` | ⚠️ **无法在 Win7 下正常运行（无法修复）**。基于 Bun 编译，其本地服务与 Token 换取在 Win7 兼容层下触发底层网络 TCP RST 连接重置，纯用户态兼容层无法突破内核网络模型，建议使用 Codex / Antigravity 替代  **1101版已解决**|
+| ❌ **OpenCode CLI** | `sst-dev.opencode-1.0.0` / CLI 2.0.6 | ⚠️ **无法在 Win7 下正常运行（无法修复）**。基于 Bun 编译，依赖微服务架构（`opencode serve` 监听 49374），因 Win7 AFD 异步驱动脱节导致入站 HTTP 握手后即被服务端底层掐断，产生端口死锁与崩溃 **1101版已解决**|
 | **C/C++ & CMake** | `ms-vscode.cpptools-1.34.4-win32-x64`<br>`ms-vscode.cmake-tools-1.24.42` | ✔️ 原生 C/C++ 语言服务、IntelliSense、调试器与 CMake 构建集成 |
 | **PowerShell 终端与扩展** | `ms-vscode.powershell-2025.4.0`<br>结合 **PowerShell 7.6.7** / 7.2.24 | ✔️ 结合活动屏幕缓冲区 VT 共享与经典控制台模式，中文无乱码 |
 | **Python & Jupyter** | `ms-toolsai.jupyter-2025.9.1-win32-x64` | ✔️ 数据科学交互笔记本与 Python 内核 |
