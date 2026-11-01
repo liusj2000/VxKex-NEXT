@@ -14,3 +14,18 @@
 6. 内存中已加载的旧扩展需要重载窗口才会替换；优先利用可用的非破坏性重新激活能力，若当前会话无法重载，则明确将真实界面验收标记为待用户操作，不能把独立后端成功说成 UI 已恢复。
 
 当前代理是 192.168.1.199:10809，历史备用地址本次已不可达。修复不沿用 10 月 24 日的旧代理选择结论；之后按实际后端日志决定是否需要处理额外故障。
+
+
+---
+
+## 根本解决：在 VxKex NEXT (`KxBase.dll`) 中实现并导出 `QueryInterruptTimePrecise` 以支持 Antigravity 原生升级
+
+根据用户要求“不希望 Antigravity 不能升级，在 VxKex NEXT 中实现并导出相应的函数”：
+
+1. **VxKex NEXT (`KxBase.dll`) 原生支持**：
+   - 已在 [`01-Extended DLLs/KxBase/time.c`](file:///D:/project/VxKex-NEXT/01-Extended%20DLLs/KxBase/time.c)、[`01-Extended DLLs/KxBase/kxbase.def`](file:///D:/project/VxKex-NEXT/01-Extended%20DLLs/KxBase/kxbase.def) 与 [`00-Common Headers/KxBase.h`](file:///D:/project/VxKex-NEXT/00-Common%20Headers/KxBase.h) 中完整实现并导出 `QueryInterruptTimePrecise`、`QueryInterruptTime` 以及 `api-ms-win-core-realtime-l1-1-2` 辅助计数器接口；
+   - 由于 [`KexDll/redirects.h`](file:///D:/project/VxKex-NEXT/KexDll/redirects.h) 已将 `api-ms-win-core-realtime` 映射至 `kxbase.dll`，新版 `agy.exe` (`1.4.12` 及后续升级版本) 启动时通过 `LoadLibraryExW(L"api-ms-win-core-realtime-l1-1-1.dll", ...)` 与 `GetProcAddress(..., "QueryInterruptTimePrecise")` 即可直接解析到 `KxBase.dll` 的实现；
+   - 经实测，加载新版 `KxBase.dll` 后，`C:\Users\liusj\.gemini\bin\agy.exe --version` 正常输出 `1.4.12`（退出码 `0`），`--help` 正常输出全部帮助信息（退出码 `0`）。
+2. **扩展脚本自适应放开升级（[`docx/antigravity-win7-backend-20261101.cjs`](file:///D:/project/VxKex-NEXT/docx/antigravity-win7-backend-20261101.cjs) V2）**：
+   - 将 `kxAcquireWin7Backend` 更新为自适应检测：一旦检测到 `C:\Program Files\VxKex\Kex64\KxBase.dll` 已包含 `QueryInterruptTimePrecise` 导出（即用户运行新版 `KexSetup_Release.exe` 安装后），立即委托给官方原版 `Fc(options)`，直接使用 `1.4.12` 并支持未来所有版本正常自动升级；仅在旧版 `KxBase.dll` 尚未升级前临时回退至 `1.4.6`。
+3. **详细设计文档**：参见 [`docx/KxBase补充QueryInterruptTimePrecise导出支持Antigravity升级设计-20261101.md`](file:///D:/project/VxKex-NEXT/docx/KxBase%E8%A1%A5%E5%85%85QueryInterruptTimePrecise%E5%AF%BC%E5%87%BA%E6%94%AF%E6%8C%81Antigravity%E5%8D%87%E7%BA%A7%E8%AE%BE%E8%AE%A1-20261101.md)。

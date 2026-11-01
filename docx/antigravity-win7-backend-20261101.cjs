@@ -1,4 +1,4 @@
-// VXKEX_AGY_WIN7_BACKEND_V1: use an authentic, verified compatible backend on NT 6.1.
+// VXKEX_AGY_WIN7_BACKEND_V2: use official upgradable backend when KxBase.dll exports QueryInterruptTimePrecise; fallback to 1.4.6 only before KexSetup_Release.exe is installed.
 async function kxAcquireWin7Backend(options) {
     const os = require('node:os');
     if (process.platform !== 'win32' || !/^6\.1\./.test(os.release())) {
@@ -6,6 +6,14 @@ async function kxAcquireWin7Backend(options) {
     }
     const fs = require('node:fs');
     const path = require('node:path');
+    try {
+        const kxbasePath = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'VxKex', 'Kex64', 'KxBase.dll');
+        const kxbaseBytes = await fs.promises.readFile(kxbasePath);
+        if (kxbaseBytes.includes(Buffer.from('QueryInterruptTimePrecise\0', 'ascii'))) {
+            options.outputChannel?.appendLine('[WIN7 COMPAT] KxBase.dll exports QueryInterruptTimePrecise; using official upgradable Antigravity backend.');
+            return Fc(options);
+        }
+    } catch {}
     const crypto = require('node:crypto');
     const {execFile} = require('node:child_process');
     const {promisify} = require('node:util');
@@ -17,7 +25,7 @@ async function kxAcquireWin7Backend(options) {
     try {
         before = await fs.promises.stat(backend);
     } catch (error) {
-        throw new Error('Win7 compatible Antigravity backend is missing: ' + backend + '. Reapply the recorded Win7 repair. (' + error.code + ')');
+        throw new Error('Win7 compatible Antigravity backend is missing: ' + backend + '. Install KexSetup_Release.exe or reapply the recorded Win7 repair. (' + error.code + ')');
     }
     if (before.size !== 204022936) throw new Error('Win7 compatible Antigravity backend has an unexpected size.');
     const digest = crypto.createHash('sha512');
@@ -32,7 +40,7 @@ async function kxAcquireWin7Backend(options) {
     if (fingerprint(before) !== fingerprint(await fs.promises.stat(backend))) {
         throw new Error('Win7 compatible Antigravity backend changed during the version check.');
     }
-    options.outputChannel?.appendLine('[WIN7 COMPAT] Reusing existing backend v1.4.6 after SHA512 manifest verification. Backend v1.4.12 requires QueryInterruptTimePrecise; compatible version pinned on Windows 7.');
+    options.outputChannel?.appendLine('[WIN7 COMPAT] KxBase.dll does not yet export QueryInterruptTimePrecise; temporarily falling back to verified backend v1.4.6 until KexSetup_Release.exe is installed.');
     options.onBinaryCheck?.({cacheHit:true,downloadReason:'up_to_date',cliVersion:'1.4.6',versionCheckMs:Date.now()-started,versionCheckSource:'spawn',versionCheckTimeout:false});
     return backend;
 }
