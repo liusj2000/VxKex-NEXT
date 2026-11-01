@@ -1,0 +1,41 @@
+{
+  "tests": [
+    {
+      "name": "non-Windows retains original updater",
+      "passed": true
+    },
+    {
+      "name": "Windows 10 retains original updater",
+      "passed": true
+    },
+    {
+      "name": "Win7 returns verified backend with its real version",
+      "passed": true
+    },
+    {
+      "name": "Win7 rejects missing file",
+      "passed": true
+    },
+    {
+      "name": "Win7 rejects wrong size",
+      "passed": true
+    },
+    {
+      "name": "Win7 rejects wrong digest",
+      "passed": true
+    },
+    {
+      "name": "Win7 rejects file changes during verification",
+      "passed": true
+    },
+    {
+      "name": "Win7 rejects wrong reported version",
+      "passed": true
+    },
+    {
+      "name": "candidate routes exported and actual manager acquisition",
+      "passed": true
+    }
+  ],
+  "passed": 9
+}
