@@ -67,8 +67,16 @@ int main(void)
         OPEN_EXISTING,
         0,
         NULL);
-    if (conout == INVALID_HANDLE_VALUE) {
-        conout = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (conout == INVALID_HANDLE_VALUE || !GetConsoleMode(conout, &mode)) {
+        AllocConsole();
+        conout = CreateFileW(
+            L"CONOUT$",
+            GENERIC_READ | GENERIC_WRITE,
+            FILE_SHARE_READ | FILE_SHARE_WRITE,
+            NULL,
+            OPEN_EXISTING,
+            0,
+            NULL);
     }
     CHECK(conout != INVALID_HANDLE_VALUE);
 
@@ -203,6 +211,40 @@ int main(void)
     printf("Read back after APC query: '%.*ws'\n", readChars, readBuf);
     CHECK(readBuf[0] == L' ');
     CHECK(readBuf[1] == L' ');
+
+    printf("\n--- Test 6: SGR 38/48 Extended Colors (24-bit RGB & 256-color) ---\n");
+    // OpenCode focused item: fg=#fab283 (250,178,131) -> 0x0E (Bright Yellow), bg=#141414 (20,20,20) -> 0x00 (Black)
+    WRITE_STR(conout, "\x1b[0;38;2;250;178;131;48;2;20;20;20m");
+    GetConsoleScreenBufferInfo(conout, &sbi);
+    printf("Attr after 38;2;250;178;131;48;2;20;20;20: 0x%04X\n", sbi.wAttributes);
+    CHECK((sbi.wAttributes & 0xFF) == (FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN));
+
+    // OpenCode muted text: fg=#808080 (128,128,128) -> 0x08 (Dark Gray)
+    WRITE_STR(conout, "\x1b[38;2;128;128;128m");
+    GetConsoleScreenBufferInfo(conout, &sbi);
+    printf("Attr after 38;2;128;128;128: 0x%04X\n", sbi.wAttributes);
+    CHECK((sbi.wAttributes & 0xFF) == FOREGROUND_INTENSITY);
+
+    // OpenCode base formfield text: fg=#eeeeee (238,238,238) -> 0x07 (Standard White)
+    WRITE_STR(conout, "\x1b[38;2;238;238;238m");
+    GetConsoleScreenBufferInfo(conout, &sbi);
+    printf("Attr after 38;2;238;238;238: 0x%04X\n", sbi.wAttributes);
+    CHECK((sbi.wAttributes & 0xFF) == (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE));
+
+    // OpenCode light theme focused blue: fg=#3b7dd8 (59,125,216) -> 0x0B (Bright Cyan)
+    WRITE_STR(conout, "\x1b[38;2;59;125;216m");
+    GetConsoleScreenBufferInfo(conout, &sbi);
+    printf("Attr after 38;2;59;125;216: 0x%04X\n", sbi.wAttributes);
+    CHECK((sbi.wAttributes & 0xFF) == (FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE));
+
+    // 256-color test: fg=214 (orange -> 0x0E), bg=240 (mid-gray 88 -> 0x80)
+    WRITE_STR(conout, "\x1b[38;5;214;48;5;240m");
+    GetConsoleScreenBufferInfo(conout, &sbi);
+    printf("Attr after 38;5;214;48;5;240: 0x%04X\n", sbi.wAttributes);
+    CHECK((sbi.wAttributes & 0xFF) == (BACKGROUND_INTENSITY | FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN));
+
+    // Reset attributes
+    WRITE_STR(conout, "\x1b[0m");
 
     printf("\n=== SUMMARY ===\n");
     if (failures == 0) {

@@ -30,7 +30,7 @@
 #define BEL (0x07)
 #define VXKEX_CONSOLE_ANSI_OUTPUT	1
 
-#define MAX_CSI_PARAMETER_COUNT		16
+#define MAX_CSI_PARAMETER_COUNT		32
 
 //
 // Global variables for ANSI escape sequence support.
@@ -232,6 +232,124 @@ STATIC ULONG GetCchToNextEscapeOrEndOfBufferAorW(
 	return Index;
 }
 
+STATIC WORD QuantizeRgbToConsoleColor(
+	IN	BYTE	R,
+	IN	BYTE	G,
+	IN	BYTE	B,
+	IN	BOOLEAN	IsBackground)
+{
+	BYTE MaxChannel;
+	BYTE MinChannel;
+	BYTE Chroma;
+	WORD Attribute;
+
+	MaxChannel = max(R, max(G, B));
+	MinChannel = min(R, min(G, B));
+	Chroma = MaxChannel - MinChannel;
+	Attribute = 0;
+
+	if (Chroma < 32) {
+		if (IsBackground) {
+			if (MaxChannel < 65) {
+				Attribute = 0;
+			} else if (MaxChannel < 160) {
+				Attribute = FOREGROUND_INTENSITY;
+			} else if (MaxChannel < 220) {
+				Attribute = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+			} else {
+				Attribute = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+			}
+		} else {
+			if (MaxChannel < 48) {
+				Attribute = 0;
+			} else if (MaxChannel < 165) {
+				Attribute = FOREGROUND_INTENSITY;
+			} else {
+				Attribute = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+			}
+		}
+	} else {
+		ULONG DeltaR = (ULONG)(R - MinChannel);
+		ULONG DeltaG = (ULONG)(G - MinChannel);
+		ULONG DeltaB = (ULONG)(B - MinChannel);
+
+		if (DeltaR * 3 >= (ULONG) Chroma) {
+			Attribute |= FOREGROUND_RED;
+		}
+		if (DeltaG * 3 >= (ULONG) Chroma) {
+			Attribute |= FOREGROUND_GREEN;
+		}
+		if (DeltaB * 3 >= (ULONG) Chroma) {
+			Attribute |= FOREGROUND_BLUE;
+		}
+
+		if (IsBackground) {
+			if (MaxChannel >= 170) {
+				Attribute |= FOREGROUND_INTENSITY;
+			}
+		} else {
+			if (MaxChannel >= 140) {
+				Attribute |= FOREGROUND_INTENSITY;
+			}
+		}
+	}
+
+	if (IsBackground) {
+		Attribute <<= 4;
+	}
+
+	return Attribute;
+}
+
+STATIC WORD Quantize256ToConsoleColor(
+	IN	SHORT	ColorIndex,
+	IN	BOOLEAN	IsBackground)
+{
+	STATIC CONST WORD Ansi8ToConsole[8] = {
+		0,
+		FOREGROUND_RED,
+		FOREGROUND_GREEN,
+		FOREGROUND_RED | FOREGROUND_GREEN,
+		FOREGROUND_BLUE,
+		FOREGROUND_RED | FOREGROUND_BLUE,
+		FOREGROUND_GREEN | FOREGROUND_BLUE,
+		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
+	};
+
+	if (ColorIndex < 0 || ColorIndex > 255) {
+		return 0;
+	}
+
+	if (ColorIndex < 8) {
+		WORD Attr = Ansi8ToConsole[ColorIndex];
+		return IsBackground ? (Attr << 4) : Attr;
+	}
+
+	if (ColorIndex < 16) {
+		WORD Attr = Ansi8ToConsole[ColorIndex - 8];
+		if (ColorIndex != 15 || IsBackground) {
+			Attr |= FOREGROUND_INTENSITY;
+		}
+		return IsBackground ? (Attr << 4) : Attr;
+	}
+
+	if (ColorIndex < 232) {
+		SHORT CubeIndex = ColorIndex - 16;
+		SHORT RIndex = CubeIndex / 36;
+		SHORT GIndex = (CubeIndex / 6) % 6;
+		SHORT BIndex = CubeIndex % 6;
+		BYTE R = (BYTE) (RIndex ? (RIndex * 40 + 55) : 0);
+		BYTE G = (BYTE) (GIndex ? (GIndex * 40 + 55) : 0);
+		BYTE B = (BYTE) (BIndex ? (BIndex * 40 + 55) : 0);
+		return QuantizeRgbToConsoleColor(R, G, B, IsBackground);
+	}
+
+	{
+		BYTE Gray = (BYTE) ((ColorIndex - 232) * 10 + 8);
+		return QuantizeRgbToConsoleColor(Gray, Gray, Gray, IsBackground);
+	}
+}
+
 STATIC BOOLEAN ExecuteCSISetGraphicsRendition(
 	IN	HANDLE	ConsoleHandle,
 	IN	SHORT	CsiParameters[MAX_CSI_PARAMETER_COUNT],
@@ -266,13 +384,13 @@ STATIC BOOLEAN ExecuteCSISetGraphicsRendition(
 			}
 		}
 
-		if (Parameter >= 30 && Parameter <= 39) {
+		if ((Parameter >= 30 && Parameter <= 37) || Parameter == 39) {
 			// setting non-bright foreground color
 			TextAttribute &= ~(FOREGROUND_INTENSITY |
 								FOREGROUND_RED |
 								FOREGROUND_GREEN |
 								FOREGROUND_BLUE);
-		} else if (Parameter >= 40 && Parameter <= 49) {
+		} else if ((Parameter >= 40 && Parameter <= 47) || Parameter == 49) {
 			// setting non-bright background color
 			TextAttribute &= ~(BACKGROUND_INTENSITY |
 								BACKGROUND_RED |
@@ -371,15 +489,35 @@ STATIC BOOLEAN ExecuteCSISetGraphicsRendition(
 			break;
 		case 38:	// Extended foreground color setting
 		case 48:	// Extended background color setting
-			// We don't support extended fg/bg color setting.
-			// These come with additional parameters which will cause
-			// random color changes if we were to interpret them as normal
-			// SGR parameters, so we'll just ignore the rest of the SGR escape.
-			KexLogDebugEvent(
-				L"Extended %s color setting ignored",
-				Parameter == 38 ? L"foreground" : L"background");
-			KexDebugCheckpoint();
-			return FALSE;
+		{
+			BOOLEAN IsBg = (Parameter == 48);
+			WORD ColorMask = IsBg ?
+				(BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE) :
+				(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+
+			if (ParameterIndex + 1 < ParameterCount) {
+				SHORT Mode = CsiParameters[ParameterIndex + 1];
+
+				if (Mode == 5 && ParameterIndex + 2 < ParameterCount) {
+					SHORT ColorIndex = CsiParameters[ParameterIndex + 2];
+					TextAttribute &= ~ColorMask;
+					TextAttribute |= Quantize256ToConsoleColor(ColorIndex, IsBg);
+					ParameterIndex += 2;
+					break;
+				} else if (Mode == 2 && ParameterIndex + 4 < ParameterCount) {
+					BYTE R = (BYTE) min(max(CsiParameters[ParameterIndex + 2], 0), 255);
+					BYTE G = (BYTE) min(max(CsiParameters[ParameterIndex + 3], 0), 255);
+					BYTE B = (BYTE) min(max(CsiParameters[ParameterIndex + 4], 0), 255);
+					TextAttribute &= ~ColorMask;
+					TextAttribute |= QuantizeRgbToConsoleColor(R, G, B, IsBg);
+					ParameterIndex += 4;
+					break;
+				}
+			}
+
+			ParameterIndex = ParameterCount;
+			break;
+		}
 		}
 	}
 
@@ -973,7 +1111,7 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 			CsiLength -= NumberCch;
 
 			if (NumberCch == 0) {
-				if (CsiLength > 0 && *Csi == ';') {
+				if (CsiLength > 0 && (*Csi == ';' || *Csi == ':')) {
 					// treat as default 0
 					ASSUME (Parameter == 0);
 				} else {
@@ -982,8 +1120,8 @@ STATIC BOOLEAN ProcessEscapeSequenceAorW(
 				}
 			}
 
-			if (CsiLength > 0 && *Csi == ';') {
-				// skip past semicolon separator
+			if (CsiLength > 0 && (*Csi == ';' || *Csi == ':')) {
+				// skip past semicolon or colon separator
 				++Csi;
 				--CsiLength;
 			}
