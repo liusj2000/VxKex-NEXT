@@ -65,6 +65,11 @@ EXPORTS
 	;; time.c
 	GetSystemTimePreciseAsFileTime
 	QueryUnbiasedInterruptTimePrecise
+	QueryInterruptTime
+	QueryInterruptTimePrecise
+	ConvertAuxiliaryCounterToPerformanceCounter
+	ConvertPerformanceCounterToAuxiliaryCounter
+	QueryAuxiliaryCounterFrequency
 
 	;; appmodel.c
 	AppPolicyGetProcessTerminationMethod

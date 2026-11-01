@@ -246,6 +246,27 @@ int main(void)
     // Reset attributes
     WRITE_STR(conout, "\x1b[0m");
 
+    printf("\n--- Test 7: QueryInterruptTime & QueryInterruptTimePrecise (Go 1.24 / Antigravity 1.4.12) ---\n");
+    {
+        typedef VOID (WINAPI *PFN_QUERYINTERRUPTTIME)(PULONGLONG);
+        PFN_QUERYINTERRUPTTIME pQueryInterruptTime = (PFN_QUERYINTERRUPTTIME) GetProcAddress(dll, "QueryInterruptTime");
+        PFN_QUERYINTERRUPTTIME pQueryInterruptTimePrecise = (PFN_QUERYINTERRUPTTIME) GetProcAddress(dll, "QueryInterruptTimePrecise");
+        ULONGLONG it0 = 0, itp0 = 0, itp1 = 0;
+
+        CHECK(pQueryInterruptTime != NULL);
+        CHECK(pQueryInterruptTimePrecise != NULL);
+        if (pQueryInterruptTime && pQueryInterruptTimePrecise) {
+            pQueryInterruptTime(&it0);
+            pQueryInterruptTimePrecise(&itp0);
+            Sleep(2);
+            pQueryInterruptTimePrecise(&itp1);
+            printf("InterruptTime=%llu, Precise0=%llu, Precise1=%llu (delta=%llu 100ns)\n", it0, itp0, itp1, itp1 - itp0);
+            CHECK(it0 > 0);
+            CHECK(itp0 >= it0);
+            CHECK(itp1 > itp0);
+        }
+    }
+
     printf("\n=== SUMMARY ===\n");
     if (failures == 0) {
         printf("ALL TESTS PASSED SUCCESSFULLY! (failures = 0)\n");
