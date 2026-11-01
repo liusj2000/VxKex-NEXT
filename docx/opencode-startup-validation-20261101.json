@@ -1,0 +1,40 @@
+{
+  "VersionExit": 0,
+  "Profiles": [
+    {
+      "Profile": "C:\\Users\\liusj\\Documents\\PowerShell\\profile.ps1",
+      "Alternate": "true",
+      "PSReadLineLoaded": false,
+      "Output": 936,
+      "Input": 936
+    },
+    {
+      "Profile": "C:\\Users\\liusj\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1",
+      "Alternate": "true",
+      "PSReadLineLoaded": false,
+      "Output": 936,
+      "Input": 936
+    },
+    {
+      "Profile": "C:\\Users\\liusj\\Documents\\WindowsPowerShell\\profile.ps1",
+      "Alternate": "true",
+      "PSReadLineLoaded": false,
+      "Output": 936,
+      "Input": 936
+    },
+    {
+      "Profile": "C:\\Users\\liusj\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1",
+      "Alternate": "true",
+      "PSReadLineLoaded": false,
+      "Output": 936,
+      "Input": 936
+    }
+  ],
+  "FinalOutput": 936,
+  "Initial": {
+    "Alternate": "true",
+    "Output": 936,
+    "Input": 936
+  },
+  "FinalInput": 936
+}

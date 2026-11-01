@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "",
+    "space value",
+    "quote\"value",
+    "C:\\space path\\",
+    "slash\\\"quote",
+    "\u7ee7\u7eed"
+  ],
+  "samples": [
+    [
+      936,
+      936
+    ],
+    [
+      936,
+      936
+    ],
+    [
+      936,
+      936
+    ]
+  ]
+}

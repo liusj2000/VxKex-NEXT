@@ -1,0 +1,40 @@
+{
+  "pid": 3216,
+  "inputCP": 936,
+  "outputCP": 936,
+  "size": [
+    80,
+    25
+  ],
+  "placeholderFound": true,
+  "inputCells": [
+    {
+      "char": 32487,
+      "attr": 7
+    },
+    {
+      "char": 32493,
+      "attr": 7
+    },
+    {
+      "char": 32,
+      "attr": 7
+    },
+    {
+      "char": 32,
+      "attr": 7
+    },
+    {
+      "char": 32,
+      "attr": 7
+    },
+    {
+      "char": 32,
+      "attr": 7
+    }
+  ],
+  "noResidualS": true,
+  "hasBothChinese": true,
+  "finalInputCP": 936,
+  "finalOutputCP": 936
+}
