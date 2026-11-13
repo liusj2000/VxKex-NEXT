@@ -925,6 +925,7 @@ KXBASEAPI VOID WINAPI ClosePseudoConsole(
 KXBASEAPI BOOL WINAPI Ext_GetConsoleMode(IN HANDLE ConsoleHandle, OUT PULONG Mode);
 KXBASEAPI BOOL WINAPI Ext_CloseHandle(IN HANDLE Handle);
 KXBASEAPI BOOL WINAPI Ext_SetConsoleMode(IN HANDLE ConsoleHandle, IN ULONG Mode);
+KXBASEAPI BOOL WINAPI Ext_SetConsoleOutputCP(IN UINT CodePage);
 KXBASEAPI BOOL WINAPI Ext_InitializeProcThreadAttributeList(
 	OUT PPROC_THREAD_ATTRIBUTE_LIST AttributeList, IN DWORD Count,
 	IN DWORD Flags, IN OUT PSIZE_T Size);

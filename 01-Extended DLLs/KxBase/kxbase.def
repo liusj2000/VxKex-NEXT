@@ -241,6 +241,7 @@ EXPORTS
 	GetConsoleMode							= Ext_GetConsoleMode
 	SetConsoleMode							= Ext_SetConsoleMode
 	FreeConsole								= Ext_FreeConsole
+	SetConsoleOutputCP						= Ext_SetConsoleOutputCP
 	GetConsoleTitleA						= Ext_GetConsoleTitleA
 	GetConsoleTitleW						= Ext_GetConsoleTitleW
 	GetConsoleOriginalTitleA				= Ext_GetConsoleOriginalTitleA

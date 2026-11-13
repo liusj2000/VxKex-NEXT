@@ -20,6 +20,189 @@ static int failures = 0;
 
 #define WRITE_STR(h, s) write_a(h, s, (DWORD)strlen(s), &written, NULL)
 
+typedef BOOL (WINAPI *EXT_SETCONSOLEOUTPUTCP)(UINT);
+typedef BOOL (WINAPI *EXT_WRITEFILE)(HANDLE, const VOID *, DWORD, LPDWORD, LPOVERLAPPED);
+
+static void t8_begin(HANDLE conout, COORD pos)
+{
+    DWORD n = 0;
+
+    FillConsoleOutputCharacterW(conout, L' ', 80, pos, &n);
+    SetConsoleCursorPosition(conout, pos);
+}
+
+// "line" must have room for 64 WCHARs. A double-width (DBCS) character is
+// returned as ONE WCHAR, so compare by character index, not by column.
+static void t8_read(HANDLE conout, COORD pos, WCHAR *line)
+{
+    DWORD n = 0;
+    DWORD i;
+
+    RtlZeroMemory(line, 64 * sizeof(WCHAR));
+    ReadConsoleOutputCharacterW(conout, line, 40, pos, &n);
+    printf("    read %lu chars:", n);
+    for (i = 0; i < n && i < 14; ++i) {
+        printf(" %04X", line[i]);
+    }
+    printf("\n");
+}
+
+static SHORT t8_cursor_x(HANDLE conout)
+{
+    CONSOLE_SCREEN_BUFFER_INFO info;
+
+    RtlZeroMemory(&info, sizeof(info));
+    GetConsoleScreenBufferInfo(conout, &info);
+    return info.dwCursorPosition.X;
+}
+
+static void RunTest8(
+    HMODULE dll,
+    HANDLE conout,
+    EXT_SETCONSOLEMODE setmode,
+    EXT_WRITECONSOLEA write_a,
+    DWORD vtMode)
+{
+    // "<cyan>U+250C<reset> Connect<green>U+25C7<reset>U+25A0 U+25A0" as UTF-8
+    static const char prompt[] =
+        "\x1b[36m\xe2\x94\x8c\x1b[39m Connect\x1b[32m\xe2\x97\x87\x1b[39m\xe2\x96\xa0\xe2\x96\xa0";
+    EXT_SETCONSOLEOUTPUTCP kx_setocp;
+    EXT_SETCONSOLEOUTPUTCP native_setocp;
+    EXT_WRITEFILE kx_writefile;
+    CONSOLE_SCREEN_BUFFER_INFO sbi8;
+    COORD pos;
+    WCHAR line[64];
+    DWORD written;
+    DWORD promptCb;
+    UINT origOutCP;
+
+    printf("\n--- Test 8: UTF-8 console output while the real output code page is 936 ---\n");
+
+    kx_setocp = (EXT_SETCONSOLEOUTPUTCP) GetProcAddress(dll, "SetConsoleOutputCP");
+    kx_writefile = (EXT_WRITEFILE) GetProcAddress(dll, "WriteFile");
+    native_setocp = (EXT_SETCONSOLEOUTPUTCP) GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "SetConsoleOutputCP");
+
+    CHECK(kx_setocp != NULL);
+    CHECK(kx_writefile != NULL);
+    CHECK(native_setocp != NULL);
+    if (!kx_setocp || !kx_writefile || !native_setocp) {
+        return;
+    }
+
+    // Negative control: fails while SetConsoleOutputCP is still a plain
+    // forwarder to kernel32 (KxBase.dll without the fix).
+    CHECK(kx_setocp != native_setocp);
+
+    promptCb = (DWORD) strlen(prompt);
+    origOutCP = GetConsoleOutputCP();
+
+    RtlZeroMemory(&sbi8, sizeof(sbi8));
+    GetConsoleScreenBufferInfo(conout, &sbi8);
+    pos.X = 0;
+    pos.Y = (SHORT) (sbi8.srWindow.Top + 12);
+
+    // The app asks for UTF-8 through KxBase, then something else (the
+    // PowerShell 936 guard) switches the real console back to 936.
+    CHECK(kx_setocp(65001));
+    CHECK(native_setocp(936));
+    printf("real output CP is now %u (expected 936)\n", GetConsoleOutputCP());
+    CHECK(GetConsoleOutputCP() == 936);
+
+    printf("8a: whole UTF-8 prompt through WriteConsoleA\n");
+    t8_begin(conout, pos);
+    written = 0;
+    CHECK(write_a(conout, prompt, promptCb, &written, NULL));
+    printf("    expected bytes=%lu written=%lu\n", promptCb, written);
+    CHECK(written == promptCb);
+    t8_read(conout, pos, line);
+    CHECK(wcsncmp(line, L"\x250C Connect\x25C7\x25A0\x25A0", 12) == 0);
+
+    printf("8b: one UTF-8 character split over three writes\n");
+    t8_begin(conout, pos);
+    written = 99;
+    CHECK(write_a(conout, "\xE2", 1, &written, NULL) && written == 1);
+    written = 99;
+    CHECK(write_a(conout, "\x94", 1, &written, NULL) && written == 1);
+    written = 99;
+    CHECK(write_a(conout, "\x8C" "ab", 3, &written, NULL) && written == 3);
+    t8_read(conout, pos, line);
+    CHECK(line[0] == 0x250C && line[1] == L'a' && line[2] == L'b');
+
+    printf("8c: split inside a character that sits between two colour sequences\n");
+    t8_begin(conout, pos);
+    written = 99;
+    CHECK(write_a(conout, "\x1b[32m\xE2\x97", 7, &written, NULL) && written == 7);
+    written = 99;
+    CHECK(write_a(conout, "\x87\x1b[39mZ", 7, &written, NULL) && written == 7);
+    t8_read(conout, pos, line);
+    CHECK(line[0] == 0x25C7 && line[1] == L'Z');
+
+    printf("8d: UTF-8 Chinese keeps the double cell width of code page 936\n");
+    t8_begin(conout, pos);
+    written = 0;
+    CHECK(write_a(conout, "\xE4\xB8\xAD\xE6\x96\x87" "g", 7, &written, NULL) && written == 7);
+    t8_read(conout, pos, line);
+    printf("    cursor X=%d (expected 5)\n", t8_cursor_x(conout));
+    CHECK(line[0] == 0x4E2D && line[1] == 0x6587 && line[2] == L'g');
+    CHECK(t8_cursor_x(conout) == 5);
+
+    printf("8e: whole UTF-8 prompt through WriteFile\n");
+    t8_begin(conout, pos);
+    written = 0;
+    CHECK(kx_writefile(conout, prompt, promptCb, &written, NULL));
+    printf("    expected bytes=%lu written=%lu\n", promptCb, written);
+    CHECK(written == promptCb);
+    t8_read(conout, pos, line);
+    CHECK(wcsncmp(line, L"\x250C Connect\x25C7\x25A0\x25A0", 12) == 0);
+
+    printf("8f: same rule while VT processing is switched off\n");
+    CHECK(setmode(conout, vtMode & ~0x0004));
+    t8_begin(conout, pos);
+    written = 0;
+    CHECK(kx_writefile(conout, "\xe2\x94\x8c Done", 8, &written, NULL) && written == 8);
+    t8_read(conout, pos, line);
+    CHECK(line[0] == 0x250C && line[1] == L' ' && line[2] == L'D');
+    t8_begin(conout, pos);
+    written = 0;
+    CHECK(write_a(conout, "\xe2\x97\x87" "X", 4, &written, NULL) && written == 4);
+    t8_read(conout, pos, line);
+    CHECK(line[0] == 0x25C7 && line[1] == L'X');
+    CHECK(setmode(conout, vtMode));
+
+    // 8g protects EXISTING behaviour: an app that asked for 936 (or never
+    // asked) keeps the native WriteConsoleA path byte for byte.
+    printf("8g: legacy GBK output is untouched when the app asked for 936\n");
+    CHECK(kx_setocp(936));
+
+    t8_begin(conout, pos);
+    written = 0;
+    CHECK(write_a(conout, "\xD6\xD0\xCE\xC4" "ab", 6, &written, NULL));
+    printf("    GBK written=%lu (expected 6)\n", written);
+    CHECK(written == 6);
+    t8_read(conout, pos, line);
+    CHECK(line[0] == 0x4E2D && line[1] == 0x6587 && line[2] == L'a' && line[3] == L'b');
+
+    // GBK lead byte and trail byte in two separate writes.
+    t8_begin(conout, pos);
+    written = 99;
+    CHECK(write_a(conout, "\xD6", 1, &written, NULL));
+    written = 99;
+    CHECK(write_a(conout, "\xD0" "ab", 3, &written, NULL));
+    t8_read(conout, pos, line);
+    CHECK(line[0] == 0x4E2D && line[1] == L'a' && line[2] == L'b');
+
+    // These four GBK bytes are also well-formed UTF-8 (U+0421 U+01BD).
+    // They must still be shown as the two Chinese characters U+5C0F U+5E73.
+    t8_begin(conout, pos);
+    written = 0;
+    CHECK(write_a(conout, "\xD0\xA1\xC6\xBD", 4, &written, NULL) && written == 4);
+    t8_read(conout, pos, line);
+    CHECK(line[0] == 0x5C0F && line[1] == 0x5E73);
+
+    t8_begin(conout, pos);
+    CHECK(kx_setocp(origOutCP ? origOutCP : 936));
+}
+
 int main(void)
 {
     HMODULE dll;
@@ -266,6 +449,8 @@ int main(void)
             CHECK(itp1 > itp0);
         }
     }
+
+    RunTest8(dll, conout, setmode, write_a, mode);
 
     printf("\n=== SUMMARY ===\n");
     if (failures == 0) {

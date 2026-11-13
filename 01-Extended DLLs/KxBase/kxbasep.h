@@ -189,6 +189,13 @@ BOOL WriteConsoleWithEscapeSequencesAorW(
 	IN	BOOLEAN	Unicode);
 
 //
+// console.c
+//
+
+BOOLEAN KxBasepShouldDecodeConsoleOutputAsUtf8(
+	VOID);
+
+//
 // consup.c
 //
 

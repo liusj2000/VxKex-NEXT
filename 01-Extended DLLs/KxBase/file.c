@@ -321,7 +321,8 @@ KXBASEAPI BOOL WINAPI Ext_WriteFile(
 {
 	ULONG DummyNumberOfBytesWritten;
 
-	if (IsConsoleHandle(FileHandle) && BaseIsConsoleAnsiSupportEnabled(FileHandle)) {
+	if (IsConsoleHandle(FileHandle) &&
+		(BaseIsConsoleAnsiSupportEnabled(FileHandle) || KxBasepShouldDecodeConsoleOutputAsUtf8())) {
 		//
 		// In order to support ANSI escape sequences, we need to redirect
 		// WriteFile to Ext_WriteConsoleA if we're writing to a console and the

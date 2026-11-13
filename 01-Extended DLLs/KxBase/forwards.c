@@ -1087,7 +1087,7 @@
 #pragma comment(linker, "/EXPORT:SetConsoleNumberOfCommandsA=kernel32.SetConsoleNumberOfCommandsA")
 #pragma comment(linker, "/EXPORT:SetConsoleNumberOfCommandsW=kernel32.SetConsoleNumberOfCommandsW")
 #pragma comment(linker, "/EXPORT:SetConsoleOS2OemFormat=kernel32.SetConsoleOS2OemFormat")
-#pragma comment(linker, "/EXPORT:SetConsoleOutputCP=kernel32.SetConsoleOutputCP")
+//#pragma comment(linker, "/EXPORT:SetConsoleOutputCP=kernel32.SetConsoleOutputCP")
 #pragma comment(linker, "/EXPORT:SetConsolePalette=kernel32.SetConsolePalette")
 #pragma comment(linker, "/EXPORT:SetConsoleScreenBufferInfoEx=kernel32.SetConsoleScreenBufferInfoEx")
 #pragma comment(linker, "/EXPORT:SetConsoleScreenBufferSize=kernel32.SetConsoleScreenBufferSize")

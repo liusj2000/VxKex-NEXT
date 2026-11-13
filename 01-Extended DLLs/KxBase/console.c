@@ -171,6 +171,268 @@ BOOL KxBasepIsPseudoConsoleHandle(
 	return TRUE;
 }
 
+#define KX_CONSOLE_UTF8_WRITE_CHUNK_CCH 8192
+
+STATIC volatile LONG KxConsoleAppOutputCodePage = 0;
+STATIC RTL_SRWLOCK KxConsoleUtf8CarryLock = RTL_SRWLOCK_INIT;
+
+STATIC struct {
+	HANDLE	ConsoleHandle;
+	ULONG	Cb;
+	CHAR	Bytes[4];
+} KxConsoleUtf8Carry = {0};
+
+STATIC BOOLEAN KxBasepIsConsoleUtf8DecodeDisabled(VOID)
+{
+	STATIC LONG Initialized = 0;
+	STATIC BOOLEAN Disabled = FALSE;
+
+	if (InterlockedCompareExchange(&Initialized, 1, 0) == 0) {
+		WCHAR EnvBuf[16];
+		if (GetEnvironmentVariableW(L"VXKEX_NO_CONSOLE_UTF8", EnvBuf, ARRAYSIZE(EnvBuf)) > 0) {
+			if (EnvBuf[0] == L'1' || EnvBuf[0] == L'y' || EnvBuf[0] == L'Y') {
+				Disabled = TRUE;
+			}
+		}
+	}
+
+	return Disabled;
+}
+
+BOOLEAN KxBasepShouldDecodeConsoleOutputAsUtf8(VOID)
+{
+	if (KxConsoleAppOutputCodePage != CP_UTF8) {
+		return FALSE;
+	}
+
+	if (KxBasepIsConsoleUtf8DecodeDisabled()) {
+		return FALSE;
+	}
+
+	return (GetConsoleOutputCP() != CP_UTF8);
+}
+
+STATIC ULONG KxBasepUtf8IncompleteTailCb(
+	IN	PCSTR	Buffer,
+	IN	ULONG	Cb)
+{
+	ULONG Back;
+
+	for (Back = 1; Back <= 3 && Back <= Cb; ++Back) {
+		UCHAR Ch;
+		ULONG Need;
+
+		Ch = (UCHAR) Buffer[Cb - Back];
+
+		if ((Ch & 0xC0) == 0x80) {
+			continue;
+		}
+
+		if (Ch >= 0xC2 && Ch <= 0xDF) {
+			Need = 2;
+		} else if (Ch >= 0xE0 && Ch <= 0xEF) {
+			Need = 3;
+		} else if (Ch >= 0xF0 && Ch <= 0xF4) {
+			Need = 4;
+		} else {
+			return 0;
+		}
+
+		return (Need > Back) ? Back : 0;
+	}
+
+	return 0;
+}
+
+STATIC BOOL KxBasepWriteConsoleUtf8(
+	IN	HANDLE	ConsoleHandle,
+	IN	PCSTR	Buffer,
+	IN	ULONG	CbToWrite,
+	OUT	PULONG	CbWrittenOut OPTIONAL,
+	IN	PVOID	Reserved OPTIONAL,
+	IN	BOOLEAN	ProcessAnsi)
+{
+	WCHAR StackWide[512];
+	CHAR CarryBytes[4];
+	PWCHAR WideBuffer;
+	PCHAR Combined;
+	PCSTR Source;
+	ULONG CarryCb;
+	ULONG SourceCb;
+	ULONG TailCb;
+	ULONG DecodeCb;
+	ULONG WideCch;
+	ULONG Offset;
+	BOOL Success;
+
+	if (CbWrittenOut) {
+		*CbWrittenOut = 0;
+	}
+
+	if (CbToWrite == 0) {
+		return TRUE;
+	}
+
+	if (!Buffer) {
+		SetLastError(ERROR_INVALID_PARAMETER);
+		return FALSE;
+	}
+
+	WideBuffer = StackWide;
+	Combined = NULL;
+	Source = Buffer;
+	SourceCb = CbToWrite;
+	CarryCb = 0;
+	Success = TRUE;
+
+	//
+	// Take over the incomplete UTF-8 sequence (1..3 bytes) left behind by the
+	// previous write to the same handle, if any.
+	//
+
+	RtlAcquireSRWLockExclusive(&KxConsoleUtf8CarryLock);
+	if (KxConsoleUtf8Carry.Cb > 0 && KxConsoleUtf8Carry.ConsoleHandle == ConsoleHandle) {
+		CarryCb = KxConsoleUtf8Carry.Cb;
+		RtlCopyMemory(CarryBytes, KxConsoleUtf8Carry.Bytes, CarryCb);
+		KxConsoleUtf8Carry.Cb = 0;
+	}
+	RtlReleaseSRWLockExclusive(&KxConsoleUtf8CarryLock);
+
+	if (CarryCb > 0) {
+		Combined = SafeAlloc(CHAR, CarryCb + CbToWrite);
+		if (!Combined) {
+			SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+			return FALSE;
+		}
+
+		RtlCopyMemory(Combined, CarryBytes, CarryCb);
+		RtlCopyMemory(Combined + CarryCb, Buffer, CbToWrite);
+		Source = Combined;
+		SourceCb = CarryCb + CbToWrite;
+	}
+
+	//
+	// Do not decode a multibyte sequence that is cut off at the end of this
+	// write. Keep it for the next write instead.
+	//
+
+	TailCb = KxBasepUtf8IncompleteTailCb(Source, SourceCb);
+	DecodeCb = SourceCb - TailCb;
+
+	if (DecodeCb > 0) {
+		INT Converted;
+
+		if (DecodeCb > ARRAYSIZE(StackWide)) {
+			WideBuffer = SafeAlloc(WCHAR, DecodeCb);
+			if (!WideBuffer) {
+				WideBuffer = StackWide;
+				SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+				Success = FALSE;
+				goto Exit;
+			}
+		}
+
+		// Flags must be 0 (not MB_ERR_INVALID_CHARS): invalid bytes become
+		// U+FFFD and the rest of the text is still shown.
+		Converted = MultiByteToWideChar(
+			CP_UTF8,
+			0,
+			Source,
+			(INT) DecodeCb,
+			WideBuffer,
+			(INT) DecodeCb);
+
+		if (Converted <= 0) {
+			Success = FALSE;
+			goto Exit;
+		}
+
+		WideCch = (ULONG) Converted;
+		Offset = 0;
+
+		while (Offset < WideCch) {
+			ULONG ChunkCch;
+			ULONG CchDummy;
+
+			ChunkCch = WideCch - Offset;
+
+			if (ChunkCch > KX_CONSOLE_UTF8_WRITE_CHUNK_CCH) {
+				ChunkCch = KX_CONSOLE_UTF8_WRITE_CHUNK_CCH;
+
+				// Do not split a surrogate pair between two console writes.
+				if (WideBuffer[Offset + ChunkCch - 1] >= 0xD800 &&
+					WideBuffer[Offset + ChunkCch - 1] <= 0xDBFF) {
+					--ChunkCch;
+				}
+			}
+
+			if (ProcessAnsi) {
+				Success = WriteConsoleWithEscapeSequencesAorW(
+					ConsoleHandle,
+					&WideBuffer[Offset],
+					ChunkCch,
+					&CchDummy,
+					Reserved,
+					TRUE);
+			} else {
+				Success = WriteConsoleW(
+					ConsoleHandle,
+					&WideBuffer[Offset],
+					ChunkCch,
+					&CchDummy,
+					NULL);
+			}
+
+			if (!Success) {
+				goto Exit;
+			}
+
+			Offset += ChunkCch;
+		}
+	}
+
+	if (TailCb > 0) {
+		RtlAcquireSRWLockExclusive(&KxConsoleUtf8CarryLock);
+		RtlCopyMemory(KxConsoleUtf8Carry.Bytes, Source + DecodeCb, TailCb);
+		KxConsoleUtf8Carry.Cb = TailCb;
+		KxConsoleUtf8Carry.ConsoleHandle = ConsoleHandle;
+		RtlReleaseSRWLockExclusive(&KxConsoleUtf8CarryLock);
+	}
+
+	// The caller counts in bytes of its own buffer.
+	if (CbWrittenOut) {
+		*CbWrittenOut = CbToWrite;
+	}
+
+Exit:
+	if (WideBuffer != StackWide) {
+		SafeFree(WideBuffer);
+	}
+
+	if (Combined) {
+		SafeFree(Combined);
+	}
+
+	return Success;
+}
+
+KXBASEAPI BOOL WINAPI Ext_SetConsoleOutputCP(
+	IN	UINT	CodePage)
+{
+	BOOL Success;
+
+	Success = SetConsoleOutputCP(CodePage);
+
+	if (Success) {
+		// Remember which code page THIS process asked for. Another process
+		// sharing the console may change the real one behind our back.
+		InterlockedExchange(&KxConsoleAppOutputCodePage, (LONG) CodePage);
+	}
+
+	return Success;
+}
+
+
 KXBASEAPI BOOL WINAPI Ext_WriteConsoleA(
 	IN	HANDLE	ConsoleHandle,
 	IN	PCVOID	Buffer,
@@ -178,7 +440,28 @@ KXBASEAPI BOOL WINAPI Ext_WriteConsoleA(
 	OUT	PULONG	CchWritten OPTIONAL,
 	IN	PVOID	Reserved OPTIONAL)
 {
-	if (KxBasepShouldProcessConsoleAnsi(ConsoleHandle)) {
+	BOOLEAN ProcessAnsi;
+
+	ProcessAnsi = KxBasepShouldProcessConsoleAnsi(ConsoleHandle);
+
+	//
+	// The application asked for UTF-8 output (SetConsoleOutputCP(65001)) but
+	// the real console is currently on another code page, e.g. 936 kept by a
+	// shell for DBCS cell width and IME. Decode here instead of letting
+	// conhost decode UTF-8 bytes as GBK.
+	//
+
+	if (KxBasepShouldDecodeConsoleOutputAsUtf8()) {
+		return KxBasepWriteConsoleUtf8(
+			ConsoleHandle,
+			(PCSTR) Buffer,
+			CchToWrite,
+			CchWritten,
+			Reserved,
+			ProcessAnsi);
+	}
+
+	if (ProcessAnsi) {
 		return WriteConsoleWithEscapeSequencesAorW(
 			ConsoleHandle,
 			Buffer,
@@ -338,6 +621,14 @@ KXBASEAPI BOOL WINAPI Ext_FreeConsole(
 	RtlAcquireSRWLockExclusive(&KxConsoleModeLock);
 	RtlZeroMemory(KxConsoleModes, sizeof(KxConsoleModes));
 	RtlReleaseSRWLockExclusive(&KxConsoleModeLock);
+
+	// A new console starts with its own code page; forget the old intent.
+	RtlAcquireSRWLockExclusive(&KxConsoleUtf8CarryLock);
+	KxConsoleUtf8Carry.Cb = 0;
+	KxConsoleUtf8Carry.ConsoleHandle = NULL;
+	RtlReleaseSRWLockExclusive(&KxConsoleUtf8CarryLock);
+	InterlockedExchange(&KxConsoleAppOutputCodePage, 0);
+
 	BaseDisableConsoleAnsiSupport(GetStdHandle(STD_OUTPUT_HANDLE));
 	return FreeConsole();
 }
