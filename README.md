@@ -25,6 +25,7 @@
 ### 3. 控制台虚拟终端（VT）重构与终端乱码彻底解决
 - **活动屏幕缓冲区 VT 状态共享**：重构 `KxBase\console.c` 中控制台模式判定，消除虚假 VT 支持回报，实现对 PowerShell 7 / PSReadLine 中 ANSI 颜色序列（如 `←[93m`、`←[0m`）的精准截获与仿真转译；
 - **紧急降级开关**：引入 `VXKEX_NO_CONSOLE_VT=1` 环境变量，允许应用一键平滑降级至 Windows 原生 Win32 控制台输入输出模式；
+- **UTF-8 输出与 936 代码页共存（OpenCode 登录界面乱码修复）**：Bun 类程序启动时把控制台切到 65001 后输出 UTF-8，而为保证中文双列宽与输入法可用，终端需保持 936（GBK），两者冲突会导致 `opencode auth login` 等界面的框线与掩码显示为 `鈹?`、`鈼?`、`鈻?枲`。`KxBase` 现会记录应用通过 `SetConsoleOutputCP` 声明的代码页，仅当“应用声明 65001 而真实代码页不是 65001”时，在用户态把窄字符输出按 UTF-8 解码后以 Unicode 写入（支持跨写入拆分的多字节字符、大块输出分片），中文仍保持双列宽；其他程序（含 GBK 输出）行为不变。如需关闭，启动程序前设置 `VXKEX_NO_CONSOLE_UTF8=1`；
 - **VS Code 内置终端体验优化**：排查并提供 Win7 + `winpty-agent` 架构下中文全角字符重复输入、菱形乱码（``）的全局解决方案与自动化 `$PROFILE` 配置。
 
 ### 4. 自动化构建打包体系与 Release 产出
@@ -131,6 +132,6 @@ Remove-Module PSReadLine -ErrorAction SilentlyContinue
 
 1. 从 [Releases 页面](../../releases) 下载最新的安装包：
    - **`KexSetup_Release.exe`**
-   - SHA256: `CA7CD2A6DB5EB305DA14BE43957F126ECC6463CD0660A86D86FEBAF6F1A2B0BA`
+   - SHA256: `ED5C3F15493D181DC473554C8370968FCE6E824090886330EC5A2F5CD4DEEA9A`（2026-11-13 构建，含 OpenCode 登录界面 UTF-8 输出修复）
 2. 运行安装程序完成 VxKex NEXT 安装与扩展 DLL 注册；
 3. 右键点击目标现代应用程序（如 `Code.exe`、`codex.exe` 等），在「属性」中切换到 **VxKex** 选项卡，勾选“为此程序启用 VxKex NEXT”，并选择伪装为 **Windows 10** 即可。
