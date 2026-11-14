@@ -203,6 +203,112 @@ static void RunTest8(
     CHECK(kx_setocp(origOutCP ? origOutCP : 936));
 }
 
+//
+// Test 9: NtSetInformationVirtualMemory exported through KxNt (OpenCode 2.3.0).
+// The OpenTUI render library calls it once after NtMapViewOfSection with
+// VmPrefetchInformation, 1 range, Flags = 0, length 4, and expects 0.
+//
+typedef LONG (NTAPI *PFN_NTSETINFORMATIONVIRTUALMEMORY)(
+    HANDLE, int, ULONG_PTR, PVOID, PVOID, ULONG);
+
+typedef struct {
+    PVOID VirtualAddress;
+    SIZE_T NumberOfBytes;
+} T9_MEMORY_RANGE_ENTRY;
+
+#define T9_STATUS_SUCCESS               ((LONG) 0x00000000L)
+#define T9_STATUS_INVALID_INFO_CLASS    ((LONG) 0xC0000003L)
+#define T9_STATUS_INVALID_PARAMETER     ((LONG) 0xC000000DL)
+#define T9_STATUS_NOT_SUPPORTED         ((LONG) 0xC00000BBL)
+
+static void RunTest9(void)
+{
+    HMODULE kxnt;
+    HMODULE kexdll;
+    WCHAR modpath[MAX_PATH];
+    PFN_NTSETINFORMATIONVIRTUALMEMORY pNt;
+    PFN_NTSETINFORMATIONVIRTUALMEMORY pZw;
+    PFN_NTSETINFORMATIONVIRTUALMEMORY pKex;
+    T9_MEMORY_RANGE_ENTRY range;
+    ULONG flags = 0;
+    PVOID mem;
+    LONG st;
+
+    printf("\n--- Test 9: NtSetInformationVirtualMemory via KxNt (OpenCode 2.3.0 OpenTUI) ---\n");
+
+    kxnt = LoadLibraryW(L"D:\\project\\VxKex-NEXT\\x64\\Release\\KxNt.dll");
+    CHECK(kxnt != NULL);
+    if (!kxnt) {
+        return;
+    }
+
+    kexdll = GetModuleHandleW(L"KexDll.dll");
+    CHECK(kexdll != NULL);
+    if (!kexdll) {
+        return;
+    }
+
+    GetModuleFileNameW(kexdll, modpath, MAX_PATH);
+    wprintf(L"KexDll in use: %s\n", modpath);
+    CHECK(_wcsicmp(modpath, L"D:\\project\\VxKex-NEXT\\x64\\Release\\KexDll.dll") == 0);
+
+    pNt = (PFN_NTSETINFORMATIONVIRTUALMEMORY) GetProcAddress(kxnt, "NtSetInformationVirtualMemory");
+    pZw = (PFN_NTSETINFORMATIONVIRTUALMEMORY) GetProcAddress(kxnt, "ZwSetInformationVirtualMemory");
+    pKex = (PFN_NTSETINFORMATIONVIRTUALMEMORY) GetProcAddress(kexdll, "NtSetInformationVirtualMemory");
+
+    CHECK(pNt != NULL);
+    CHECK(pZw != NULL);
+    CHECK(pKex != NULL);
+    CHECK(pNt == pZw);
+    CHECK(pNt == pKex);
+
+    if (!pNt) {
+        return;
+    }
+
+    mem = VirtualAlloc(NULL, 0x10000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    CHECK(mem != NULL);
+    range.VirtualAddress = mem;
+    range.NumberOfBytes = 0x10000;
+
+    // Exactly what the OpenTUI caller passes.
+    st = pNt((HANDLE) -1, 0, 1, &range, &flags, sizeof(flags));
+    printf("prefetch (caller parameters) -> 0x%08lX\n", (ULONG) st);
+    CHECK(st == T9_STATUS_SUCCESS);
+
+    st = pNt((HANDLE) -1, 0, 0, &range, &flags, sizeof(flags));
+    CHECK(st == T9_STATUS_INVALID_PARAMETER);
+
+    st = pNt((HANDLE) -1, 0, 1, NULL, &flags, sizeof(flags));
+    CHECK(st == T9_STATUS_INVALID_PARAMETER);
+
+    st = pNt((HANDLE) -1, 0, 1, &range, NULL, sizeof(flags));
+    CHECK(st == T9_STATUS_INVALID_PARAMETER);
+
+    st = pNt((HANDLE) -1, 0, 1, &range, &flags, 0);
+    CHECK(st == T9_STATUS_INVALID_PARAMETER);
+
+    st = pNt((HANDLE) -1, 1, 1, &range, &flags, sizeof(flags));
+    printf("page priority class -> 0x%08lX\n", (ULONG) st);
+    CHECK(st == T9_STATUS_NOT_SUPPORTED);
+
+    st = pNt((HANDLE) -1, 2, 1, &range, &flags, sizeof(flags));
+    CHECK(st == T9_STATUS_NOT_SUPPORTED);
+
+    st = pNt((HANDLE) -1, 99, 1, &range, &flags, sizeof(flags));
+    CHECK(st == T9_STATUS_INVALID_INFO_CLASS);
+
+    st = pNt((HANDLE) -1, -1, 1, &range, &flags, sizeof(flags));
+    CHECK(st == T9_STATUS_INVALID_INFO_CLASS);
+
+    // The memory must be untouched and still usable.
+    if (mem) {
+        ((volatile BYTE *) mem)[0] = 0x5A;
+        CHECK(((volatile BYTE *) mem)[0] == 0x5A);
+        VirtualFree(mem, 0, MEM_RELEASE);
+    }
+}
+
 int main(void)
 {
     HMODULE dll;
@@ -451,6 +557,8 @@ int main(void)
     }
 
     RunTest8(dll, conout, setmode, write_a, mode);
+
+    RunTest9();
 
     printf("\n=== SUMMARY ===\n");
     if (failures == 0) {

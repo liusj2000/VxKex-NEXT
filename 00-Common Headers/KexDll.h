@@ -323,6 +323,14 @@ KEXAPI NTSTATUS NTAPI NtCompareObjects(
 	IN	HANDLE	FirstObjectHandle,
 	IN	HANDLE	SecondObjectHandle);
 
+KEXAPI NTSTATUS NTAPI NtSetInformationVirtualMemory(
+	IN	HANDLE								ProcessHandle,
+	IN	VIRTUAL_MEMORY_INFORMATION_CLASS	VmInformationClass,
+	IN	ULONG_PTR							NumberOfEntries,
+	IN	PMEMORY_RANGE_ENTRY					VirtualAddresses,
+	IN	PVOID								VmInformation,
+	IN	ULONG								VmInformationLength);
+
 #pragma endregion
 
 #pragma region Kex* functions

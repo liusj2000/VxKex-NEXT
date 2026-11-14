@@ -3957,18 +3957,6 @@ NTSYSCALLAPI NTSTATUS NTAPI NtWaitForKeyedEvent(
 
 #pragma endregion
 
-#pragma region Nt* function declarations (not in Windows 7)
-
-NTSYSCALLAPI NTSTATUS NTAPI NtSetInformationVirtualMemory(
-	IN		HANDLE								ProcessHandle,
-	IN		VIRTUAL_MEMORY_INFORMATION_CLASS	VmInformationClass,
-	IN		ULONG_PTR							NumberOfEntries,
-	IN		PMEMORY_RANGE_ENTRY					VirtualAddresses,
-	IN		PVOID								VmInformation,
-	IN		ULONG								VmInformationLength);
-
-#pragma endregion
-
 #pragma region NtWow64* function declarations
 
 typedef NTSTATUS (NTAPI *NT_WOW64_WRITE_VIRTUAL_MEMORY64) (
