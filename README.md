@@ -132,6 +132,6 @@ Remove-Module PSReadLine -ErrorAction SilentlyContinue
 
 1. 从 [Releases 页面](../../releases) 下载最新的安装包：
    - **`KexSetup_Release.exe`**
-   - SHA256: `ED5C3F15493D181DC473554C8370968FCE6E824090886330EC5A2F5CD4DEEA9A`（2026-11-13 构建，含 OpenCode 登录界面 UTF-8 输出修复）
+   - SHA256: `E89EC8B81D1853BC405DA517C429349DD0E0B1F3405BF7E490D767E925832E43`（2026-11-14 构建，含 OpenCode 2.3.0 渲染库所需的 `NtSetInformationVirtualMemory` 导出）
 2. 运行安装程序完成 VxKex NEXT 安装与扩展 DLL 注册；
 3. 右键点击目标现代应用程序（如 `Code.exe`、`codex.exe` 等），在「属性」中切换到 **VxKex** 选项卡，勾选“为此程序启用 VxKex NEXT”，并选择伪装为 **Windows 10** 即可。
